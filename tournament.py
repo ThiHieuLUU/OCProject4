@@ -12,7 +12,6 @@ import match
 # default_number_of_rounds = 4
 DEFAULT_NUMBER_OF_ROUNDS = 4
 
-
 none_player = player.Player()
 
 
@@ -29,8 +28,6 @@ class Tournament:
         self._players = None
         self._time_control = None
         self._description = None
-        self._initial_rankings = None
-        self._tournament_rankings = None
 
     @property
     def name(self):
@@ -135,16 +132,15 @@ class Tournament:
     @description.deleter
     def description(self):
         del self._description
-
-    def save_tournament(self):
+        
+    def get_initial_rankings(self):
         """docstring"""
-        pass
+        initial_rankings = dict()
+        for _player in self._players:
+            initial_rankings[_player] = _player.ranking
+        return initial_rankings
 
-    def save_players(self):
-        """docstring"""
-        pass
-
-    def pair_first_round(self):
+    def make_pairs_first_round(self):
         """docstring"""
         pairs = []
         sorted_players = sorted(self._players, key=lambda p: p.ranking, reverse=True)
@@ -154,45 +150,20 @@ class Tournament:
             pairs.append([sorted_players[index], sorted_players[half_number + index]])
 
         if len(self._players) % 2 == 1:
-            # player.Player() has None defaut value
-            # pairs.append([player.Player(), sorted_players[-1]])
             pairs.append([none_player, sorted_players[-1]])
-            # pairs.append([None, sorted_players[-1]])
-            # pairs.append([None, sorted_players[-1]])
         return pairs
 
-    @staticmethod
-    def initialize_matches_of_a_round(pairs):
-        _round = round_robin.Round()
-        _round.matches = []
-        for pair in pairs:
-            m = match.Match(pair[0], 0, pair[1], 0)
-            _round.matches.append(m.match)
-        return _round
 
-    def get_initial_rankings(self):
-        initial_rankings = dict()
-        for _player in self._players:
-            initial_rankings[_player] = _player.ranking
-        return initial_rankings
-
-    # @staticmethod
-    # def next_key(d, key):
-    #     key_iter = iter(d)
-    #     for k in key_iter:
-    #         if k == key:
-    #             return next(key_iter, None)
-    #     return None
-
-    def pair_for_not_first_round(self, total_points, initial_rankings, opponent_lists):
+    def make_pairs(self, player_info_list, total_points, opponent_list):
         """docstring"""
         pairs = []
-        player_info_list = self.get_player_info_list(total_points, initial_rankings, opponent_lists)
-        print(player_info_list)
-        from operator import itemgetter
-        # The two sorts are increasing
-        # sorted_player_info = sorted(player_info, key=itemgetter("total_point", "initial_ranking"))
-        sorted_player_info_list = sorted(player_info_list, key=lambda k: (-k["total_point"], k['initial_ranking']))
+        # player_info_list = self.update_player_info_list(total_points, initial_rankings, opponent_list)
+        player_info_list = self.update_player_info_list(player_info_list, total_points, opponent_list)
+
+        # Initial ranking consist of player's Elo rating, the best player is the best Elo rating
+        # Sort with decreasing order of total point and decreasing order of Elo rating
+        # The best player with sorted result is in the first, the worst is in the last
+        sorted_player_info_list = sorted(player_info_list, key=lambda k: (-k["total_point"], -k['initial_ranking']))
 
         player_number = len(sorted_player_info_list)
         if player_number % 2 == 1:
@@ -200,39 +171,47 @@ class Tournament:
         else:
             player_number_ = player_number
 
-
-
         paired_player_number = 0
 
         # Each time, two players are taken.
-        # if the numbers of players is odd, the treatment is only to "numbers of players -1"
-        print(player_number_)
+        # If the numbers of players is odd, the treatment is only done to the numbers of players - 1
         while paired_player_number < player_number_:
             print("paired_nb = ", paired_player_number)
             print("len=", len(sorted_player_info_list))
             player_1_info = sorted_player_info_list[0]
             not_encountered_player_list = [info for info in sorted_player_info_list if info["player"] not in
-                                      player_1_info["opponents"]]
-            # list is not empty
-            # player_2_info = None
+                                           player_1_info["opponents"]]
+
             if not not_encountered_player_list:
-                # first element of the list eliminating all the players encountered
+                # Take the first element in the list which eliminates all the players encountered
                 player_2_info = not_encountered_player_list[0]
             else:
+                # If the player 1 encountered all other players, take the next element in the sorted list
                 player_2_info = sorted_player_info_list[1]
-            # Remove the paired players
+
+            # Each time, remove the pair of players has been made in the sorted list
             sorted_player_info_list = [element for element in sorted_player_info_list if element not in (
                 player_1_info, player_2_info)]
+            # Built pair
             pairs.append([player_1_info["player"], player_2_info["player"]])
             paired_player_number += 2
 
         if player_number % 2 == 1:
+            # Pair with none player if number of player is odd
             pairs.append([none_player, sorted_player_info_list[-1]["player"]])
         print(pairs)
         return pairs
+    
+    @staticmethod
+    def initialize_round_with_pairs(pairs):
+        """docstring"""
+        _round = round_robin.Round()
+        _round.matches = []
+        for pair in pairs:
+            m = match.Match(pair[0], 0, pair[1], 0)
+            _round.matches.append(m.match)
+        return _round
 
-
-    # ok
     def update_round_result(self, _round):
         """docstring"""
         matches = _round.matches
@@ -270,17 +249,16 @@ class Tournament:
                 match_index += 1
                 print("odd nb", match)
 
-    # ok
     def initialize_total_points(self):
+        """docstring"""
         total_points = dict()
         for player in self._players:
             total_points[player] = 0
-        print(total_points)
         return total_points
-
-    # ok
-    # total_points = dict of players/ id players
+    
+    # @staticmethod
     def update_total_points(self, _round, total_points):
+        """docstring"""
         for match in _round.matches:
             if match[0][0] != none_player:  # odd number of players
                 total_points[match[0][0]] += match[0][1]
@@ -289,46 +267,59 @@ class Tournament:
                 total_points[match[1][0]] += match[1][1]
         return total_points
 
-    def initialize_opponent_lists(self):
-        opponent_lists = dict()
+    def initialize_opponent_list(self):
+        """docstring"""
+        opponent_list = dict()
         for _player in self._players:
-            opponent_lists[_player] = []
-        return opponent_lists
+            opponent_list[_player] = []
+        return opponent_list
 
-    # total_points = dict of players/ id players
     @staticmethod
-    def update_opponent_lists(_round, opponent_lists):
+    def update_opponent_list(_round, opponent_list):
+        """docstring"""
         for match in _round.matches:
-            # because match = ([player1, score1], [player2, score2])
+            # match structure: ([player1, score1], [player2, score2])
             if match[0][0] != none_player and match[1][0] != none_player:  # odd number of players
-                opponent_lists[match[0][0]].append(match[1][0])
-                opponent_lists[match[1][0]].append(match[0][0])
-        return opponent_lists
-
-    # def initialize_player_info_list(self, initial_rankings):
-    #     player_info_list = []
-    #     for _player in self._players:
-    #         info = dict()
-    #         info[_player] = _player
-    #         info["initial_ranking"] = initial_rankings[_player]
-    #         player_info_list.append(info)
-    #     return player_info_list
-
-    def get_player_info_list(self, total_points, initial_rankings, opponents):
+                opponent_list[match[0][0]].append(match[1][0])
+                opponent_list[match[1][0]].append(match[0][0])
+        return opponent_list
+    
+    def initialize_player_info_list(self, initial_rankings):
+        """docstring"""
         player_info_list = []
         for _player in self._players:
             info = dict()
             info["player"] = _player
-            info["total_point"] = total_points[_player]
+            # info["total_point"] = total_points[_player]
             info["initial_ranking"] = initial_rankings[_player]
-            info["opponents"] = opponents[_player]
+            # info["opponents"] = opponents[_player]
             player_info_list.append(info)
         return player_info_list
+    
+    def update_player_info_list(self, player_info_list, total_points, opponents):
+        """docstring"""
+        for info in player_info_list:
+            _player = info["player"]
+            print(_player)
+            print(total_points[_player])
+            info["total_point"] = total_points[_player]
+            info["opponents"] = opponents[_player]
+        return player_info_list
 
-
+    # def update_player_info_list(self, total_points, initial_rankings, opponents):
+    #     """docstring"""
+    #     player_info_list = []
+    #     for _player in self._players:
+    #         info = dict()
+    #         info["player"] = _player
+    #         info["total_point"] = total_points[_player]
+    #         info["initial_ranking"] = initial_rankings[_player]
+    #         info["opponents"] = opponents[_player]
+    #         player_info_list.append(info)
+    #     return player_info_list
 
     def get_attributes(self):
-        """Get attribute names (without protected or private sign) and theirs values """
+        """Get all attribute's names (without protected or private sign) and theirs values """
         attr_names = []
 
         protected_sign = "_"
@@ -345,7 +336,7 @@ class Tournament:
         return attr_names, list(self.__dict__.values())
 
     def __str__(self):
-        """Print all attributes and theirs values of an object"""
+        """Print all attributes and theirs values for an object"""
         attr_names, attr_values = self.get_attributes()
         attr_str = ""
 
@@ -368,11 +359,11 @@ if __name__ == '__main__':
     t.time_control = "bullet"
     t.description = "Local tournament"
     print(t)
-    first_pairs = t.pair_first_round()
+    first_pairs = t.make_pairs_first_round()
     print(first_pairs)
     # for p in first_pairs:
     #     print(p[0].ranking, p[1].ranking)
-    _round = t.initialize_matches_of_a_round(first_pairs)
+    _round = t.initialize_round_with_pairs(first_pairs)
     t.rounds.append(_round)
     print(t)
     t.update_round_result(_round)
@@ -380,23 +371,27 @@ if __name__ == '__main__':
     print(t.rounds[0].matches)
     total_points = t.initialize_total_points()
     total_points = t.update_total_points(_round, total_points)
+    print("===")
     print(total_points)
-    opponent_lists = t.initialize_opponent_lists()
-    print(opponent_lists)
-    t.update_opponent_lists(_round, opponent_lists)
-    print(opponent_lists)
+    opponent_list = t.initialize_opponent_list()
+    print(opponent_list)
+    t.update_opponent_list(_round, opponent_list)
+    print(opponent_list)
     initial_rankings = t.get_initial_rankings()
     print(initial_rankings)
-    player_info = t.get_player_info_list(total_points, initial_rankings, opponent_lists)
+    player_info =t.initialize_player_info_list(initial_rankings)
+    player_info = t.update_player_info_list(player_info, total_points, opponent_list)
     print(player_info)
     from operator import itemgetter
+
     # The two sorts are increasing
     # sorted_player_info = sorted(player_info, key=itemgetter("total_point", "initial_ranking"))
     # sorted_player_info_list = sorted(player_info, key=lambda k: (-k["total_point"], k['initial_ranking']))
     # for item in sorted_player_info_list:
     #     print(item["total_point"], item["initial_ranking"])
-    pairs = t.pair_for_not_first_round(total_points, initial_rankings, opponent_lists)
-    _round = t.initialize_matches_of_a_round(pairs)
+
+    pairs = t.make_pairs(player_info, total_points, opponent_list)
+    _round = t.initialize_round_with_pairs(pairs)
     t.rounds.append(_round)
     print(t)
     t.update_round_result(_round)
@@ -404,9 +399,10 @@ if __name__ == '__main__':
     print(t.rounds[-1].matches)
     total_points = t.update_total_points(_round, total_points)
     print(total_points)
-    # t.update_opponent_lists(_round, opponent_lists)
 
 
-    # t.pair_for_not_first_round(total_points, opponent_lists, initial_rankings)
+    # t.update_opponent_list(_round, opponent_list)
+
+    # t.make_pairs(total_points, opponent_list, initial_rankings)
 
     # players = player_list.players

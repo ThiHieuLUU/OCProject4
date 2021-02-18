@@ -4,13 +4,13 @@
 class Player:
     """docstring"""
 
-    def __init__(self, fide_id=None, first_name=None, last_name=None, date_of_birth=None, gender=None, ranking=None):
+    def __init__(self, fide_id=None, first_name=None, last_name=None, date_of_birth=None, gender=None, elo_rating=None):
         self._fide_id = fide_id
         self._first_name = first_name
         self._last_name = last_name
         self._date_of_birth = date_of_birth
         self._gender = gender
-        self._ranking = ranking
+        self._elo_rating = elo_rating
 
     def __hash__(self):
         return hash((self._fide_id, self._first_name, self._last_name)) # tuple hash
@@ -80,16 +80,16 @@ class Player:
         del self._gender
 
     @property
-    def ranking(self):
-        return self._ranking
+    def elo_rating(self):
+        return self._elo_rating
 
-    @ranking.setter
-    def ranking(self, new_ranking):
-        self._ranking = new_ranking
+    @elo_rating.setter
+    def elo_rating(self, new_elo_rating):
+        self._elo_rating = new_elo_rating
 
-    @ranking.deleter
-    def ranking(self):
-        del self._ranking
+    @elo_rating.deleter
+    def elo_rating(self):
+        del self._elo_rating
 
     def get_attributes(self):
         """Get attribute names (without protected or private sign) and theirs values """

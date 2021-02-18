@@ -1,13 +1,13 @@
 """docstring"""
-# A faire : round idex pour appler fonction pair
-# Générer temps pour round
-import datetime
+
+
+from datetime import datetime, date
 import mvc_exceptions as mvc_exc
-import location as loc
 import round_robin
 import player
 import player_list
 import match
+import location
 
 # default_number_of_rounds = 4
 DEFAULT_NUMBER_OF_ROUNDS = 4
@@ -62,12 +62,11 @@ class Tournament:
 
     @date.setter
     def date(self, new_date):
-        date_format = "%d-%m-%Y"
-        if datetime.datetime.strptime(str(new_date), date_format):
-            print("This is the correct date string date_format.")
+        date_format = "%d/%m/%Y"
+        if datetime.strptime(str(new_date), date_format):
             self._date = new_date
         else:
-            raise mvc_exc.DateError('Incorrect date date_format. It should be DD-MM-YYYY')
+            raise mvc_exc.DateError('Incorrect date date_format. It should be DD/MM/YYYY')
 
     @date.deleter
     def date(self):
@@ -132,18 +131,18 @@ class Tournament:
     @description.deleter
     def description(self):
         del self._description
-        
-    def get_initial_rankings(self):
+
+    def get_elo_ratings(self):
         """docstring"""
-        initial_rankings = dict()
+        elo_ratings = dict()
         for _player in self._players:
-            initial_rankings[_player] = _player.ranking
-        return initial_rankings
+            elo_ratings[_player] = _player.elo_rating
+        return elo_ratings
 
     def make_pairs_first_round(self):
         """docstring"""
         pairs = []
-        sorted_players = sorted(self._players, key=lambda p: p.ranking, reverse=True)
+        sorted_players = sorted(self._players, key=lambda p: p.elo_rating, reverse=True)
         half_number = int(len(self._players) / 2)
 
         for index in range(half_number):
@@ -151,21 +150,27 @@ class Tournament:
 
         if len(self._players) % 2 == 1:
             pairs.append([none_player, sorted_players[-1]])
+            
+        print("*"*10)    
+        print("First pairs")
+        for pair in pairs:
+            print(pair[0].elo_rating, pair[1].elo_rating)
+        print("*" * 10)
+        
         return pairs
 
-
-    def make_pairs(self, player_info_list, total_points, opponent_list):
+    def make_pairs(self, players_info):
         """docstring"""
         pairs = []
-        # player_info_list = self.update_player_info_list(total_points, initial_rankings, opponent_list)
-        player_info_list = self.update_player_info_list(player_info_list, total_points, opponent_list)
+        # players_info = self.update_players_info(total_points, elo_ratings, opponents)
+        # players_info = self.update_players_info(players_info, total_points, opponents)
 
         # Initial ranking consist of player's Elo rating, the best player is the best Elo rating
         # Sort with decreasing order of total point and decreasing order of Elo rating
         # The best player with sorted result is in the first, the worst is in the last
-        sorted_player_info_list = sorted(player_info_list, key=lambda k: (-k["total_point"], -k['initial_ranking']))
+        sorted_players_info = sorted(players_info, key=lambda k: (-k["total_point"], -k['initial_ranking']))
 
-        player_number = len(sorted_player_info_list)
+        player_number = len(sorted_players_info)
         if player_number % 2 == 1:
             player_number_ = player_number - 1
         else:
@@ -176,52 +181,59 @@ class Tournament:
         # Each time, two players are taken.
         # If the numbers of players is odd, the treatment is only done to the numbers of players - 1
         while paired_player_number < player_number_:
-            print("paired_nb = ", paired_player_number)
-            print("len=", len(sorted_player_info_list))
-            player_1_info = sorted_player_info_list[0]
-            not_encountered_player_list = [info for info in sorted_player_info_list if info["player"] not in
+            player_1_info = sorted_players_info[0]
+            not_yet_encountered_players = [info for info in sorted_players_info if info["player"] not in
                                            player_1_info["opponents"]]
 
-            if not not_encountered_player_list:
-                # Take the first element in the list which eliminates all the players encountered
-                player_2_info = not_encountered_player_list[0]
+            if len(not_yet_encountered_players) > 1:
+                print("len =", len(not_yet_encountered_players))
+                # Take the second element in the list which eliminates all the players encountered
+                # Do not take the first element because it is the player 1 itself
+                player_2_info = not_yet_encountered_players[1]
             else:
-                # If the player 1 encountered all other players, take the next element in the sorted list
-                player_2_info = sorted_player_info_list[1]
+                raise("Player encountered all other players")
+                # print(f"not_yet_encountered_players {not_yet_encountered_players}")
+                # # If the player 1 encountered all other players, take the next element in the sorted list
+                # player_2_info = sorted_players_info[1]
 
             # Each time, remove the pair of players has been made in the sorted list
-            sorted_player_info_list = [element for element in sorted_player_info_list if element not in (
+            sorted_players_info = [element for element in sorted_players_info if element not in (
                 player_1_info, player_2_info)]
             # Built pair
             pairs.append([player_1_info["player"], player_2_info["player"]])
             paired_player_number += 2
 
+            print(f'{player_1_info["total_point"]} vs {player_2_info["total_point"]}; '
+                  f'{player_1_info["player"].elo_rating} vs {player_2_info["player"].elo_rating}; '
+                  f'{player_1_info["player"] in player_2_info["opponents"]} vs '
+                  f'{player_2_info["player"] in player_1_info["opponents"]}')
+
         if player_number % 2 == 1:
             # Pair with none player if number of player is odd
-            pairs.append([none_player, sorted_player_info_list[-1]["player"]])
-        print(pairs)
+            pairs.append([none_player, sorted_players_info[-1]["player"]])
+            print(sorted_players_info[-1]["total_point"], sorted_players_info[-1]["player"].elo_rating)
+
         return pairs
-    
+
     @staticmethod
-    def initialize_round_with_pairs(pairs):
+    def initialize_matches(pairs):
         """docstring"""
-        _round = round_robin.Round()
-        _round.matches = []
+        matches = []
         for pair in pairs:
             m = match.Match(pair[0], 0, pair[1], 0)
-            _round.matches.append(m.match)
-        return _round
+            matches.append(m.match)
+        return matches
 
-    def update_round_result(self, _round):
+    def update_round(self, _round):
         """docstring"""
         matches = _round.matches
         match_index = 1
         while match_index <= len(matches):
-            match = matches[match_index - 1]  # ([player1, score1], [player2, score2])
-            print(match)
+            match = matches[match_index - 1]  # ([player_1, score1], [player_2, score2])
             none_player = player.Player()
             if match[0][0] != none_player and match[1][0] != none_player:
-                print(f"Enter the scores of the match {match_index}")
+                print("\n")
+                print(f"{_round.name}, match {match_index}, enter the scores:")
                 score1 = float(
                     input(f'FIDE ID = {match[0][0].fide_id}, Name = '
                           f'{match[0][0].first_name + " " + match[0][0].last_name}, '
@@ -247,7 +259,6 @@ class Tournament:
                 elif match[1][0] == none_player:
                     match[0][1] = 1
                 match_index += 1
-                print("odd nb", match)
 
     def initialize_total_points(self):
         """docstring"""
@@ -255,7 +266,7 @@ class Tournament:
         for player in self._players:
             total_points[player] = 0
         return total_points
-    
+
     # @staticmethod
     def update_total_points(self, _round, total_points):
         """docstring"""
@@ -267,56 +278,44 @@ class Tournament:
                 total_points[match[1][0]] += match[1][1]
         return total_points
 
-    def initialize_opponent_list(self):
+    def initialize_opponents(self):
         """docstring"""
-        opponent_list = dict()
+        opponents = dict()
         for _player in self._players:
-            opponent_list[_player] = []
-        return opponent_list
+            opponents[_player] = []
+        return opponents
 
     @staticmethod
-    def update_opponent_list(_round, opponent_list):
+    def update_opponents(_round, opponents):
         """docstring"""
         for match in _round.matches:
-            # match structure: ([player1, score1], [player2, score2])
+            # match structure: ([player_1, score1], [player_2, score2])
             if match[0][0] != none_player and match[1][0] != none_player:  # odd number of players
-                opponent_list[match[0][0]].append(match[1][0])
-                opponent_list[match[1][0]].append(match[0][0])
-        return opponent_list
-    
-    def initialize_player_info_list(self, initial_rankings):
+                opponents[match[0][0]].append(match[1][0])
+                opponents[match[1][0]].append(match[0][0])
+        return opponents
+
+    def initialize_players_info(self, elo_ratings):
         """docstring"""
-        player_info_list = []
+        players_info = []
         for _player in self._players:
             info = dict()
             info["player"] = _player
-            # info["total_point"] = total_points[_player]
-            info["initial_ranking"] = initial_rankings[_player]
-            # info["opponents"] = opponents[_player]
-            player_info_list.append(info)
-        return player_info_list
-    
-    def update_player_info_list(self, player_info_list, total_points, opponents):
+            info["total_point"] = []
+            info["initial_ranking"] = elo_ratings[_player]
+            info["opponents"] = []
+            players_info.append(info)
+        return players_info
+
+    def update_players_info(self, players_info, total_points, opponents):
         """docstring"""
-        for info in player_info_list:
+        for info in players_info:
             _player = info["player"]
             print(_player)
             print(total_points[_player])
             info["total_point"] = total_points[_player]
             info["opponents"] = opponents[_player]
-        return player_info_list
-
-    # def update_player_info_list(self, total_points, initial_rankings, opponents):
-    #     """docstring"""
-    #     player_info_list = []
-    #     for _player in self._players:
-    #         info = dict()
-    #         info["player"] = _player
-    #         info["total_point"] = total_points[_player]
-    #         info["initial_ranking"] = initial_rankings[_player]
-    #         info["opponents"] = opponents[_player]
-    #         player_info_list.append(info)
-    #     return player_info_list
+        return players_info
 
     def get_attributes(self):
         """Get all attribute's names (without protected or private sign) and theirs values """
@@ -347,62 +346,97 @@ class Tournament:
 
 
 if __name__ == '__main__':
-    # input_data = b'\x00\x10' #
+
     t = Tournament()
-    print(t)
-    print("==")
-    t.name = "tournament 1"
-    t.location = "10 rue de Fontenay"
-    t.date = "27-12-2020"
-    # "bullet", "blitz", and "rapid".
+    t.name = input("Enter the name of the tournament: ")
+    print("Enter the location with the following information: ")
+    building_number = input("Building number: ")
+    street = input("Street: ")
+    city = input("City: ")
+    zipcode = input("Zipcode: ")
+    location = location.Location(building_number, street, city, zipcode)
+
+    t.location = location
+    t.date = input("Date of the tournament (dd/mm/yyyy): ")
+    t.number_of_rounds = DEFAULT_NUMBER_OF_ROUNDS
+    t.rounds = []
+    # players = []
+    # nb_player = 1
+    # while True:
+    #     print(f"{nb_player}. Enter the players {nb_player}: ")
+    #     _fide_id = int(input("Fide id :"))
+    #     first_name = input("First name: ")
+    #     last_name = input("Last name: ")
+    #     date_of_birth = input("Date of birth (dd/mm/yyyy): ")
+    #     gender = input("Gender (male/female): ")
+    #     ranking = input("Ranking (Elo rating): ")
+    #     _player = player.Player(_fide_id, first_name, last_name, date_of_birth, gender, ranking)
+    #     players.append(_player)
+    #     print("Do you want to continue?")
+    #     answer = input("yes/no :")
+    #     if answer.lower() == "yes":
+    #         nb_player += 1
+    #     else:
+    #         break
+    # t.players = players
     t.players = player_list.players
-    t.time_control = "bullet"
-    t.description = "Local tournament"
+    while True:
+        time_control = input("Enter time control (bullet/blitz/rapid): ")
+        if time_control not in ["bullet", "blitz", "rapid"]:
+            print("Re-enter")
+            time_control = input("Enter time control (bullet/blitz/rapid): ")
+        else:
+            t.time_control = time_control
+            break
+
+    t.description = input("Enter your description :")
     print(t)
-    first_pairs = t.make_pairs_first_round()
-    print(first_pairs)
-    # for p in first_pairs:
-    #     print(p[0].ranking, p[1].ranking)
-    _round = t.initialize_round_with_pairs(first_pairs)
-    t.rounds.append(_round)
-    print(t)
-    t.update_round_result(_round)
-    print(t)
-    print(t.rounds[0].matches)
+
+    # ranking = ranking
+    pairs = t.make_pairs_first_round()
+    # _round = t.initialize_matches(pairs)
     total_points = t.initialize_total_points()
-    total_points = t.update_total_points(_round, total_points)
-    print("===")
-    print(total_points)
-    opponent_list = t.initialize_opponent_list()
-    print(opponent_list)
-    t.update_opponent_list(_round, opponent_list)
-    print(opponent_list)
-    initial_rankings = t.get_initial_rankings()
-    print(initial_rankings)
-    player_info =t.initialize_player_info_list(initial_rankings)
-    player_info = t.update_player_info_list(player_info, total_points, opponent_list)
-    print(player_info)
-    from operator import itemgetter
+    opponents = t.initialize_opponents()
+    elo_ratings = t.get_elo_ratings()
+    players_info = t.initialize_players_info(elo_ratings)
 
-    # The two sorts are increasing
-    # sorted_player_info = sorted(player_info, key=itemgetter("total_point", "initial_ranking"))
-    # sorted_player_info_list = sorted(player_info, key=lambda k: (-k["total_point"], k['initial_ranking']))
-    # for item in sorted_player_info_list:
-    #     print(item["total_point"], item["initial_ranking"])
-
-    pairs = t.make_pairs(player_info, total_points, opponent_list)
-    _round = t.initialize_round_with_pairs(pairs)
-    t.rounds.append(_round)
-    print(t)
-    t.update_round_result(_round)
-    print(t)
-    print(t.rounds[-1].matches)
-    total_points = t.update_total_points(_round, total_points)
-    print(total_points)
+    print("*" * 10)
+    print("First pairs :")
+    # print(_round.matches)
+    for pair in pairs:
+        print(pair[0].elo_rating, pair[1].elo_rating)
+    print("*" * 10)
+    print("At the initialisation: ")
+    print(f"total_points: {total_points}")
+    print(f"opponents: {opponents}")
+    print(f"elo_ratings: {elo_ratings}")
+    print(f"players_info: {players_info}")
+    #
+    round_index = 1
+    while round_index <= DEFAULT_NUMBER_OF_ROUNDS:
+        if round_index == 1:
+            pairs = t.make_pairs_first_round()
+        else:
+            pairs = t.make_pairs(players_info)
 
 
-    # t.update_opponent_list(_round, opponent_list)
+        _round = round_robin.Round()
+        _round.name = "Round " + str(round_index)
+        _round.date = date.today().strftime("%d/%m/%Y")
+        matches = t.initialize_matches(pairs)
+        _round.matches = matches
+        _round.start_time = datetime.now().strftime("%H:%M:%S")
+        t.update_round(_round)
+        _round.end_time = datetime.now().strftime("%H:%M:%S")
+        total_points = t.update_total_points(_round, total_points)
+        opponents = t.update_opponents(_round, opponents)
+        players_info = t.update_players_info(players_info, total_points, opponents)
+        print("*"*10)
+        print(f'{round_index}. Round {round_index}')
+        print(_round)
+        print(f"total_points: {total_points}")
+        print(f"opponents: {opponents}")
+        print(f"players_info: {players_info}")
+        print("*" * 10)
+        round_index += 1
 
-    # t.make_pairs(total_points, opponent_list, initial_rankings)
-
-    # players = player_list.players

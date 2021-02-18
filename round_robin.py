@@ -1,6 +1,6 @@
 """docstring"""
 
-import datetime
+from datetime import datetime, date
 import mvc_exceptions as mvc_exc
 
 
@@ -42,12 +42,11 @@ class Round:
 
     @date.setter
     def date(self, new_date):
-        date_format = "%d-%m-%Y"
-        if datetime.datetime.strptime(str(new_date), date_format):
-            print("This is the correct date string date_format.")
+        date_format = "%d/%m/%Y"
+        if datetime.strptime(str(new_date), date_format):
             self._date = new_date
         else:
-            raise mvc_exc.DateError('Incorrect date date_format. It should be DD-MM-YYYY')
+            raise mvc_exc.DateError('Incorrect date date_format. It should be DD/MM/YYYY')
 
     @date.deleter
     def date(self):
@@ -114,10 +113,10 @@ class Round:
         for attr_name, attr_value in zip(attr_names, attr_values):
             attr_str += str(attr_name).capitalize() + ': ' + str(attr_value) + "\n"
 
-        return attr_str
+        return "\n" + attr_str
 
     def __repr__(self):
-        return f"Round {type(self).count}"
+        return self._name + "at " + self.start_time
 
 
 if __name__ == '__main__':

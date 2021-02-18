@@ -78,6 +78,16 @@ class Location:
         for attr_name, attr_value in zip(attr_names, attr_values):
             attr_str += str(attr_name).capitalize() + ': ' + str(attr_value) + "\n"
 
+        return "\n" + attr_str
+
+    def __repr__(self):
+        """Print all attributes and theirs values of an object"""
+        attr_names, attr_values = self.get_attributes()
+        attr_str = ""
+
+        for attr_name, attr_value in zip(attr_names, attr_values):
+            attr_str += str(attr_name).capitalize() + ': ' + str(attr_value) + "\n"
+
         return attr_str
 
 

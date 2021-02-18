@@ -1,6 +1,6 @@
 # OCProject4
 ## Process
-1. Create a virtual environment python for the project 2
+1. Create a virtual environment python for the project 4
 ```bash
 sudo apt install -y python3-venv
 mkdir project4

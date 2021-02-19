@@ -18,6 +18,7 @@ python3 tournament.py
 ```
 4. Test case with making pairs (problem at the end of round 3).
 The scores (player_1 vs player_2)  to test:
+```
 4.1. Round 1
 0 1
 1 0
@@ -35,4 +36,5 @@ The scores (player_1 vs player_2)  to test:
 1 0
 0 1
 0 1
+```
 

@@ -151,7 +151,7 @@ class Tournament:
             pairs.append([none_player, sorted_players[-1]])
 
         print("*" * 10)
-        print("First pairs")
+        print("First pairs by elo rating")
         for pair in pairs:
             print(pair[0].elo_rating, pair[1].elo_rating)
         print("*" * 10)
@@ -183,33 +183,38 @@ class Tournament:
         sorted_players_info_dict = dict()
         sorted_players_info_dict[pair_index] = sorted_players_info
         not_yet_encountered_players = dict()
+        called_time = dict()
+        called_time[pair_index] = 1
         while pair_index <= pair_number:
             print("pair_index", pair_index)
             player_1_info = sorted_players_info_dict[pair_index][0]
             player_1 = player_1_info["player"]
-            # This list has always the player_1
-            not_yet_encountered_players[pair_index] = [info for info in sorted_players_info_dict[pair_index]
+            if called_time[pair_index] == 1:
+                # This list has always the player_1
+                not_yet_encountered_players[pair_index] = [info for info in sorted_players_info_dict[pair_index]
                                                        if info["player"] not in player_1_info["opponents"]]
-
-            # eliminate the player_1 in the list, player_1 is the first element of the list
-            not_yet_encountered_players[pair_index] = not_yet_encountered_players[pair_index][1:]
+                # eliminate the player_1 in the list, player_1 is the first element of the list
+                not_yet_encountered_players[pair_index] = not_yet_encountered_players[pair_index][1:]
+                called_time[pair_index] += 1
 
             pair_result = self.make_pair(player_1, not_yet_encountered_players[pair_index])
             if pair_result is None:
                 # return in the previous pair and re-make
-                pair_index -= 1
+                pair_index -= 1 # CHANGE HERE : -=1 to re-make the previous pair, pair_index = 1: re-begin all
+                print("It has to return to make the previous pair")
+
             else:
                 pair, player_2_info, new_not_yet_encountered_players = pair_result
                 # update the list of not yet encountered players after selecting one of its elements, the remove this
                 # element  the list. The goal is the next time, the other element will be selected
                 not_yet_encountered_players[pair_index] = new_not_yet_encountered_players
                 # pass to next pair
-                # print("in pair")
                 pair_index += 1
                 # Each time, remove the pair of players has been made in the sorted list
                 sorted_players_info_dict[pair_index] = [element for element
                                                         in sorted_players_info_dict[pair_index - 1]
                                                         if element["player"] not in pair]
+                called_time[pair_index] = 1
 
                 # print("after\n ", sorted_players_info_dict[pair_index])
                 # Built pair
@@ -362,16 +367,16 @@ class Tournament:
 if __name__ == '__main__':
 
     t = Tournament()
-    t.name = input("Enter the name of the tournament: ")
-    print("Enter the location with the following information: ")
-    building_number = input("Building number: ")
-    street = input("Street: ")
-    city = input("City: ")
-    zipcode = input("Zipcode: ")
-    location = location.Location(building_number, street, city, zipcode)
-
-    t.location = location
-    t.date = input("Date of the tournament (dd/mm/yyyy): ")
+    # t.name = input("Enter the name of the tournament: ")
+    # print("Enter the location with the following information: ")
+    # building_number = input("Building number: ")
+    # street = input("Street: ")
+    # city = input("City: ")
+    # zipcode = input("Zipcode: ")
+    # location = location.Location(building_number, street, city, zipcode)
+    #
+    # t.location = location
+    # t.date = input("Date of the tournament (dd/mm/yyyy): ")
     t.number_of_rounds = DEFAULT_NUMBER_OF_ROUNDS
     t.rounds = []
     # players = []
@@ -394,17 +399,17 @@ if __name__ == '__main__':
     #         break
     # t.players = players
     t.players = player_list.players
-    while True:
-        time_control = input("Enter time control (bullet/blitz/rapid): ")
-        if time_control not in ["bullet", "blitz", "rapid"]:
-            print("Re-enter")
-            time_control = input("Enter time control (bullet/blitz/rapid): ")
-        else:
-            t.time_control = time_control
-            break
-
-    t.description = input("Enter your description :")
-    print(t)
+    # while True:
+    #     time_control = input("Enter time control (bullet/blitz/rapid): ")
+    #     if time_control not in ["bullet", "blitz", "rapid"]:
+    #         print("Re-enter")
+    #         time_control = input("Enter time control (bullet/blitz/rapid): ")
+    #     else:
+    #         t.time_control = time_control
+    #         break
+    #
+    # t.description = input("Enter your description :")
+    # print(t)
 
     # ranking = ranking
     pairs = t.make_pairs_first_round()
@@ -414,20 +419,21 @@ if __name__ == '__main__':
     elo_ratings = t.get_elo_ratings()
     players_info = t.initialize_players_info(elo_ratings)
 
-    print("*" * 10)
-    print("First pairs :")
-    # print(_round.matches)
-    for pair in pairs:
-        print(pair[0].elo_rating, pair[1].elo_rating)
-    print("*" * 10)
-    print("At the initialisation: ")
-    print(f"total_points: {total_points}")
-    print(f"opponents: {opponents}")
-    print(f"elo_ratings: {elo_ratings}")
-    print(f"players_info: {players_info}")
+    # print("*" * 10)
+    # print("First pairs :")
+    # # print(_round.matches)
+    # for pair in pairs:
+    #     print(pair[0].elo_rating, pair[1].elo_rating)
+    # print("*" * 10)
+    # print("At the initialisation: ")
+    # print(f"total_points: {total_points}")
+    # print(f"opponents: {opponents}")
+    # print(f"elo_ratings: {elo_ratings}")
+    # print(f"players_info: {players_info}")
     #
     round_index = 1
     while round_index <= DEFAULT_NUMBER_OF_ROUNDS:
+        print(f"Make pairs for round {round_index}")
         if round_index == 1:
             pairs = t.make_pairs_first_round()
         else:

@@ -16,8 +16,8 @@ class Player:
         return hash((self._fide_id, self._first_name, self._last_name)) # tuple hash
 
     def __eq__(self, other):
-        return (self._fide_id, self._first_name, self._last_name) == (other.fide_id, other.first_name,
-                                                                      other.last_name)
+        return (self._fide_id, self._first_name, self._last_name) == (other.fide_id, other.first_name, other.last_name)
+
 
     @property
     def fide_id(self):

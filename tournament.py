@@ -1,6 +1,5 @@
 """docstring"""
 
-
 from datetime import datetime, date
 import mvc_exceptions as mvc_exc
 import round_robin
@@ -150,24 +149,25 @@ class Tournament:
 
         if len(self._players) % 2 == 1:
             pairs.append([none_player, sorted_players[-1]])
-            
-        print("*"*10)    
+
+        print("*" * 10)
         print("First pairs")
         for pair in pairs:
             print(pair[0].elo_rating, pair[1].elo_rating)
         print("*" * 10)
-        
+
         return pairs
 
-    def make_pair(self, pair_index, player_1, not_yet_encountered_players):
+    def make_pair(self, player_1, not_yet_encountered_players):
         if len(not_yet_encountered_players) >= 1:
-            player_2 = not_yet_encountered_players[0]
+            player_2_info = not_yet_encountered_players[0]
+            player_2 = player_2_info["player"]
             # Eliminate the taken player_2 for the next time if it has to re-find player_2
             not_yet_encountered_players = not_yet_encountered_players[1:]
             pair = [player_1, player_2]
-            return pair, not_yet_encountered_players
+            return pair, player_2_info, not_yet_encountered_players
         else:
-            return None, not_yet_encountered_players
+            return None
 
     def make_pairs(self, players_info):
         """docstring"""
@@ -175,128 +175,59 @@ class Tournament:
         sorted_players_info = sorted(players_info, key=lambda k: (-k["total_point"], -k['initial_ranking']))
 
         player_number = len(sorted_players_info)
-        if player_number % 2 == 1:
-            player_number_ = player_number - 1
-        else:
-            player_number_ = player_number
-
-        paired_player_number = 0
-
         pair_index = 1
-        pair_number = int(player_number/2)
-
-        # Each time, two players are taken.
         # If the numbers of players is odd, the treatment is only done to the numbers of players - 1
+        pair_number = int(player_number / 2)
 
         # Each pair has its own player, built player_1 as dictionary in order to mark the player of which pair
-        player_1_info = dict()
-        player_1 = dict()
         sorted_players_info_dict = dict()
         sorted_players_info_dict[pair_index] = sorted_players_info
+        not_yet_encountered_players = dict()
         while pair_index <= pair_number:
-            player_1_info[pair_index] = sorted_players_info_dict[pair_index][0]
-            player_1[pair_index] = player_1_info[pair_index]["player"]
+            print("pair_index", pair_index)
+            player_1_info = sorted_players_info_dict[pair_index][0]
+            player_1 = player_1_info["player"]
+            # This list has always the player_1
+            not_yet_encountered_players[pair_index] = [info for info in sorted_players_info_dict[pair_index]
+                                                       if info["player"] not in player_1_info["opponents"]]
 
-            not_yet_encountered_players = [info for info in sorted_players_info_dict[pair_index] if info["player"]
-                                           not in player_1_info[pair_index]["opponents"]] # stop at here
-            # eliminate the player_1 in the list
-            not_yet_encountered_players = not_yet_encountered_players[1:]
-            pair, not_yet_encountered_players = self.make_pair(pair_index, player_1, not_yet_encountered_players)
-            if pair is None:
+            # eliminate the player_1 in the list, player_1 is the first element of the list
+            not_yet_encountered_players[pair_index] = not_yet_encountered_players[pair_index][1:]
+
+            pair_result = self.make_pair(player_1, not_yet_encountered_players[pair_index])
+            if pair_result is None:
                 # return in the previous pair and re-make
                 pair_index -= 1
             else:
+                pair, player_2_info, new_not_yet_encountered_players = pair_result
+                # update the list of not yet encountered players after selecting one of its elements, the remove this
+                # element  the list. The goal is the next time, the other element will be selected
+                not_yet_encountered_players[pair_index] = new_not_yet_encountered_players
                 # pass to next pair
+                # print("in pair")
                 pair_index += 1
+                # Each time, remove the pair of players has been made in the sorted list
+                sorted_players_info_dict[pair_index] = [element for element
+                                                        in sorted_players_info_dict[pair_index - 1]
+                                                        if element["player"] not in pair]
 
+                # print("after\n ", sorted_players_info_dict[pair_index])
+                # Built pair
+                pairs.append(pair)
+                # paired_player_number += 2
 
-            if len(not_yet_encountered_players) > 1:
-                print("len =", len(not_yet_encountered_players))
-                # Take the first element in the list which eliminates all the players encountered
-                player_2_info = not_yet_encountered_players[0]
-            else:
-                raise("Player encountered all other players")
-                # print(f"not_yet_encountered_players {not_yet_encountered_players}")
-                # # If the player 1 encountered all other players, take the next element in the sorted list
-                # player_2_info = sorted_players_info[1]
-
-            # Each time, remove the pair of players has been made in the sorted list
-            sorted_players_info = [element for element in sorted_players_info if element not in (
-                player_1_info, player_2_info)]
-            # Built pair
-            pairs.append([player_1_info["player"], player_2_info["player"]])
-            paired_player_number += 2
-
-            print(f'{player_1_info["total_point"]} vs {player_2_info["total_point"]}; '
-                  f'{player_1_info["player"].elo_rating} vs {player_2_info["player"].elo_rating}; '
-                  f'{player_1_info["player"] in player_2_info["opponents"]} vs '
-                  f'{player_2_info["player"] in player_1_info["opponents"]}')
+                print(f'{player_1_info["total_point"]} vs {player_2_info["total_point"]}; '
+                      f'{player_1_info["player"].elo_rating} vs {player_2_info["player"].elo_rating}; '
+                      f'{player_1_info["player"] in player_2_info["opponents"]} vs '
+                      f'{player_2_info["player"] in player_1_info["opponents"]}')
 
         if player_number % 2 == 1:
             # Pair with none player if number of player is odd
-            pairs.append([none_player, sorted_players_info[-1]["player"]])
-            print(sorted_players_info[-1]["total_point"], sorted_players_info[-1]["player"].elo_rating)
+            pairs.append([sorted_players_info_dict[pair_index][-1]["player"], none_player])
+            print(sorted_players_info_dict[pair_index][-1]["player"]["total_point"],
+                  sorted_players_info_dict[pair_index][-1]["player"].elo_rating)
 
         return pairs
-
-
-
-    # def make_pairs(self, players_info):
-    #     """docstring"""
-    #     pairs = []
-    #     # players_info = self.update_players_info(total_points, elo_ratings, opponents)
-    #     # players_info = self.update_players_info(players_info, total_points, opponents)
-    #
-    #     # Initial ranking consist of player's Elo rating, the best player is the best Elo rating
-    #     # Sort with decreasing order of total point and decreasing order of Elo rating
-    #     # The best player with sorted result is in the first, the worst is in the last
-    #     sorted_players_info = sorted(players_info, key=lambda k: (-k["total_point"], -k['initial_ranking']))
-    #
-    #     player_number = len(sorted_players_info)
-    #     if player_number % 2 == 1:
-    #         player_number_ = player_number - 1
-    #     else:
-    #         player_number_ = player_number
-    #
-    #     paired_player_number = 0
-    #
-    #     # Each time, two players are taken.
-    #     # If the numbers of players is odd, the treatment is only done to the numbers of players - 1
-    #     while paired_player_number < player_number_:
-    #         player_1_info = sorted_players_info[0]
-    #         not_yet_encountered_players = [info for info in sorted_players_info if info["player"] not in
-    #                                        player_1_info["opponents"]]
-    #         # eliminate the player_1 in the list
-    #         not_yet_encountered_players = not_yet_encountered_players[1:]
-    #
-    #         if len(not_yet_encountered_players) > 1:
-    #             print("len =", len(not_yet_encountered_players))
-    #             # Take the first element in the list which eliminates all the players encountered
-    #             player_2_info = not_yet_encountered_players[0]
-    #         else:
-    #             raise("Player encountered all other players")
-    #             # print(f"not_yet_encountered_players {not_yet_encountered_players}")
-    #             # # If the player 1 encountered all other players, take the next element in the sorted list
-    #             # player_2_info = sorted_players_info[1]
-    #
-    #         # Each time, remove the pair of players has been made in the sorted list
-    #         sorted_players_info = [element for element in sorted_players_info if element not in (
-    #             player_1_info, player_2_info)]
-    #         # Built pair
-    #         pairs.append([player_1_info["player"], player_2_info["player"]])
-    #         paired_player_number += 2
-    #
-    #         print(f'{player_1_info["total_point"]} vs {player_2_info["total_point"]}; '
-    #               f'{player_1_info["player"].elo_rating} vs {player_2_info["player"].elo_rating}; '
-    #               f'{player_1_info["player"] in player_2_info["opponents"]} vs '
-    #               f'{player_2_info["player"] in player_1_info["opponents"]}')
-    #
-    #     if player_number % 2 == 1:
-    #         # Pair with none player if number of player is odd
-    #         pairs.append([none_player, sorted_players_info[-1]["player"]])
-    #         print(sorted_players_info[-1]["total_point"], sorted_players_info[-1]["player"].elo_rating)
-    #
-    #     return pairs
 
     @staticmethod
     def initialize_matches(pairs):
@@ -502,7 +433,6 @@ if __name__ == '__main__':
         else:
             pairs = t.make_pairs(players_info)
 
-
         _round = round_robin.Round()
         _round.name = "Round " + str(round_index)
         _round.date = date.today().strftime("%d/%m/%Y")
@@ -514,7 +444,7 @@ if __name__ == '__main__':
         total_points = t.update_total_points(_round, total_points)
         opponents = t.update_opponents(_round, opponents)
         players_info = t.update_players_info(players_info, total_points, opponents)
-        print("*"*10)
+        print("*" * 10)
         print(f'{round_index}. Round {round_index}')
         print(_round)
         print(f"total_points: {total_points}")
@@ -522,4 +452,3 @@ if __name__ == '__main__':
         print(f"players_info: {players_info}")
         print("*" * 10)
         round_index += 1
-

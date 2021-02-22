@@ -13,5 +13,12 @@ class ScoreError(Exception):
     pass
 
 
-class ItemNotStored(Exception):
+class ItemNotExisted(Exception):
+    pass
+
+class ItemAlreadyExisted(Exception):
+    pass
+
+
+class ItemNotExisted(Exception):
     pass

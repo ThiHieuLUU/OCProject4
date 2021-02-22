@@ -13,11 +13,13 @@ class Player:
         self._elo_rating = elo_rating
 
     def __hash__(self):
-        return hash((self._fide_id, self._first_name, self._last_name)) # tuple hash
+        return hash((self._fide_id, self._first_name, self._last_name))  # tuple hash
 
     def __eq__(self, other):
-        return (self._fide_id, self._first_name, self._last_name) == (other.fide_id, other.first_name, other.last_name)
-
+        if isinstance(other, type(self)):
+            return (self._fide_id, self._first_name, self._last_name, self._date_of_birth, self._gender) \
+               == (other.fide_id, other.first_name, other.last_name, other.date_of_birth, other.gender)
+        return False
 
     @property
     def fide_id(self):
@@ -93,27 +95,32 @@ class Player:
 
     def get_attributes(self):
         """Get attribute names (without protected or private sign) and theirs values """
-        attr_names = []
+        attributes_info = dict()
 
         protected_sign = "_"
         private_sign = "_" + type(self).__name__ + "__"
 
-        for attribute_name in self.__dict__:
+        for attribute_name, attribute_value in zip(self.__dict__, self.__dict__.values()):
             # in case of protected or private attribute, retrieve only true name of attribute
             if attribute_name.startswith(private_sign):
                 attribute_name = attribute_name[len(private_sign):]
             elif attribute_name.startswith(protected_sign):
                 attribute_name = attribute_name[1:]
 
-            attr_names.append(attribute_name)
-        return attr_names, list(self.__dict__.values())
+            attributes_info[attribute_name] = attribute_value
+        return attributes_info
+
+    def set_attrs(self, kwargs):
+        for k, v in kwargs.items():
+            # print(f"k = {k}, v = {v}")
+            setattr(self, k, v)
 
     def __str__(self):
         """Print all attributes and theirs values of an object"""
-        attr_names, attr_values = self.get_attributes()
+        attr_info = self.get_attributes()
         attr_str = ""
 
-        for attr_name, attr_value in zip(attr_names, attr_values):
+        for attr_name, attr_value in attr_info.items():
             attr_str += str(attr_name).capitalize() + ': ' + str(attr_value) + "\n"
 
         return attr_str

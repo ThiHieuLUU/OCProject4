@@ -27,6 +27,16 @@ class Tournament:
         self._players = None
         self._time_control = None
         self._description = None
+        self.item_type = type(self)
+
+    def __hash__(self):
+        return hash((self._name, self._location, self._date))  # tuple hash
+
+    def __eq__(self, other):
+        if isinstance(other, type(self)):
+            return (self._name, self._location, self._date) \
+               == (other.name, other.location, other.date)
+        return False
 
     @property
     def name(self):
@@ -202,6 +212,8 @@ class Tournament:
                 # return in the previous pair and re-make
                 pair_index -= 1 # CHANGE HERE : -=1 to re-make the previous pair, pair_index = 1: re-begin all
                 print("It has to return to make the previous pair")
+                # remove the previous pair to re-make it
+                pairs.pop()
 
             else:
                 pair, player_2_info, new_not_yet_encountered_players = pair_result

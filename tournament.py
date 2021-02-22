@@ -351,32 +351,49 @@ class Tournament:
         return players_info
 
     def get_attributes(self):
-        """Get all attribute's names (without protected or private sign) and theirs values """
-        attr_names = []
+        """Get attribute names (without protected or private sign) and theirs values """
+        attributes_info = basic_backend.get_attributes(self)
+        return attributes_info
 
-        protected_sign = "_"
-        private_sign = "_" + type(self).__name__ + "__"
+    def set_attrs(self, kwargs):
+        basic_backend.set_attrs(self, kwargs)
 
-        for attribute_name in self.__dict__:
-            # in case of protected or private attribute, retrieve only true name of attribute
-            if attribute_name.startswith(private_sign):
-                attribute_name = attribute_name[len(private_sign):]
-            elif attribute_name.startswith(protected_sign):
-                attribute_name = attribute_name[1:]
+    @classmethod
+    def create_tournament(cls, attributes_values):
+        # Retrieve the class type
+        obj_type = globals()[cls.__name__]
+        return basic_backend.create_item(attributes_values, obj_type)
 
-            attr_names.append(attribute_name)
-        return attr_names, list(self.__dict__.values())
+    @classmethod
+    def add_tournament(cls, tournaments, tournament):
+        return basic_backend.add_item(tournaments, tournament)
+
+    @classmethod
+    def find_tournament(cls, tournaments, key, value):
+        return basic_backend.find_item(tournaments, key, value)
+
+    @classmethod
+    def read_tournament(cls, tournaments, key, value):
+        return basic_backend.read_item(tournaments, key, value)
+
+    @classmethod
+    def update_tournament(cls, tournaments, key, value, attributes_new_values):
+        return basic_backend.update_item(tournaments, key, value, attributes_new_values)
+
+    @classmethod
+    def delete_tournament(cls, tournaments, key, value):
+        return basic_backend.delete_item(tournaments, key, value)
 
     def __str__(self):
-        """Print all attributes and theirs values for an object"""
-        attr_names, attr_values = self.get_attributes()
-        attr_str = ""
-
-        for attr_name, attr_value in zip(attr_names, attr_values):
-            attr_str += str(attr_name).capitalize() + ': ' + str(attr_value) + "\n"
-
+        """Print all attributes and theirs values of an object"""
+        attr_str = basic_backend.get_str(self)
         return attr_str
 
+    def __repr__(self):
+        if self._name is not None:
+            return self._name + " - date: " + str(self._date)
+        else:
+            return str(None)
 
 if __name__ == '__main__':
 

@@ -20,5 +20,5 @@ class ItemAlreadyExisted(Exception):
     pass
 
 
-class ItemNotExisted(Exception):
+class ItemNotFound(Exception):
     pass

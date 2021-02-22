@@ -1,4 +1,5 @@
 """docstring"""
+import basic_backend
 
 
 class Player:
@@ -18,7 +19,7 @@ class Player:
     def __eq__(self, other):
         if isinstance(other, type(self)):
             return (self._fide_id, self._first_name, self._last_name, self._date_of_birth, self._gender) \
-               == (other.fide_id, other.first_name, other.last_name, other.date_of_birth, other.gender)
+                   == (other.fide_id, other.first_name, other.last_name, other.date_of_birth, other.gender)
         return False
 
     @property
@@ -95,34 +96,41 @@ class Player:
 
     def get_attributes(self):
         """Get attribute names (without protected or private sign) and theirs values """
-        attributes_info = dict()
-
-        protected_sign = "_"
-        private_sign = "_" + type(self).__name__ + "__"
-
-        for attribute_name, attribute_value in zip(self.__dict__, self.__dict__.values()):
-            # in case of protected or private attribute, retrieve only true name of attribute
-            if attribute_name.startswith(private_sign):
-                attribute_name = attribute_name[len(private_sign):]
-            elif attribute_name.startswith(protected_sign):
-                attribute_name = attribute_name[1:]
-
-            attributes_info[attribute_name] = attribute_value
+        attributes_info = basic_backend.get_attributes(self)
         return attributes_info
 
     def set_attrs(self, kwargs):
-        for k, v in kwargs.items():
-            # print(f"k = {k}, v = {v}")
-            setattr(self, k, v)
+        basic_backend.set_attrs(self, kwargs)
+
+    @classmethod
+    def create_player(cls, attributes_values):
+        # Retrieve the class type
+        obj_type = globals()[cls.__name__]
+        return basic_backend.create_item(attributes_values, obj_type)
+
+    @classmethod
+    def add_player(cls, players, player):
+        return basic_backend.add_item(players, player)
+
+    @classmethod
+    def find_player(cls, players, key, value):
+        return basic_backend.find_item(players, key, value)
+
+    @classmethod
+    def read_player(cls, players, key, value):
+        return basic_backend.read_item(players, key, value)
+
+    @classmethod
+    def update_player(cls, players, key, value, attributes_new_values):
+        return basic_backend.update_item(players, key, value, attributes_new_values)
+
+    @classmethod
+    def delete_player(cls, players, key, value):
+        return basic_backend.delete_item(players, key, value)
 
     def __str__(self):
         """Print all attributes and theirs values of an object"""
-        attr_info = self.get_attributes()
-        attr_str = ""
-
-        for attr_name, attr_value in attr_info.items():
-            attr_str += str(attr_name).capitalize() + ': ' + str(attr_value) + "\n"
-
+        attr_str = basic_backend.get_str(self)
         return attr_str
 
     def __repr__(self):
@@ -133,5 +141,10 @@ class Player:
 
 
 if __name__ == '__main__':
+    # klass = globals()["Player"]
     p = Player(123, "Maxim", "Drague")
     print(p)
+
+    # print(klass)
+    # p = klass()
+    # print(p)

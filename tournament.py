@@ -1,6 +1,7 @@
 """docstring"""
 
 from datetime import datetime, date
+import basic_backend
 import mvc_exceptions as mvc_exc
 import round_robin
 import player
@@ -13,6 +14,7 @@ DEFAULT_NUMBER_OF_ROUNDS = 4
 
 none_player = player.Player()
 
+tournaments = dict()
 
 class Tournament:
     """docstring"""

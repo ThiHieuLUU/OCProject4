@@ -37,4 +37,24 @@ The scores (player_1 vs player_2)  to test:
 0 1
 0 1
 ```
+another case:
+```
+4.1. Round 1
+1 0
+0 1
+0.5 0.5
+1 0
+
+4.2. Round 2
+0 1
+0.5 0.5
+0.5 0.5 
+1 0
+
+4.3.Round 3
+1 0
+0 1
+1 0
+0 1
+```
 

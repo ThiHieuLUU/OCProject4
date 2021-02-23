@@ -384,6 +384,11 @@ class Tournament:
     def delete_tournament(cls, tournaments, key, value):
         return basic_backend.delete_item(tournaments, key, value)
 
+    @staticmethod
+    def get_attribute_names():
+        t = Tournament()
+        return t.get_attributes().keys()
+
     def __str__(self):
         """Print all attributes and theirs values of an object"""
         attr_str = basic_backend.get_str(self)

@@ -1,3 +1,5 @@
+from datetime import datetime, date
+
 import model
 import view
 import player_list
@@ -18,17 +20,24 @@ class Controller(object):
             break
         return time_control
 
+    def input_int(self, msg):
+        while True:
+            try:
+                int_entry = int(input(msg))
+                break
+            except ValueError as e:
+                self.view.show_error("input", "integer")
+        return int_entry
+
     # def input_players(self):
     #     self.view.show_request("players")
     #     players = []
-    #     nb_player = 1
+    #     player_index = 1
     #     while True:
-    #         self.view.show_request(f"player {nb_player}")
-    #         # print(f"{nb_player}. Enter the players {nb_player}: ")
-    #         # _player_id = int(input("Fide id :"))
+    #         self.view.show_request(f"player {player_index}")
     #         first_name = input("First name: ")
     #         last_name = input("Last name: ")
-    #         date_of_birth = input("Date of birth (dd/mm/yyyy): ")
+    #         date_of_birth = self.input_date("Date of birth: ")
     #         gender = input("Gender (male/female): ")
     #         ranking = input("Ranking (Elo rating): ")
     #         # assert ranking is int, 'Ranking must be integer'
@@ -40,7 +49,7 @@ class Controller(object):
     #         self.view.show_question("add more player")
     #         res = input()
     #         if res.lower() == "y":
-    #             nb_player += 1
+    #             player_index += 1
     #         else:
     #             break
     #     return players
@@ -58,25 +67,42 @@ class Controller(object):
         location = self.model.build_location(building_number, street, city, zipcode)
         return location
 
+    def input_date(self, msg):
+        # self.view.show_message(f"{msg}")
+        date_format = "%d/%m/%Y"
+        while True:
+            try:
+                date_entry = input(msg)
+                datetime.strptime(str(date_entry), date_format)
+                break
+            except ValueError as e:
+                self.view.show_error("date", "dd/mm/yyyy")
+        return date_entry
+
     def create_tournament(self):
-        self.view.start_view()
+        self.view.show_question("create a tournament")
         res = input()
         if res == 'y':
-            name = input("Enter the name of the tournament: ")
-            date = input("Enter the date of the tournament (dd/mm/yyyy): ")
-            number_of_rounds = int(input("Enter the number of rounds: "))
-            description = input("Enter your description :")
+            name = str(input("Enter the name of the tournament: "))
+            date_ = self.input_date("Enter the date of the tournament: ")
+            number_of_rounds = self.input_int("Enter the number of rounds: ")
+            description = input("Enter your description: ")
             location = self.input_location()
             players = self.input_players()
             time_control = self.input_time_control()
 
-            self.model.create_tournament(name, location, date, number_of_rounds, players, time_control, description)
+            self.model.create_tournament(name, location, date_, number_of_rounds, players, time_control, description)
         else:
-            return view.end_view()
+            return self.view.end_view()
 
     def get_pairs(self, round_index):
         pairs = self.model.get_pairs(round_index)
-        self.view.show_pairs(pairs, round_index)
+        self.view.show_question(f"see the pairs of the round {round_index}")
+        res = input()
+        if res.lower() in ["y", "Yes"]:
+            self.view.show_pairs(pairs, round_index)
+        else:
+            self.view.next_view()
 
     def make_new_round(self):
         # The new round becomes the last round in the list of rounds
@@ -110,17 +136,23 @@ class Controller(object):
 
     def run_tournament(self):
         self.create_tournament()
-        self.view.show_tournament_info(controller.model.tournament)
-        nb_rounds = controller.model.get_number_of_rounds()
-        round_index = 1
-        while round_index <= nb_rounds:
-            self.get_pairs(round_index)
-            self.make_new_round()
-            self.update_matches()
-            round_index += 1
+        try:
+            nb_rounds = self.model.get_number_of_rounds()
+            round_index = 1
+            while round_index <= nb_rounds:
+                self.get_pairs(round_index)
+                self.make_new_round()
+                self.update_matches()
+                round_index += 1
+        except TypeError:
+            print("Something is wrong. Tournament is not happened!")
+        else:
+            print("All is done".upper())
+
 
 if __name__ == "__main__":
     controller = Controller()
+    controller.view.start_view()
     controller.run_tournament()
 
 

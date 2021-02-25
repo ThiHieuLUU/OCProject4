@@ -4,11 +4,19 @@ class View(object):
     def start_view():
         print('**************************************************************')
         print('Welcome to the chess application!'.upper())
-        print('Do you want to create a tournament?[y/n]: ')
+        print('**************************************************************')
 
     @staticmethod
     def end_view():
         print('Goodbye!')
+
+    @staticmethod
+    def next_view():
+        print('Go to the next step!')
+
+    @staticmethod
+    def show_message(msg):
+        print(msg)
 
     @staticmethod
     def show_request(obj):

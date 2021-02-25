@@ -14,7 +14,7 @@ pip install -r requirements.txt
 ```
 3. Launch
 ```bash
-python3 tournament.py
+python3 controller.py
 ```
 4. Test case with making pairs (problem at the end of round 3).
 The scores (player_1 vs player_2)  to test:

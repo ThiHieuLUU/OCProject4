@@ -96,12 +96,6 @@ class Location:
         return "\n" + attr_str
 
     def __repr__(self):
-        if self._location_id is not None:
-            return self._first_name + " " + self._last_name + " - ID " + str(self._location_id)
-        else:
-            return str(None)
-
-    def __repr__(self):
         """Print all attributes and theirs values of an object"""
         attr_names, attr_values = self.get_attributes()
         attr_str = ""
@@ -110,9 +104,3 @@ class Location:
             attr_str += str(attr_name).capitalize() + ': ' + str(attr_value) + "\n"
 
         return attr_str
-
-
-if __name__ == '__main__':
-    l = Location(10)
-    del l.building_number
-    print(l)

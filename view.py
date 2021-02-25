@@ -11,8 +11,8 @@ class View(object):
         print('Goodbye!')
 
     @staticmethod
-    def show_request(event):
-        print(f'Enter the information of {event}: ')
+    def show_request(obj):
+        print(f'Enter the information of {obj}: ')
 
     @staticmethod
     def show_error(key, value):
@@ -46,8 +46,7 @@ class View(object):
 
     @staticmethod
     def show_updating_match(round_index, match_index):
-        print(f"- Round {round_index}, match {match_index}:".upper())
-
+        print(f"* Round {round_index}, match {match_index}:".upper())
 
     @staticmethod
     def show_tournament_info(tournament):

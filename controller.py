@@ -5,12 +5,11 @@ import player_list
 
 class Controller(object):
 
-    def __init__(self, _model, _view):
-        self.model = _model
-        self.view = _view
+    def __init__(self):
+        self.model = model.Model()
+        self.view = view.View()
 
     def input_time_control(self):
-        # time_control = None
         while True:
             time_control = input("Enter time control (bullet/blitz/rapid): ")
             while time_control not in ["bullet", "blitz", "rapid"]:
@@ -46,7 +45,8 @@ class Controller(object):
     #             break
     #     return players
 
-    def input_players(self):
+    @staticmethod
+    def input_players():
         return player_list.players
 
     def input_location(self):
@@ -63,7 +63,6 @@ class Controller(object):
         res = input()
         if res == 'y':
             name = input("Enter the name of the tournament: ")
-            # print("Enter the location with the following information: ")
             date = input("Enter the date of the tournament (dd/mm/yyyy): ")
             number_of_rounds = int(input("Enter the number of rounds: "))
             description = input("Enter your description :")
@@ -72,27 +71,21 @@ class Controller(object):
             time_control = self.input_time_control()
 
             self.model.create_tournament(name, location, date, number_of_rounds, players, time_control, description)
-            # self.model.tournament = tournament
-            # return tournament
         else:
             return view.end_view()
-
-    # def get_pairs_first_round(self):
-    #     pairs = self.model.get_first_pairs()
-    #     self.view.show_pairs(pairs, round_index=1)
 
     def get_pairs(self, round_index):
         pairs = self.model.get_pairs(round_index)
         self.view.show_pairs(pairs, round_index)
 
     def make_new_round(self):
+        # The new round becomes the last round in the list of rounds
         self.model.make_new_round()
-        # the added round is the last round in the list of rounds
         last_round, last_round_index = self.model.get_last_round()
         self.view.show_round(last_round, last_round_index)
 
     def update_matches(self):
-        # convention: always update the last round
+        # Convention: always update the last round
         last_round, last_round_index = self.model.get_last_round()
         matches = last_round.matches
         self.view.show_updating_round(last_round_index)
@@ -107,38 +100,27 @@ class Controller(object):
 
             score_list = [0, 0.5, 1]
             if score1 in score_list and score2 in score_list and score1 + score2 == 1.0:
-                # match[0][1] = score1  # update also to _round.matches
-                # match[1][1] = score2
                 self.model.update_match(match, score1, score2)
                 match_index += 1
             else:
                 self.view.show_error("score", "[0/0.5/1], sum of scores must be 1")
-        print(matches)
         self.model.update_round(matches)
         last_round, last_round_index = self.model.get_last_round()
         self.view.show_round(last_round, last_round_index)
 
+    def run_tournament(self):
+        self.create_tournament()
+        self.view.show_tournament_info(controller.model.tournament)
+        nb_rounds = controller.model.get_number_of_rounds()
+        round_index = 1
+        while round_index <= nb_rounds:
+            self.get_pairs(round_index)
+            self.make_new_round()
+            self.update_matches()
+            round_index += 1
+
 if __name__ == "__main__":
-    # running controller function
-    _model = model.Model()
-    _view = view.View()
-    controller = Controller(_model, _view)
-    controller.create_tournament()
-    controller.view.show_tournament_info(controller.model.tournament)
-    round_index = 1
-    controller.get_pairs(round_index)
-    controller.make_new_round()
-    controller.update_matches()
-    round_index = 2
-    controller.get_pairs(round_index)
-    controller.make_new_round()
-    controller.update_matches()
-    round_index = 3
-    controller.get_pairs(round_index)
-    controller.make_new_round()
-    controller.update_matches()
-    round_index = 4
-    controller.get_pairs(round_index)
-    controller.make_new_round()
-    controller.update_matches()
-    # print(controller.model.tournament)
+    controller = Controller()
+    controller.run_tournament()
+
+

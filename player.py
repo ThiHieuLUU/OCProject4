@@ -13,14 +13,6 @@ class Player:
         self._date_of_birth = date_of_birth
         self._gender = gender
         self._elo_rating = elo_rating
-    #
-    # def __init__(self):
-    #     self._player_id = None
-    #     self._first_name = None
-    #     self._last_name = None
-    #     self._date_of_birth = None
-    #     self._gender = None
-    #     self._elo_rating = None
 
     def __hash__(self):
         return hash((self._player_id, self._first_name, self._last_name))  # tuple hash
@@ -147,12 +139,3 @@ class Player:
             return self._first_name + " " + self._last_name + " - ID " + str(self._player_id)
         else:
             return str(None)
-
-if __name__ == '__main__':
-    # klass = globals()["Player"]
-    p = Player(123, "Maxim", "Drague")
-    print(p)
-
-    # print(klass)
-    # p = klass()
-    # print(p)

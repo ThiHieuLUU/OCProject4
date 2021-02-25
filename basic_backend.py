@@ -22,7 +22,7 @@ def find_item(items, key, value):
     if my_item_indexes is not None:
         return items[my_item_indexes]
     else:
-        raise mvc_exc.ItemNotFound(f'{item} not found!')
+        raise mvc_exc.ItemNotFound(f'{key} = {value} is not found!')
     return None
 
 

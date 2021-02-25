@@ -2,12 +2,12 @@
 
 import tournament
 import player
-import round_robin
-import match
+import chess_round
 import location
 
-# players = list()
 tournaments = list()
+players = list()
+
 total_points = dict()
 opponents = dict()
 players_info = dict()
@@ -17,10 +17,6 @@ class Model:
 
     def __init__(self):
         self.tournament = tournament.Tournament()
-        # self.players = []
-        # self.rounds = []
-        # self.matches = []
-        # self.location = None
 
     @staticmethod
     def build_location(building_number, street, city, zipcode):
@@ -47,7 +43,6 @@ class Model:
         global players
         player.Player.add_player(players, new_player)
 
-    # @staticmethod
     def create_tournament(self, name, _location, date, number_of_rounds, player_list, time_control, description):
         attributes_values = dict()
         attributes_values["name"] = name
@@ -67,7 +62,6 @@ class Model:
         opponents = self.tournament.initialize_opponents()
         elo_ratings = self.tournament.get_elo_ratings()
         players_info = self.tournament.initialize_players_info(elo_ratings)
-        # return total_points, opponents, players_info
 
     def get_first_pairs(self):
         return self.tournament.make_pairs_first_round()
@@ -79,8 +73,6 @@ class Model:
 
         if round_index == 1:
             pairs = self.tournament.make_pairs_first_round()
-            # self.initialize_info
-            # total_points, opponents, players_info = self.get_initial_info()
         else:
             pairs = self.tournament.make_pairs(players_info)
         return pairs
@@ -88,7 +80,7 @@ class Model:
     def make_new_round(self):
         round_index = len(self.tournament.rounds) + 1
         if round_index <= self.tournament.number_of_rounds:
-            _round = round_robin.Round()
+            _round = chess_round.Round()
             _round.name = "Round " + str(round_index)
             _round.date = self.tournament.date
 
@@ -125,17 +117,18 @@ class Model:
 
         return last_round, last_round_index
 
+    def get_number_of_rounds(self):
+        return self.tournament.number_of_rounds
+
     @staticmethod
     def get_players_from_match(_match):
         return repr(_match[0][0]), repr(_match[1][0])
 
     @staticmethod
     def update_match(match, score1, score2):
-        match[0][1] = score1  # update also to _round.matches
+        match[0][1] = score1
         match[1][1] = score2
         return match
-        # _round.date = date.today().strftime("%d/%m/%Y")
-        # if self.tournament is not None:
 
     @staticmethod
     def add_player(new_tournament):

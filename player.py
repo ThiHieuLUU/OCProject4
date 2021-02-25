@@ -5,34 +5,43 @@ import basic_backend
 class Player:
     """docstring"""
 
-    def __init__(self, fide_id=None, first_name=None, last_name=None, date_of_birth=None, gender=None, elo_rating=None):
-        self._fide_id = fide_id
+    def __init__(self, player_id=None, first_name=None, last_name=None, date_of_birth=None, gender=None,
+                 elo_rating=None):
+        self._player_id = player_id
         self._first_name = first_name
         self._last_name = last_name
         self._date_of_birth = date_of_birth
         self._gender = gender
         self._elo_rating = elo_rating
+    #
+    # def __init__(self):
+    #     self._player_id = None
+    #     self._first_name = None
+    #     self._last_name = None
+    #     self._date_of_birth = None
+    #     self._gender = None
+    #     self._elo_rating = None
 
     def __hash__(self):
-        return hash((self._fide_id, self._first_name, self._last_name))  # tuple hash
+        return hash((self._player_id, self._first_name, self._last_name))  # tuple hash
 
     def __eq__(self, other):
         if isinstance(other, type(self)):
-            return (self._fide_id, self._first_name, self._last_name, self._date_of_birth, self._gender) \
-                   == (other.fide_id, other.first_name, other.last_name, other.date_of_birth, other.gender)
+            return (self._player_id, self._first_name, self._last_name, self._date_of_birth, self._gender) \
+                   == (other.player_id, other.first_name, other.last_name, other.date_of_birth, other.gender)
         return False
 
     @property
-    def fide_id(self):
-        return self._fide_id
+    def player_id(self):
+        return self._player_id
 
-    @fide_id.setter
-    def fide_id(self, new_fide_id):
-        self._fide_id = new_fide_id
+    @player_id.setter
+    def player_id(self, new_player_id):
+        self._player_id = new_player_id
 
-    @fide_id.deleter
-    def fide_id(self):
-        del self._fide_id
+    @player_id.deleter
+    def player_id(self):
+        del self._player_id
 
     @property
     def first_name(self):
@@ -134,11 +143,10 @@ class Player:
         return attr_str
 
     def __repr__(self):
-        if self._fide_id is not None:
-            return self._first_name + " " + self._last_name + " - ID " + str(self._fide_id)
+        if self._player_id is not None:
+            return self._first_name + " " + self._last_name + " - ID " + str(self._player_id)
         else:
             return str(None)
-
 
 if __name__ == '__main__':
     # klass = globals()["Player"]

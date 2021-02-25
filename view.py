@@ -1,108 +1,57 @@
-# VIEW
-# model_view_controller.py
-"""docstring"""
-class View():
-    """docstring"""
+class View(object):
 
     @staticmethod
     def start_view():
-        print
-        'MVC - the simplest example'
-        print
-        'Do you want to see everyone in my db?[y/n]'
+        print('**************************************************************')
+        print('Welcome to the chess application!'.upper())
+        print('Do you want to create a tournament?[y/n]: ')
 
     @staticmethod
-    def show_tournament(tournament):
-        """docstring"""
-        print('**************************************************************')
-        print('Tournament information:')
+    def end_view():
+        print('Goodbye!')
+
+    @staticmethod
+    def show_request(event):
+        print(f'Enter the information of {event}: ')
+
+    @staticmethod
+    def show_error(key, value):
+        print(f'The {key} is not correct. Re-enter {key} ({value}): ')
+
+    @staticmethod
+    def show_question(action):
+        print(f'Do you want to {action} [y/n]? ')
+
+    @staticmethod
+    def show_pairs(pairs, round_index):
+        print("*" * 10)
+        print(f"Pairs of the round {round_index}:".upper())
+        for pair in pairs:
+            print(pair)
+            # print(f'{pair[0]} \t {pair[1]}')
+        print("*" * 10)
+
+    @staticmethod
+    def show_round(_round, round_index):
+        print("*" * 10)
+        print(f"Information of the round {round_index}:".upper())
+        print(_round)
+        print("*" * 10)
+
+    @staticmethod
+    def show_updating_round(round_index):
+        print("*" * 10)
+        print(f"Enter result of the matches for the round {round_index}:".upper())
+        print("*" * 10)
+
+    @staticmethod
+    def show_updating_match(round_index, match_index):
+        print(f"- Round {round_index}, match {match_index}:".upper())
+
+
+    @staticmethod
+    def show_tournament_info(tournament):
+        print("*" * 10)
+        print(f"information of the tournament:".upper())
         print(tournament)
-        print('**************************************************************')
-
-    @staticmethod
-    def show_round(round):
-        """docstring"""
-        print('**************************************************************')
-        print('Round information:')
-        print(round)
-        print('**************************************************************')
-
-    @staticmethod
-    def show_player(player):
-        """docstring"""
-        print('**************************************************************')
-        print('Player information:')
-        print(player)
-        print('**************************************************************')
-
-    @staticmethod
-    def show_match(match):
-        """docstring"""
-        print('**************************************************************')
-        print('match information:')
-        print(match)
-        print('**************************************************************')
-
-    @staticmethod
-    def show_tournaments(tournaments):
-        """docstring"""
-        print('**************************************************************')
-        print('List of tournaments:')
-        index = 1
-        for tournament in tournaments:
-            print(f'{index}.Tournament:')
-            print(tournament)
-            index += 1
-        print('**************************************************************')
-
-    @staticmethod
-    def show_rounds(rounds):
-        """docstring"""
-        print('**************************************************************')
-        print('List of rounds:')
-        index = 1
-        for round in rounds:
-            print(f'{index}. Round:')
-            print(round)
-            index += 1
-        print('**************************************************************')
-
-    @staticmethod
-    def show_players(players):
-        """docstring"""
-        print('**************************************************************')
-        print('List of players:')
-        index = 1
-        for player in players:
-            print(f'{index}. Player:')
-            print(player)
-            index += 1
-        print('**************************************************************')
-
-    @staticmethod
-    def show_matchs(matchs):
-        """docstring"""
-        print('**************************************************************')
-        print('List of matchs:')
-        index = 1
-        for match in matchs:
-            print(f'{index}. Match:')
-            print(match)
-            index += 1
-        print('**************************************************************')
-
-    @staticmethod
-    def show_tournament_ranking(tournament_rankings):
-        """docstring"""
-        print('**************************************************************')
-        print('List of tournament rankings:')
-        index = 1
-        for rank in rankings:
-            print(f'{index}. {rank}')
-            index += 1
-        print('**************************************************************')
-
-    @staticmethod
-    def show_elo_rating():
-        """docstring"""
-
+        print("*" * 10)

@@ -1,9 +1,12 @@
+import basic_backend
+
+
 class Location:
-    def __init__(self, building_number=None, street=None, city=None, zipcode=None):
-        self._building_number = building_number
-        self._street = street
-        self._city = city
-        self._zipcode = zipcode
+    def __init__(self):
+        self._building_number = None
+        self._street = None
+        self._city = None
+        self._zipcode = None
 
     @property
     def building_number(self):
@@ -55,30 +58,48 @@ class Location:
 
     def get_attributes(self):
         """Get attribute names (without protected or private sign) and theirs values """
-        attr_names = []
+        attributes_info = basic_backend.get_attributes(self)
+        return attributes_info
 
-        protected_sign = "_"
-        private_sign = "_" + type(self).__name__ + "__"
+    def set_attrs(self, kwargs):
+        basic_backend.set_attrs(self, kwargs)
 
-        for attribute_name in self.__dict__:
-            # in case of protected or private attribute, retrieve only true name of attribute
-            if attribute_name.startswith(private_sign):
-                attribute_name = attribute_name[len(private_sign):]
-            elif attribute_name.startswith(protected_sign):
-                attribute_name = attribute_name[1:]
+    @classmethod
+    def create_location(cls, attributes_values):
+        # Retrieve the class type
+        obj_type = globals()[cls.__name__]
+        return basic_backend.create_item(attributes_values, obj_type)
 
-            attr_names.append(attribute_name)
-        return attr_names, list(self.__dict__.values())
+    @classmethod
+    def add_location(cls, locations, location):
+        return basic_backend.add_item(locations, location)
+
+    @classmethod
+    def find_location(cls, locations, key, value):
+        return basic_backend.find_item(locations, key, value)
+
+    @classmethod
+    def read_location(cls, locations, key, value):
+        return basic_backend.read_item(locations, key, value)
+
+    @classmethod
+    def update_location(cls, locations, key, value, attributes_new_values):
+        return basic_backend.update_item(locations, key, value, attributes_new_values)
+
+    @classmethod
+    def delete_location(cls, locations, key, value):
+        return basic_backend.delete_item(locations, key, value)
 
     def __str__(self):
         """Print all attributes and theirs values of an object"""
-        attr_names, attr_values = self.get_attributes()
-        attr_str = ""
-
-        for attr_name, attr_value in zip(attr_names, attr_values):
-            attr_str += str(attr_name).capitalize() + ': ' + str(attr_value) + "\n"
-
+        attr_str = basic_backend.get_str(self)
         return "\n" + attr_str
+
+    def __repr__(self):
+        if self._location_id is not None:
+            return self._first_name + " " + self._last_name + " - ID " + str(self._location_id)
+        else:
+            return str(None)
 
     def __repr__(self):
         """Print all attributes and theirs values of an object"""

@@ -43,6 +43,7 @@ print(tournaments)
 res = tournament.Tournament.delete_tournament(tournaments, key="name", value="T1")
 print("after of deleting \n ", tournaments)
 print("*"*10)
+print("In test tournament")
 
 
 

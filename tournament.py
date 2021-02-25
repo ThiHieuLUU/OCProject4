@@ -5,7 +5,7 @@ import basic_backend
 import mvc_exceptions as mvc_exc
 import round_robin
 import player
-import player_list
+# import player_list
 import match
 import location
 
@@ -16,20 +16,22 @@ none_player = player.Player()
 
 tournaments = dict()
 
+
 class Tournament:
     """docstring"""
     count_round = 0
 
-    def __init__(self):
-        self._name = None
-        self._location = None
-        self._date = None
-        self._number_of_rounds = DEFAULT_NUMBER_OF_ROUNDS
+    def __init__(self, name=None, location=None, date=None, number_of_rounds=None, players=None, time_control=None,
+                 description=None):
+        self._name = name
+        self._location = location
+        self._date = date
+        self._number_of_rounds = number_of_rounds
         self._rounds = []
-        self._players = None
-        self._time_control = None
-        self._description = None
-        self.item_type = type(self)
+        self._players = players
+        self._time_control = time_control
+        self._description = description
+        # self.item_type = type(self)
 
     def __hash__(self):
         return hash((self._name, self._location, self._date))  # tuple hash
@@ -37,7 +39,7 @@ class Tournament:
     def __eq__(self, other):
         if isinstance(other, type(self)):
             return (self._name, self._location, self._date) \
-               == (other.name, other.location, other.date)
+                   == (other.name, other.location, other.date)
         return False
 
     @property
@@ -73,11 +75,7 @@ class Tournament:
 
     @date.setter
     def date(self, new_date):
-        date_format = "%d/%m/%Y"
-        if datetime.strptime(str(new_date), date_format):
-            self._date = new_date
-        else:
-            raise mvc_exc.DateError('Incorrect date date_format. It should be DD/MM/YYYY')
+        self._date = new_date
 
     @date.deleter
     def date(self):
@@ -162,11 +160,11 @@ class Tournament:
         if len(self._players) % 2 == 1:
             pairs.append([none_player, sorted_players[-1]])
 
-        print("*" * 10)
-        print("First pairs by elo rating")
-        for pair in pairs:
-            print(pair[0].elo_rating, pair[1].elo_rating)
-        print("*" * 10)
+        # print("*" * 10)
+        # print("First pairs by elo rating")
+        # for pair in pairs:
+        #     print(pair[0].elo_rating, pair[1].elo_rating)
+        # print("*" * 10)
 
         return pairs
 
@@ -204,7 +202,7 @@ class Tournament:
             if called_time[pair_index] == 1:
                 # This list has always the player_1
                 not_yet_encountered_players[pair_index] = [info for info in sorted_players_info_dict[pair_index]
-                                                       if info["player"] not in player_1_info["opponents"]]
+                                                           if info["player"] not in player_1_info["opponents"]]
                 # eliminate the player_1 in the list, player_1 is the first element of the list
                 not_yet_encountered_players[pair_index] = not_yet_encountered_players[pair_index][1:]
                 called_time[pair_index] += 1
@@ -212,7 +210,7 @@ class Tournament:
             pair_result = self.make_pair(player_1, not_yet_encountered_players[pair_index])
             if pair_result is None:
                 # return in the previous pair and re-make
-                pair_index -= 1 # CHANGE HERE : -=1 to re-make the previous pair, pair_index = 1: re-begin all
+                pair_index -= 1  # CHANGE HERE : -=1 to re-make the previous pair, pair_index = 1: re-begin all
                 print("It has to return to make the previous pair")
                 # remove the previous pair to re-make it
                 pairs.pop()
@@ -257,41 +255,49 @@ class Tournament:
             matches.append(m.match)
         return matches
 
-    def update_round(self, _round):
-        """docstring"""
-        matches = _round.matches
-        match_index = 1
-        while match_index <= len(matches):
-            match = matches[match_index - 1]  # ([player_1, score1], [player_2, score2])
-            none_player = player.Player()
-            if match[0][0] != none_player and match[1][0] != none_player:
-                print("\n")
-                print(f"{_round.name}, match {match_index}, enter the scores:")
-                score1 = float(
-                    input(f'FIDE ID = {match[0][0].fide_id}, Name = '
-                          f'{match[0][0].first_name + " " + match[0][0].last_name}, '
-                          f'score = '))
-                score2 = float(
-                    input(f'FIDE ID = {match[1][0].fide_id}, Name = '
-                          f'{match[1][0].first_name + " " + match[1][0].last_name}, '
-                          f'score = '))
-                score_list = [0, 0.5, 1]
-                if score1 in score_list and score2 in score_list and score1 + score2 == 1.0:
-                    match_index += 1
-                    match[0][1] = score1  # update also to _round.matches
-                    match[1][1] = score2
-                else:
-                    print('Typing error. Score must be: 0, 0.5 or 1. The sum of scores must be equal to 1. Re-enter:'
-                          '1.')
-                    # raise mvc_exc.ScoreError('Re-enter scores. The sum of scores must be equal to 1')
+    def update_round(self, updated_matches):
+        """update only the last round"""
+         # _round.matches = updated_matches
+        # self._rounds[index_round].matches = updated_matches
+        self._rounds[-1].matches = updated_matches
 
-            else:
-                # Odd number of players, the worst ranking player has one free point.
-                if match[0][0] == none_player:
-                    match[1][1] = 1
-                elif match[1][0] == none_player:
-                    match[0][1] = 1
-                match_index += 1
+
+
+    # def update_round(self, _round):
+    #     """docstring"""
+    #     matches = _round.matches
+    #     match_index = 1
+    #     while match_index <= len(matches):
+    #         match = matches[match_index - 1]  # ([player_1, score1], [player_2, score2])
+    #         none_player = player.Player()
+    #         if match[0][0] != none_player and match[1][0] != none_player:
+    #             print("\n")
+    #             print(f"{_round.name}, match {match_index}, enter the scores:")
+    #             score1 = float(
+    #                 input(f'FIDE ID = {match[0][0].fide_id}, Name = '
+    #                       f'{match[0][0].first_name + " " + match[0][0].last_name}, '
+    #                       f'score = '))
+    #             score2 = float(
+    #                 input(f'FIDE ID = {match[1][0].fide_id}, Name = '
+    #                       f'{match[1][0].first_name + " " + match[1][0].last_name}, '
+    #                       f'score = '))
+    #             score_list = [0, 0.5, 1]
+    #             if score1 in score_list and score2 in score_list and score1 + score2 == 1.0:
+    #                 match_index += 1
+    #                 match[0][1] = score1  # update also to _round.matches
+    #                 match[1][1] = score2
+    #             else:
+    #                 print('Typing error. Score must be: 0, 0.5 or 1. The sum of scores must be equal to 1. Re-enter:'
+    #                       '1.')
+    #                 # raise mvc_exc.ScoreError('Re-enter scores. The sum of scores must be equal to 1')
+    #
+    #         else:
+    #             # Odd number of players, the worst ranking player has one free point.
+    #             if match[0][0] == none_player:
+    #                 match[1][1] = 1
+    #             elif match[1][0] == none_player:
+    #                 match[0][1] = 1
+    #             match_index += 1
 
     def initialize_total_points(self):
         """docstring"""
@@ -400,9 +406,9 @@ class Tournament:
         else:
             return str(None)
 
-if __name__ == '__main__':
 
-    t = Tournament()
+if __name__ == '__main__':
+    # t = Tournament()
     # t.name = input("Enter the name of the tournament: ")
     # print("Enter the location with the following information: ")
     # building_number = input("Building number: ")
@@ -413,8 +419,8 @@ if __name__ == '__main__':
     #
     # t.location = location
     # t.date = input("Date of the tournament (dd/mm/yyyy): ")
-    t.number_of_rounds = DEFAULT_NUMBER_OF_ROUNDS
-    t.rounds = []
+    # t.number_of_rounds = DEFAULT_NUMBER_OF_ROUNDS
+    # t.rounds = []
     # players = []
     # nb_player = 1
     # while True:
@@ -450,10 +456,10 @@ if __name__ == '__main__':
     # ranking = ranking
     pairs = t.make_pairs_first_round()
     # _round = t.initialize_matches(pairs)
-    total_points = t.initialize_total_points()
-    opponents = t.initialize_opponents()
-    elo_ratings = t.get_elo_ratings()
-    players_info = t.initialize_players_info(elo_ratings)
+    # total_points = t.initialize_total_points()
+    # opponents = t.initialize_opponents()
+    # elo_ratings = t.get_elo_ratings()
+    # players_info = t.initialize_players_info(elo_ratings)
 
     # print("*" * 10)
     # print("First pairs :")
@@ -467,30 +473,30 @@ if __name__ == '__main__':
     # print(f"elo_ratings: {elo_ratings}")
     # print(f"players_info: {players_info}")
     #
-    round_index = 1
-    while round_index <= DEFAULT_NUMBER_OF_ROUNDS:
-        print(f"Make pairs for round {round_index}")
-        if round_index == 1:
-            pairs = t.make_pairs_first_round()
-        else:
-            pairs = t.make_pairs(players_info)
-
-        _round = round_robin.Round()
-        _round.name = "Round " + str(round_index)
-        _round.date = date.today().strftime("%d/%m/%Y")
-        matches = t.initialize_matches(pairs)
-        _round.matches = matches
-        _round.start_time = datetime.now().strftime("%H:%M:%S")
-        t.update_round(_round)
-        _round.end_time = datetime.now().strftime("%H:%M:%S")
-        total_points = t.update_total_points(_round, total_points)
-        opponents = t.update_opponents(_round, opponents)
-        players_info = t.update_players_info(players_info, total_points, opponents)
-        print("*" * 10)
-        print(f'{round_index}. Round {round_index}')
-        print(_round)
-        print(f"total_points: {total_points}")
-        print(f"opponents: {opponents}")
-        print(f"players_info: {players_info}")
-        print("*" * 10)
-        round_index += 1
+    # round_index = 1
+    # while round_index <= DEFAULT_NUMBER_OF_ROUNDS:
+    #     print(f"Make pairs for round {round_index}")
+    #     if round_index == 1:
+    #         pairs = t.make_pairs_first_round()
+    #     else:
+    #         pairs = t.make_pairs(players_info)
+    #
+    #     _round = round_robin.Round()
+    #     _round.name = "Round " + str(round_index)
+    #     _round.date = date.today().strftime("%d/%m/%Y")
+    #     matches = t.initialize_matches(pairs)
+    #     _round.matches = matches
+    #     _round.start_time = datetime.now().strftime("%H:%M:%S")
+    #     t.update_round(_round)
+    #     _round.end_time = datetime.now().strftime("%H:%M:%S")
+    #     total_points = t.update_total_points(_round, total_points)
+    #     opponents = t.update_opponents(_round, opponents)
+    #     players_info = t.update_players_info(players_info, total_points, opponents)
+    #     print("*" * 10)
+    #     print(f'{round_index}. Round {round_index}')
+    #     print(_round)
+    #     print(f"total_points: {total_points}")
+    #     print(f"opponents: {opponents}")
+    #     print(f"players_info: {players_info}")
+    #     print("*" * 10)
+    #     round_index += 1

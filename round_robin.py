@@ -42,11 +42,12 @@ class Round:
 
     @date.setter
     def date(self, new_date):
-        date_format = "%d/%m/%Y"
-        if datetime.strptime(str(new_date), date_format):
-            self._date = new_date
-        else:
-            raise mvc_exc.DateError('Incorrect date date_format. It should be DD/MM/YYYY')
+        self._date = new_date
+        # date_format = "%d/%m/%Y"
+        # if datetime.strptime(str(new_date), date_format):
+        #     self._date = new_date
+        # else:
+        #     raise mvc_exc.DateError('Incorrect date date_format. It should be DD/MM/YYYY')
 
     @date.deleter
     def date(self):

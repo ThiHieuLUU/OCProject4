@@ -211,7 +211,8 @@ class Tournament:
             if pair_result is None:
                 # return in the previous pair and re-make
                 pair_index -= 1  # CHANGE HERE : -=1 to re-make the previous pair, pair_index = 1: re-begin all
-                print("It has to return to make the previous pair")
+                print(f"Problem at pair {pair_index + 1} - 2 players have been encountered. Return to make the "
+                      f"previous pair (pair {pair_index})".upper())
                 # remove the previous pair to re-make it
                 pairs.pop()
 

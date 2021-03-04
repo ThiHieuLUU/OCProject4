@@ -1,4 +1,6 @@
 # OCProject4
+# About project 4
+This project is realized with MVC pattern in order to manage a chess tournament.
 ## Process
 1. Create a virtual environment python for the project 4
 ```bash

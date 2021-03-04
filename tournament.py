@@ -378,7 +378,7 @@ class Tournament:
             if key == "rounds":
                 rounds = serialized_attributes_values["rounds"]
                 for index, round_info in enumerate(rounds):
-                    deserialized_round = chess_round.Round.create_round(round_info)
+                    deserialized_round = chess_round.Round.get_deserialized_round(round_info)
                     print("deserialized_round", deserialized_round)
                     rounds[index] = deserialized_round
 

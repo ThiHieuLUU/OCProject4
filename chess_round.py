@@ -113,7 +113,7 @@ class Round:
             if key == "matches":
                 matches = serialized_attributes_values["matches"]
                 for index, match_info in enumerate(matches):
-                    deserialized_match = match.Match.create_match(match_info)
+                    deserialized_match = match.Match.get_deserialized_match(match_info)
                     print("deserialized_match", deserialized_match)
                     matches[index] = deserialized_match
         _round = basic_backend.create_item(serialized_attributes_values, obj_type)

@@ -3,16 +3,26 @@
 
 """This module takes into account all elements (players, rounds, matches) to take place a tournament."""
 
+from tinydb import TinyDB, Query
+
+
 import tournament
 import player
 import chess_round
 import location
 import mvc_exceptions as mvc_exc
+import db_TinyDB as tiny
 
 total_points = dict()
 opponents = dict()
 players_info = dict()
 
+db = TinyDB('db.json', encoding="utf-8", ensure_ascii=False)
+actors_table = db.table('actors')
+players_table = db.table('players')
+tournaments_table = db.table('tournaments', cache_size=30)
+matches_table = db.table('matches', cache_size=30)
+rounds_table = db.table('rounds', cache_size=30)
 
 class Model:
     """The Model class is the business logic of the application.
@@ -56,6 +66,15 @@ class Model:
         self.tournament = tournament.Tournament(name=name, location=_location, date=date,
                                                 number_of_rounds=number_of_rounds, players=players,
                                                 time_control=time_control, description=description)
+        #For TinyDB:
+        # upsert_player(table, item, cdn)
+
+        serialized_players = tiny.serialize_items(self.tournament.players)
+        tiny.upsert_multiple(tiny.actors_table, serialized_players, tiny.upsert_player)
+
+        serialized_tournament = tiny.serialize_item(self.tournament)
+        tiny.upsert_tournament(tiny.tournaments_table, serialized_tournament)
+
 
     def initialize_info(self):
         """Initialize values for three global variable."""
@@ -105,6 +124,11 @@ class Model:
             _round.matches = self.tournament.initialize_matches(pairs)
             _round.start_time = start_time
             self.tournament.rounds.append(_round)
+
+            # For Tiny_DB:
+            serialized_tournament = tiny.serialize_item(self.tournament)
+            tiny.upsert_tournament(tiny.tournaments_table, serialized_tournament)
+
             return self.tournament.rounds[-1]
         else:
             # To change: raise ?
@@ -125,6 +149,11 @@ class Model:
         total_points = self.tournament.update_total_points(_round, total_points)
         opponents = self.tournament.update_opponents(_round, opponents)
         players_info = self.tournament.update_players_info(players_info, total_points, opponents)
+
+        # For Tiny_DB:
+        serialized_tournament = tiny.serialize_item(self.tournament)
+        tiny.upsert_tournament(tiny.tournaments_table, serialized_tournament)
+
 
     def get_last_round(self):
         """Get the last round in the list of rounds of the tournament. It will not be the final round."""
@@ -207,7 +236,32 @@ class Model:
         match[1][1] = score2
         return match
 
-    # @staticmethod
-    # def get_tournaments():
-    #     # global tournaments
-    #     return Model.tournaments
+    def upsert_tournament(self):
+        serialized_tournament = tiny.serialize_item(self.tournament)
+        tiny.upsert_tournament(tiny.tournaments_table, serialized_tournament)
+
+    @staticmethod
+    def get_tournaments():
+        db_serialized_items = tiny.tournaments_table.all()
+        fct = tournament.Tournament.get_deserialized_tournament
+        deserialized_tournaments = tiny.deserialize_items(db_serialized_items, fct)
+        return deserialized_tournaments
+
+    @staticmethod
+    def get_actors():
+        db_serialized_items = tiny.actors_table.all()
+        fct = player.Player.create_player
+        deserialized_actors = tiny.deserialize_items(db_serialized_items, fct)
+        return deserialized_actors
+
+    def get_actors_alphabetical_order(self):
+        actors = self.get_actors()
+        return sorted(actors, key=lambda actor: actor.first_name)
+
+    def get_actors_ranking_order(self):
+        actors = self.get_actors()
+        return sorted(actors, key=lambda actor: actor.elo_rating, reverse=True)
+
+
+
+

@@ -128,7 +128,8 @@ p7 = Player("Gaëtan", "Trintignant", "27/01/2021", "M", 770)
 p8 = Player("Abraham", "Adnet", "12/01/2021", "M", 970)
 p9 = Player("Nicolas", "Desmarais", "05/01/2021", "M", 1170)
 p10 = Player(" Claude", "Brassard", "03/01/2021", "M", 1470)
-p11 = Player("Lucrèce", "Besnard", "12/02/2021", "M", 1090)
+p11 = Player("Lucas", "Besnard", "15/02/2021", "M", 1090)
 
 # players = [p1, p2, p3, p4, p5, p6, p7, p8, p9]
-players = [p1, p2, p3, p4, p5, p6, p7, p8]
+# players = [p1, p2, p3, p4, p5, p6, p7, p8]
+players = [p4, p5, p6, p7, p8, p9, p10, p11]

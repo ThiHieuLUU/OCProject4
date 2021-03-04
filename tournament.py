@@ -359,6 +359,9 @@ class Tournament:
             new_dict["players"][index] = serialized_player
 
         for index, _round in enumerate(new_dict["rounds"]):
+            print(_round)
+            print(type(_round))
+            input()
             serialized_round = _round.get_serialized_attributes()
             new_dict["rounds"][index] = serialized_round
 

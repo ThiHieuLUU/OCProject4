@@ -240,7 +240,15 @@ for t in deserialized_items:
     # input()
     # print(t.rounds[0])
     if (len(t.players)) > 0:
-        print(type(t.players[0]))
+        print("*"*10)
+        print(t.players[0])
+        print("*"*10)
+
     if (len(t.rounds)) > 0:
-        print(type(t.rounds[0]))
+        print("*"*10)
+        print(t.rounds[0])
+        print("*" * 10)
+        print(t.rounds[0].matches)
+        print("*"*10)
+
     print("*" * 5)

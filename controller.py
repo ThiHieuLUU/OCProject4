@@ -181,6 +181,9 @@ class Controller(object):
                 last_round, last_round_index = self.model.get_last_round()
                 self.view.show_round(last_round, last_round_index)
                 input(f"You have started the round {last_round_index}. Press Enter to continue...".upper())
+
+                # For TinyDB
+                self.model.upsert_tournament()
             else:
                 self.view.show_round_error(
                     f"You can not start the new round (round {last_round_index + 1}) because the "
@@ -249,6 +252,9 @@ class Controller(object):
             self.view.show_round(last_round, last_round_index)
             input(f"You have finished the round {last_round_index}. Press Enter to continue...".upper())
 
+            # For TinyDB
+            self.model.upsert_tournament()
+
         except mvc_exc.EmptyListError as e:
             self.view.show_except_error(e)
             input(f"Press Enter to continue...".upper())
@@ -302,4 +308,20 @@ class Controller(object):
             self.view.show_items(matches)
         except mvc_exc.EmptyListError as e:
             self.view.show_except_error(e)
+        input("Press Enter to continue...".upper())
+
+    def get_tounaments(self):
+        return self.model.get_tournaments()
+
+    def get_actors(self):
+        return self.model.get_actors()
+
+    def get_actors_alphabetical_order(self):
+        actors = self.model.get_actors_alphabetical_order()
+        self.view.show_items(actors)
+        input("Press Enter to continue...".upper())
+
+    def get_actors_ranking_order(self):
+        actors = self.model.get_actors_ranking_order()
+        self.view.show_items(actors)
         input("Press Enter to continue...".upper())

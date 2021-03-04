@@ -2,9 +2,10 @@ from consolemenu import *
 from consolemenu.format import *
 from consolemenu.items import *
 from controller import Controller as Controller
-# import tournament
+import tournament
 
 controller = Controller()
+
 # nbr_t = 4
 # tournament_list = []
 # for i in range(nbr_t):
@@ -18,7 +19,6 @@ controller = Controller()
 def create_tournament():
     # print("Hello World")
     controller.create_tournament()
-
 
 
 def get_pairs():
@@ -68,13 +68,15 @@ def get_matches_new_tournament():
     controller.get_matches()
 
 
-def get_actors_by_letter():
-    print("By letter")
+def get_actors_alphabetical_order():
+    controller.get_actors_alphabetical_order()
+
+def get_actors_ranking_order():
+    controller.get_actors_ranking_order()
 
 
-def get_actors_by_ranking():
-    print("By ranking")
-
+def get_tournaments():
+    return controller.get_tounaments()
 
 def main():
     menu_format = MenuFormatBuilder().set_border_style_type(MenuBorderStyleType.HEAVY_BORDER) \
@@ -139,10 +141,6 @@ def main():
     submenu.append_item(submenu_level2_item)
 
 
-
-
-
-
     # get_ranking_function = FunctionItem("Last Ranking", get_last_ranking)
     # submenu.append_item(get_ranking_function)
 
@@ -158,9 +156,11 @@ def main():
     submenu = SelectionMenu([], title="Tournaments", subtitle="See here tournament's information",
                             formatter=menu_format, exit_option_text='Return to Main Menu')
 
-    # for t in tournament_list:
-    #     submenu_level2_item = SubmenuItem(t.name, submenu=submenu_level2)
-    #     submenu.append_item(submenu_level2_item)
+    tournament_list = get_tournaments()
+    print(tournament_list)
+    for t in tournament_list:
+        submenu_level2_item = SubmenuItem(t.name, submenu=submenu_level2)
+        submenu.append_item(submenu_level2_item)
 
     submenu_item = SubmenuItem("Tournaments", submenu=submenu)
     menu.append_item(submenu_item)
@@ -169,10 +169,10 @@ def main():
     submenu = SelectionMenu([], title="Actors",
                             formatter=menu_format, exit_option_text='Return to Main Menu')
 
-    get_actors_by_letter_function = FunctionItem("Actors in alphabetical order", get_actors_by_letter)
+    get_actors_by_letter_function = FunctionItem("Actors in alphabetical order", get_actors_alphabetical_order)
     submenu.append_item(get_actors_by_letter_function)
 
-    get_actors_by_ranking_function = FunctionItem("Actors in ranking order", get_actors_by_ranking)
+    get_actors_by_ranking_function = FunctionItem("Actors in ranking order", get_actors_ranking_order)
     submenu.append_item(get_actors_by_ranking_function)
 
     submenu_item = SubmenuItem("Actors", submenu=submenu)

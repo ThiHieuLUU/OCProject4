@@ -91,8 +91,8 @@ class View(object):
     def show_items(items):
         print("*" * 40)
         if items is not None and len(items) > 0:
-            for item in items:
-                print(item)
+            for i, item in enumerate(items):
+                print(f'{i}. {item}')
         else:
             print("For the moment, there is any element in the list!")
         print("*" * 40)

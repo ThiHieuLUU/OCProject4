@@ -14,5 +14,5 @@ pip install -r requirements.txt
 ```
 3. Launch
 ```bash
-python3 tournament.py
+python3 project4_cli.py
 ```

@@ -1,10 +1,9 @@
 #! /usr/bin/venv python3
 # coding: utf-8
 
-"""This module takes into account all elements (players, rounds, matches) to take place a tournament."""
+"""This module takes into account all elements (players, rounds, matches) to take place a new tournament."""
 
 from tinydb import TinyDB, Query
-
 
 import tournament
 import player
@@ -24,6 +23,7 @@ tournaments_table = db.table('tournaments', cache_size=30)
 matches_table = db.table('matches', cache_size=30)
 rounds_table = db.table('rounds', cache_size=30)
 
+
 class Model:
     """The Model class is the business logic of the application.
     The Model class provides methods to access the data of the application and
@@ -31,15 +31,13 @@ class Model:
     a database. Only the Model can access the database. A Model never calls
     View's methods.
     """
-    tournaments = list()
-    players = list()
 
     def __init__(self):
-        """Each model instance is associated with a tournament."""
+        """Each instance of the class Medel is associated with a new tournament."""
 
         self.tournament = tournament.Tournament()
-        type(self).tournaments.append(self.tournament)
-        type(self).players.append(self.tournament.players)
+        self.actors_table = tiny.actors_table
+        self.tournaments_table = tiny.tournaments_table
 
     @staticmethod
     def build_location(building_number, street, city, zipcode):
@@ -55,29 +53,18 @@ class Model:
 
                              elo_rating=elo_rating)
 
-    # @staticmethod
-    # def add_player(new_player):
-    #     global players
-    #     player.Player.add_player(players, new_player)
-
     def create_tournament(self, name, _location, date, number_of_rounds, players, time_control, description):
         """Build a tournament object from given values."""
 
         self.tournament = tournament.Tournament(name=name, location=_location, date=date,
                                                 number_of_rounds=number_of_rounds, players=players,
                                                 time_control=time_control, description=description)
-        #For TinyDB:
-        # upsert_player(table, item, cdn)
-
-        serialized_players = tiny.serialize_items(self.tournament.players)
-        tiny.upsert_multiple(tiny.actors_table, serialized_players, tiny.upsert_player)
-
-        serialized_tournament = tiny.serialize_item(self.tournament)
-        tiny.upsert_tournament(tiny.tournaments_table, serialized_tournament)
-
+        # For Tiny_DB:
+        self.upsert_players()  # Insert each player if player is not in the table of actors and update if else.
+        self.upsert_tournament()  # Insert new tournament in the table of tournaments.
 
     def initialize_info(self):
-        """Initialize values for three global variable."""
+        """Initialize values for three global variables."""
 
         global total_points
         global opponents
@@ -88,21 +75,39 @@ class Model:
         players_info = self.tournament.initialize_players_info(elo_ratings)
 
     def check_exist_players(self):
-        if self.tournament.players is not None and len(self.tournament.players) > 0:
+        """Check if there are players in the tournament."""
+
+        if not self.tournament.players:
             return True
         else:
             raise mvc_exc.EmptyListError("Error: there is no player at the moment!")
 
+    def check_if_new_round(self):
+        """Check if the index of new round is over the number of rounds."""
+
+        last_round_index = self.get_last_round_index()
+        nbr_rounds = self.get_number_of_rounds()
+        if last_round_index <= nbr_rounds - 1:
+            return True
+        else:
+            raise mvc_exc.RoundIndexError(f"Can not do your request because the "
+                                          f"number of rounds is limited by {nbr_rounds}.")
+
     def get_first_pairs(self):
+        """Get the first pairs for the first round, based on the initial ranking (e.g. elo rating)."""
+
         return self.tournament.make_pairs_first_round()
 
     def get_pairs(self, round_index):
+        """Get pairs from the second round."""
+
         global total_points
         global opponents
         global players_info
 
-        # round index for user, shift 1 compared to the real
-        if round_index <= self.tournament.number_of_rounds:
+        # For user, the index of a round is shifted by 1 (in python, index begins by 0).
+        nb_rounds = self.tournament.number_of_rounds
+        if round_index <= nb_rounds:
             if round_index == 1:
                 pairs = self.tournament.make_pairs_first_round()
             else:
@@ -110,14 +115,16 @@ class Model:
             return pairs
         else:
             raise mvc_exc.RoundIndexError(f"Can not get pairs for the round {round_index} because the "
-                                          f"number of rounds is limited by {self.tournament.number_of_rounds}.")
+                                          f"number of rounds is limited by {nb_rounds}.")
 
     def make_new_round(self, start_time):
-        # Advanced one round index
+        """Build the pairs for a new round and start the round."""
+
+        # For user, the index of a round in a list is shifted by 1, compared to the index in system.
         round_index = len(self.tournament.rounds) + 1
         if round_index <= self.tournament.number_of_rounds:
             _round = chess_round.Round()
-            _round.name = "Round " + str(round_index)
+            _round.name = " ".join(["Round", str(round_index)])
             _round.date = self.tournament.date
 
             pairs = self.get_pairs(round_index)
@@ -126,17 +133,16 @@ class Model:
             self.tournament.rounds.append(_round)
 
             # For Tiny_DB:
-            serialized_tournament = tiny.serialize_item(self.tournament)
-            tiny.upsert_tournament(tiny.tournaments_table, serialized_tournament)
+            self.upsert_tournament()
 
             return self.tournament.rounds[-1]
         else:
-            # To change: raise ?
             raise mvc_exc.RoundIndexError("Can not start the round because the number of rounds is limited by "
                                           f"{self.tournament.number_of_rounds}.")
-            # print("Impossible to create new round)
 
     def update_round(self, updated_matches):
+        """Update a round after the scores of all matches are known."""
+
         global total_points
         global opponents
         global players_info
@@ -151,19 +157,17 @@ class Model:
         players_info = self.tournament.update_players_info(players_info, total_points, opponents)
 
         # For Tiny_DB:
-        serialized_tournament = tiny.serialize_item(self.tournament)
-        tiny.upsert_tournament(tiny.tournaments_table, serialized_tournament)
-
+        self.upsert_tournament()
 
     def get_last_round(self):
-        """Get the last round in the list of rounds of the tournament. It will not be the final round."""
+        """Get the last round in the list of rounds of the tournament. It may be not the final round."""
 
-        # round index for user, shift 1 compared to the real
-        if len(self.tournament.rounds) == 0:
-            return None
-        else:
+        # For user, the index of a round in a list is shifted by 1, compared to the index in system.
+        if not self.tournament.rounds:
             last_round_index = len(self.tournament.rounds)
             last_round = self.tournament.rounds[-1]
+        else:
+            raise mvc_exc.RoundIndexError('Error: There is no round now!')
 
         return last_round, last_round_index
 
@@ -178,7 +182,7 @@ class Model:
         return self.tournament.number_of_rounds
 
     def get_last_ranking(self):
-        """Get the ranking of the last rounds."""
+        """Get the ranking of the last finished round. It may be not the final round."""
 
         global total_points
         global opponents
@@ -186,7 +190,6 @@ class Model:
         if self.get_last_round_index() == 0:
             sorted_players = sorted(self.tournament.players, key=lambda p: p.elo_rating, reverse=True)
             last_ranking = [[repr(_player), _player.elo_rating] for _player in sorted_players]
-            # print(last_ranking)
         else:
             sorted_players_info = sorted(players_info, key=lambda k: (-k["total_point"], -k['initial_ranking']))
             last_ranking = [[repr(item["player"]), item["total_point"], item["initial_ranking"]] for item in
@@ -197,30 +200,49 @@ class Model:
     def get_items(items, item_name):
         """The method is used as a pattern for get players, rounds, matches."""
 
-        if items is not None and len(items) > 0:
+        if not items:
             return items
         else:
             raise mvc_exc.EmptyListError(f'For the moment, there is no {item_name} in the list of'
                                          f' {item_name}s!')
 
-    def get_players(self):
-        """Get player list of the tournament."""
+    @staticmethod
+    def get_players(_tournament):
+        """Get the list of players of the tournament."""
 
-        return self.get_items(self.tournament.players, "player")
+        return Model.get_items(_tournament.players, "player")
 
-    def get_rounds(self):
-        """Get round list of the tournament."""
+    @staticmethod
+    def get_rounds(_tournament):
+        """Get the list of rounds of the tournament."""
 
-        return self.get_items(self.tournament.rounds, "round")
+        rounds = _tournament.rounds
+        return Model.get_items(rounds, "round")
 
-    def get_matches(self):
-        """Get match list of the tournament."""
+    @staticmethod
+    def get_matches(_tournament):
+        """Get the list of matches of the tournament."""
 
-        rounds = self.tournament.rounds
-        matches = []
-        if rounds is not None and len(rounds) > 0:
+        rounds = _tournament.rounds
+        if not rounds:
             matches = [match for _round in rounds for match in _round.matches]
-        return self.get_items(matches, "match")
+        else:
+            raise mvc_exc.EmptyListError("There is no round now!")
+        return Model.get_items(matches, "matche")
+
+    def get_players_new_tournament(self):
+        """Get the list of players of the actual tournament (which is the self.tournament)."""
+        return Model.get_players(self.model.tournament)
+
+    def get_rounds_new_tournament(self):
+        """Get the list of rounds of the actual tournament (which is the self.tournament)."""
+
+        return Model.get_rounds(self.model.tournament)
+
+    def get_matches_new_tournament(self):
+        """Get the list of matches of the actual tournament (which is the self.tournament)."""
+
+        return Model.get_matches(self.model.tournament)
 
     @staticmethod
     def get_players_from_match(_match):
@@ -230,38 +252,50 @@ class Model:
 
     @staticmethod
     def update_match(match, score1, score2):
-        """Update match with input of scores."""
+        """Update match when the scores of two players are known."""
 
         match[0][1] = score1
         match[1][1] = score2
         return match
 
     def upsert_tournament(self):
+        """Update and insert the actual tournament in the data base (the table of tournaments)."""
+        
         serialized_tournament = tiny.serialize_item(self.tournament)
-        tiny.upsert_tournament(tiny.tournaments_table, serialized_tournament)
+        tiny.upsert_tournament(self.tournaments_table, serialized_tournament)
 
-    @staticmethod
-    def get_tournaments():
-        db_serialized_items = tiny.tournaments_table.all()
+    def upsert_players(self):
+        """Update and insert the list of players of the actual tournament in the data base (the table of 
+        actors)."""
+
+        serialized_players = tiny.serialize_items(self.tournament.players)
+        tiny.upsert_multiple(self.actors_table, serialized_players, tiny.upsert_player)
+
+    def get_tournaments(self):
+        """Retrieve the data of tournaments from the data base and rebuild them to a list of tournaments."""
+
+        db_serialized_items = self.tournaments_table.all()
         fct = tournament.Tournament.get_deserialized_tournament
         deserialized_tournaments = tiny.deserialize_items(db_serialized_items, fct)
         return deserialized_tournaments
 
-    @staticmethod
-    def get_actors():
-        db_serialized_items = tiny.actors_table.all()
+    def get_actors(self):
+        """Retrieve the data of players from the data base and rebuild them to a list of players."""
+
+        db_serialized_items = self.actors_table.all()
         fct = player.Player.create_player
         deserialized_actors = tiny.deserialize_items(db_serialized_items, fct)
         return deserialized_actors
 
     def get_actors_alphabetical_order(self):
+        """Retrieve all players from the data base and sort these players by theirs names in the alphabetical order.
+        """
+
         actors = self.get_actors()
         return sorted(actors, key=lambda actor: actor.first_name)
 
     def get_actors_ranking_order(self):
+        """Retrieve all players from the data base and sort these players by theirs ranking (elo rating)."""
+
         actors = self.get_actors()
         return sorted(actors, key=lambda actor: actor.elo_rating, reverse=True)
-
-
-
-

@@ -90,6 +90,8 @@ class Round:
         new_dict = copy.deepcopy(attributes_info)
         # This part is added used for the serialization with TinyDB
         for index, _match in enumerate(attributes_info["matches"]):
+            print(_match)
+            input()
             serialized_match = _match.get_serialized_attributes()
             new_dict["matches"][index] = serialized_match
         return new_dict

@@ -59,14 +59,13 @@ def get_info_new_tournament():
     controller.get_info_tournament()
 
 def get_rounds_new_tournament():
-    controller.get_rounds()
+    controller.get_rounds_new_tournament()
 
 def get_players_new_tournament():
-    controller.get_players()
+    controller.get_players_new_tournament()
 
 def get_matches_new_tournament():
-    controller.get_matches()
-
+    controller.get_matches_new_tournament()
 
 def get_actors_alphabetical_order():
     controller.get_actors_alphabetical_order()
@@ -76,7 +75,7 @@ def get_actors_ranking_order():
 
 
 def get_tournaments():
-    return controller.get_tounaments()
+    return controller.get_tournaments()
 
 def main():
     menu_format = MenuFormatBuilder().set_border_style_type(MenuBorderStyleType.HEAVY_BORDER) \
@@ -148,18 +147,33 @@ def main():
     menu.append_item(submenu_item)
 
     # Tournaments
-    items = ["players", "rounds", "matches"]
-    submenu_level2 = SelectionMenu(items, title="Tournament's Information", formatter=menu_format,
-                                   exit_option_text='Return to Tournaments')
-
-    # "rounds, matches, players",subtitle="See here tournament's information: "
+    # items = ["players", "rounds", "matches"]
+    # submenu_level2 = SelectionMenu([], title="Tournament's Information", formatter=menu_format,
+    #                                exit_option_text='Return to Tournaments')
+    #
+    # # "rounds, matches, players",subtitle="See here tournament's information: "
     submenu = SelectionMenu([], title="Tournaments", subtitle="See here tournament's information",
                             formatter=menu_format, exit_option_text='Return to Main Menu')
-
+    #
+    # Menu for list of tournaments
     tournament_list = get_tournaments()
-    print(tournament_list)
+
     for t in tournament_list:
-        submenu_level2_item = SubmenuItem(t.name, submenu=submenu_level2)
+
+        submenu_level2 = SelectionMenu([], title="Tournament's Information", formatter=menu_format,
+                                       exit_option_text='Return to Tournaments')
+
+        get_ranking_function = FunctionItem("Players", get_last_ranking)
+        submenu_level2.append_item(get_ranking_function)
+
+        get_ranking_function = FunctionItem("Rounds", get_last_ranking)
+        submenu_level2.append_item(get_ranking_function)
+
+        get_ranking_function = FunctionItem("Matches", get_last_ranking)
+        submenu_level2.append_item(get_ranking_function)
+
+        item_name = ", ".join([t.name, t.date])
+        submenu_level2_item = SubmenuItem(item_name, submenu=submenu_level2)
         submenu.append_item(submenu_level2_item)
 
     submenu_item = SubmenuItem("Tournaments", submenu=submenu)

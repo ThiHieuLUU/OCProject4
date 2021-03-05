@@ -266,7 +266,8 @@ class Tournament:
         matches = []
         for pair in pairs:
             m = match.Match(pair[0], 0, pair[1], 0)
-            matches.append(m.match)
+            # matches.append(m.match)
+            matches.append(m)
         return matches
 
     def update_round(self, updated_matches):
@@ -359,9 +360,6 @@ class Tournament:
             new_dict["players"][index] = serialized_player
 
         for index, _round in enumerate(new_dict["rounds"]):
-            print(_round)
-            print(type(_round))
-            input()
             serialized_round = _round.get_serialized_attributes()
             new_dict["rounds"][index] = serialized_round
 
@@ -382,14 +380,12 @@ class Tournament:
                 rounds = serialized_attributes_values["rounds"]
                 for index, round_info in enumerate(rounds):
                     deserialized_round = chess_round.Round.get_deserialized_round(round_info)
-                    print("deserialized_round", deserialized_round)
                     rounds[index] = deserialized_round
 
             if key == "players":
                 players = serialized_attributes_values["players"]
                 for index, player_info in enumerate(players):
                     deserialized_player = player.Player.create_player(player_info)
-                    print("deserialized_round", deserialized_player)
                     players[index] = deserialized_player
 
             if key == "location":

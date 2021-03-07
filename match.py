@@ -3,9 +3,7 @@
 
 """This module is used to model a chess match with two players and theirs scores."""
 
-
 import copy
-
 
 import basic_backend
 import player
@@ -62,13 +60,16 @@ class Match:
 
         basic_backend.set_attrs(self, kwargs)
 
-    # @classmethod
-    # def create_match(cls, attributes_values):
-    #     # Retrieve the class type
-    #     obj_type = globals()[cls.__name__]
-    #     print("In Match")
-    #     print(attributes_values)
-    #     return basic_backend.create_item(attributes_values, obj_type)
+    def update_match(self, score1, score2):
+        """Update match when the scores of two players are known."""
+
+        self._match[0][1] = score1
+        self._match[1][1] = score2
+
+    def get_players_from_match(self):
+        """To display two players of a match."""
+
+        return repr(self._match[0][0]), repr(self._match[1][0])
 
     @classmethod
     def get_deserialized_match(cls, serialized_attributes_values):
@@ -76,8 +77,6 @@ class Match:
         (e.g. from TinyDB).
         """
 
-        # Retrieve the class type
-        obj_type = globals()[cls.__name__]
         for key in serialized_attributes_values.keys():
             if key == "match":
                 serialized_attributes_values["match"] = tuple(
@@ -92,12 +91,7 @@ class Match:
                 serialized_attributes_values["match"][0][0] = deserialized_player1
                 serialized_attributes_values["match"][1][0] = deserialized_player2
 
-        return basic_backend.create_item(serialized_attributes_values, obj_type)
-
-    # @staticmethod
-    # def get_attribute_names():
-    #     _match = Match()
-    #     return _match.get_attributes().keys()
+        return basic_backend.create_item(serialized_attributes_values, cls)
 
     def __str__(self):
         """Set values for attributes via a dictionary."""

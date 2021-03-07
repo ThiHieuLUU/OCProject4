@@ -77,7 +77,19 @@ class Location:
         attributes_info = basic_backend.get_attributes(self)
         return attributes_info
 
+    def get_serialized_attributes(self):
+        """Serialize all attributes of a location instance in order to save them in a document oriented database
+        (TinyDB here).
+
+        In the case of the Location class, this method is the same of get_attributes method because the attributes
+        are not other class instances.
+        """
+
+        return self.get_attributes()
+
     def set_attrs(self, kwargs):
+        """Set values for attributes via a dictionary."""
+
         basic_backend.set_attrs(self, kwargs)
 
     def __str__(self):

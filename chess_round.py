@@ -79,6 +79,20 @@ class Round:
     def end_time(self):
         del self._end_time
 
+    def initialize_matches(self, pairs):
+        """Initialize a match with score = 0 for each player."""
+
+        matches = []
+        for pair in pairs:
+            _match = match.Match(pair[0], 0, pair[1], 0)
+            matches.append(_match)
+        self._matches = matches
+
+    def update_round(self, updated_matches):
+        """Conventions: update only the last round."""
+
+        self._matches = updated_matches
+
     def get_serialized_attributes(self):
         """Serialize all attributes of a chess round instance in order to save them in a document oriented database
         (TinyDB).
@@ -90,8 +104,6 @@ class Round:
         new_dict = copy.deepcopy(attributes_info)
         # This part is added used for the serialization with TinyDB
         for index, _match in enumerate(attributes_info["matches"]):
-            print(_match)
-            input()
             serialized_match = _match.get_serialized_attributes()
             new_dict["matches"][index] = serialized_match
         return new_dict
@@ -116,7 +128,7 @@ class Round:
                 matches = serialized_attributes_values["matches"]
                 for index, match_info in enumerate(matches):
                     deserialized_match = match.Match.get_deserialized_match(match_info)
-                    print("deserialized_match", deserialized_match)
+                    # print("deserialized_match", deserialized_match)
                     matches[index] = deserialized_match
         _round = basic_backend.create_item(serialized_attributes_values, obj_type)
         return _round
@@ -130,8 +142,8 @@ class Round:
     def get_attribute_names():
         """Get only names of attributes (without protected sign or private sign)."""
 
-        r = Round()
-        return r.get_attributes().keys()
+        _round = Round()
+        return _round.get_attributes().keys()
 
     def __str__(self):
         """Print all attributes and theirs values for a round."""

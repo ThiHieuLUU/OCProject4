@@ -1,13 +1,16 @@
-#! /usr/bin/venv python3
+"""This module is used to represent a chess player with player's individual information."""
+
+# ! /usr/bin/venv python3
 # coding: utf-8
 
-"""This module is used to model a chess player with his individual information."""
+
+import random
 
 import basic_backend
 
 
 class Player:
-    """This class describes a normal person with his chess rating (here, elo rating)"""
+    """This class describes a normal person with his chess ranking (here, elo rating)."""
 
     def __init__(self, first_name=None, last_name=None, date_of_birth=None, gender=None,
                  elo_rating=None):
@@ -18,9 +21,13 @@ class Player:
         self._elo_rating = elo_rating
 
     def __hash__(self):
+        """To take player as a key in a dictionary."""
+
         return hash((self._first_name, self._last_name, self._date_of_birth))  # tuple hash
 
     def __eq__(self, other):
+        """To compare two players."""
+
         if isinstance(other, type(self)):
             return (self._first_name, self._last_name, self._date_of_birth, self._gender) \
                    == (other.first_name, other.last_name, other.date_of_birth, other.gender)
@@ -87,49 +94,81 @@ class Player:
         del self._elo_rating
 
     def get_attributes(self):
-        """Get attribute names (without protected or private sign) and theirs values."""
+        """Get names of all attributes (without protected or private sign) and theirs values."""
+
         attributes_info = basic_backend.get_attributes(self)
         return attributes_info
 
+    def get_serialized_attributes(self):
+        """Serialize all attributes of a player instance in order to save them in a document oriented database (TinyDB).
+
+        In the case of the Player class, this method is the same of get_attributes method because the attributes
+        are not build from other class instances.
+        """
+
+        return self.get_attributes()
+
     def set_attrs(self, kwargs):
-        """Set attributes' values via a dictionary."""
+        """Set values for attributes via a dictionary."""
 
         basic_backend.set_attrs(self, kwargs)
 
     @classmethod
     def create_player(cls, attributes_values):
-        """Create a chess player from the given set of attribute - value (under dictionary format)."""
+        """Create a chess player from the given set of attribute - value."""
 
         # Retrieve the class type
-        obj_type = globals()[cls.__name__]
-        return basic_backend.create_item(attributes_values, obj_type)
+        return basic_backend.create_item(attributes_values, cls)
 
     def __str__(self):
-        """Print all attributes and theirs values for a chess player"""
+        """Print all attributes and theirs values for a player."""
 
         attr_str = basic_backend.get_str(self)
         return attr_str
 
     def __repr__(self):
-        """Display the string representation of a chess player object."""
+        """Display the string representation of a player object."""
 
         if self._first_name is not None:
             return self._first_name + " " + self._last_name + " - " + self._date_of_birth
         return str(None)
 
+    @classmethod
+    def get_players(cls):
+        """Method is used to get a random sample of players."""
 
-p1 = Player("Lucrèce", "Besnard", "12/02/2021", "M", 1070)
-p2 = Player("Alexis", "Marchant", "18/01/2021", "M", 670)
-p3 = Player("Gaël", "Charpentier", "12/02/2021", "M", 470)
-p4 = Player("Marius", "Bouhier", "09/01/2021", "M", 1250)
-p5 = Player("Jean-François", "Duchemin", "02/01/2021", "M", 570)
-p6 = Player("Frédéric", "Colbert", "06/01/2021", "M", 870)
-p7 = Player("Gaëtan", "Trintignant", "27/01/2021", "M", 770)
-p8 = Player("Abraham", "Adnet", "12/01/2021", "M", 970)
-p9 = Player("Nicolas", "Desmarais", "05/01/2021", "M", 1170)
-p10 = Player(" Claude", "Brassard", "03/01/2021", "M", 1470)
-p11 = Player("Lucas", "Besnard", "15/02/2021", "M", 1090)
+        players = dict()
+        players[0] = cls("Damien", "Adnet", "12/02/1980", "M", 1070)
+        players[1] = cls("Lucrèce", "Besnard", "15/02/1980", "M", 1070)
+        players[2] = cls("Alexis", "Marchant", "18/01/1980", "M", 670)
+        players[3] = cls("Gaël", "Charpentier", "12/02/1980", "M", 470)
+        players[4] = cls("Marius", "Bouhier", "09/01/1980", "M", 1250)
+        players[5] = cls("Jean-François", "Duchemin", "02/01/1980", "M", 570)
+        players[6] = cls("Frédéric", "Colbert", "06/01/1980", "M", 870)
+        players[7] = cls("Gaëtan", "Trintignant", "27/01/1980", "M", 770)
+        players[8] = cls("Abraham", "Adnet", "12/01/1980", "M", 970)
+        players[9] = cls("Nicolas", "Desmarais", "05/01/1980", "M", 1170)
+        players[10] = cls("Claude", "Brassard", "03/01/1980", "M", 1470)
+        players[11] = cls("Louis", "Bouhier", "15/02/1980", "M", 1090)
+        players[12] = cls("Augustin", "Besnard", "15/04/1980", "M", 1490)
+        players[13] = cls("Alice", "Duchemin", "15/09/1980", "F", 1190)
+        players[14] = cls("Camille", "Victor", "25/02/1980", "F", 990)
+        players[15] = cls("Hugo", "Albert", "10/09/1980", "M", 890)
+        players[16] = cls("Marie", "Colbert", "10/02/1980", "F", 690)
+        players[17] = cls("Pascal", "Luc", "15/01/1980", "M", 490)
+        players[18] = cls("Antoine", "Yvon", "15/01/1980", "M", 490)
+        players[19] = cls("Alex", "Martin", "15/05/1980", "M", 790)
+        players[20] = cls("Joël", "Desmoulins", "15/06/1980", "M", 990)
+        players[21] = cls("Hervé", "Pesnard", "15/07/1980", "M", 1590)
+        players[22] = cls("Ivan", "Desnard", "15/08/1980", "M", 1390)
 
-# players = [p1, p2, p3, p4, p5, p6, p7, p8, p9]
-# players = [p1, p2, p3, p4, p5, p6, p7, p8]
-players = [p4, p5, p6, p7, p8, p9, p10, p11]
+        # Pick randomly players with a given number of players.
+        original_list = [players[i] for i in range(22)]
+        number_of_players = 8
+        list_of_players = random.sample(original_list, number_of_players)
+
+        # For test cases to check the algorithm of constructing two players for a match.
+        # The must not be encountered before.
+        # list_of_players = [players[i] for i in range(1, 9, 1)]
+
+        return list_of_players

@@ -1,18 +1,17 @@
 #! /usr/bin/venv python3
 # coding: utf-8
 
-"""This module connect the View and Model in mvc pattern."""
+"""This module connects the View and Model in MVC pattern."""
 
-from datetime import datetime, date
+from datetime import datetime
 
 import model
 import view
 import constants as const
 import mvc_exceptions as mvc_exc
-import player
 
 
-class Controller(object):
+class Controller:
     """The Controller class associates the user input to a Model and a View.
     The Controller class handles the user's inputs, invokes Model's methods to
     alter the data, and calls specific View's methods to present the data back
@@ -27,10 +26,10 @@ class Controller(object):
         """To control the input for the time control of the tournament."""
 
         while True:
-            time_control = input("Enter time control (bullet/blitz/rapid): ")
-            while time_control.lower() not in ["bullet", "blitz", "rapid"]:
-                self.view.show_error("time control", "bullet/blitz/rapid")
-                time_control = input("Re-enter time control (bullet/blitz/rapid): ")
+            time_control = input(f"Enter time control {const.time_control_list}: ")
+            while time_control.lower() not in const.time_control_list:
+                self.view.show_error("time control", const.time_control_list)
+                time_control = input(f"Re-enter time control {const.time_control_list}: ")
             break
         return time_control
 
@@ -56,27 +55,24 @@ class Controller(object):
     #         first_name = input("First name: ")
     #         last_name = input("Last name: ")
     #         date_of_birth = self.input_date("Date of birth: ")
-    #         gender = input("Gender (male/female): ")
+    #         gender = input("Gender (M/F): ").upper()
     #         ranking = input("Ranking (Elo rating): ")
-    #         # assert ranking is int, 'Ranking must be integer'
-    #         player_id = len(self.model.get_players()) + 1
-    #         player = self.model.build_player(player_id, first_name, last_name, date_of_birth, gender, ranking)
+    #
+    #         _player = self.model.build_player(first_name, last_name, date_of_birth, gender, ranking)
     #         players.append(player)
-    #         # Add to BDD
-    #         self.model.add_player(player)
+    #
     #         self.view.show_question("add more player")
     #         res = input()
-    #         if res.lower() == "y":
+    #         if res.lower() in const.y_res:
     #             player_index += 1
     #         else:
     #             break
     #     return players
 
-    @staticmethod
-    def input_players():
+    def input_players(self):
         """Read a given list of players and use it as the players of the tournament."""
 
-        return player.players
+        return self.model.get_player_sample()
 
     def input_location(self):
         """To control the input for the location of the tournament."""
@@ -92,14 +88,14 @@ class Controller(object):
     def input_date(self, msg):
         """To control the input for the date of the tournament."""
 
-        date_format = "%d/%m/%Y"
+        date_format = const.date_format  # "%d/%m/%Y"
         while True:
             try:
                 date_entry = input(msg)
                 datetime.strptime(str(date_entry), date_format)
                 break
-            except ValueError as e:
-                self.view.show_error("date", "d/m/yyyy")
+            except ValueError:
+                self.view.show_error("date", const.date_request)
         return date_entry
 
     def create_tournament(self):
@@ -117,37 +113,43 @@ class Controller(object):
 
             self.model.create_tournament(name, location, _date, number_of_rounds, players, time_control, description)
 
-            self.view.show_question(f"see the tournament's information")
+            self.view.show_question("see the tournament's information")
             res = input()
             if res.lower() in const.y_res:
                 self.view.show_tournament_info(self.model.tournament)
 
             input("You have created a tournament. Press Enter to continue...".upper())
-            # return self.model.tournament
         else:
             input("You did not create a tournament. Press Enter to continue...".upper())
 
     def get_pairs(self, round_index):
-        """Get pairs of each round in order to show to the user."""
+        """Get pairs of each round in order to show these pairs to the user."""
 
         try:
-            # Players exist is the condition for taking place a tournament (get pairs, make round, update round).
+            # Players exist is a condition for taking place a tournament (get pairs, make round, update round).
             self.model.check_exist_players()
-        except mvc_exc.EmptyListError as e:
-            self.view.show_except_error(e)
-            input(f"Press Enter to continue...".upper())
+        except mvc_exc.EmptyListError as error:
+            self.view.show_except_error(error)
+            input("Press Enter to continue...".upper())
         else:
-            # We do not need to check if at least a round is created.
-            # Before the first round we have already the pairs if the players exist.
-            nbr_rounds = self.model.tournament.number_of_rounds
-            if round_index <= nbr_rounds:
-                self.view.show_question(f"see the pairs of the round {round_index}")
-                res = input()
-                if res.lower() in const.y_res:
-                    pairs = self.model.get_pairs(round_index)
-                    self.view.show_pairs(pairs, round_index)
-                    input(f"You have seen the pairs of the round {round_index}. Press Enter to continue...".upper())
-
+            try:
+                # Check if the new_round/new pairs can be created.
+                # The new round index must not be over the number of rounds.
+                self.model.check_if_new_round()
+            except mvc_exc.RoundIndexError as error:
+                self.view.show_except_error(error)
+                input("Press Enter to continue...".upper())
+            else:
+                # Do not need to check if at least a round has been already created.
+                # Before the first round we have already the pairs if the players exist.
+                nbr_rounds = self.model.tournament.number_of_rounds
+                if round_index <= nbr_rounds:
+                    self.view.show_question(f"see the pairs of the round {round_index}")
+                    res = input()
+                    if res.lower() in const.y_res:
+                        pairs = self.model.get_pairs(round_index)
+                        self.view.show_pairs(pairs, round_index)
+                        input(f"You have seen the pairs of the round {round_index}. Press Enter to continue...".upper())
 
     def get_last_round_index(self):
         """Get the index of the last round in the list of rounds taken place."""
@@ -159,18 +161,19 @@ class Controller(object):
 
         # The new round becomes the last round in the list of rounds.
         try:
-            # Players exist is the condition for taking place a tournament (get pairs, make rounds, update rounds)
+            # Players exist is a condition for taking place a tournament (get pairs, make rounds, update rounds).
             self.model.check_exist_players()
-        except mvc_exc.EmptyListError as e:
-            self.view.show_except_error(e)
-            input(f"Press Enter to continue...".upper())
+        except mvc_exc.EmptyListError as error:
+            self.view.show_except_error(error)
+            input("Press Enter to continue...".upper())
         else:
             try:
-                # Check if the new round can be created, its index must not be over the number of rounds.
+                # Check if the new_round/new pairs can be created.
+                # The new round index must not be over the number of rounds.
                 self.model.check_if_new_round()
-            except mvc_exc.RoundIndexError as e:
-                self.view.show_except_error(e)
-                input(f"Press Enter to continue...".upper())
+            except mvc_exc.RoundIndexError as error:
+                self.view.show_except_error(error)
+                input("Press Enter to continue...".upper())
             else:
                 last_round_index = self.get_last_round_index()
                 res = input(f"Do you want to start the round {last_round_index + 1} now {const.y_n}? ".upper())
@@ -180,104 +183,81 @@ class Controller(object):
 
                     self.model.make_new_round(start_time)
 
-                last_round, last_round_index = self.model.get_last_round()
-                self.view.show_round(last_round, last_round_index)
-                input(f"You have started the round {last_round_index}. Press Enter to continue...".upper())
-
-                # For TinyDB
-                self.model.upsert_tournament()
+                    last_round, last_round_index = self.model.get_last_round()
+                    self.view.show_round(last_round, last_round_index)
+                    input(f"You have started the round {last_round_index}. Press Enter to continue...".upper())
 
     def update_matches(self):
         """Update the scores of a match with input scores from user."""
 
-        # Convention: always update the last round
+        # Convention: always update the last round.
         try:
-            # Players exist is the condition for taking place a tournament (get pairs, make round, update round).
+            # Players exist is a condition for taking place a tournament (get pairs, make round, update round).
             self.model.check_exist_players()
-        except mvc_exc.EmptyListError as e:
-            self.view.show_except_error(e)
-            input(f"Press Enter to continue...".upper())
+        except mvc_exc.EmptyListError as error:
+            self.view.show_except_error(error)
+            input("Press Enter to continue...".upper())
         else:
             try:
-                # Check if at least a round is created/started in the tournament
+                # Check if at least a round has already created/started in the tournament.
                 last_round, last_round_index = self.model.get_last_round()
-            except mvc_exc.RoundIndexError as e:
-                self.view.show_except_error(e)
-                input(f"Press Enter to continue...".upper())
+            except mvc_exc.RoundIndexError as error:
+                self.view.show_except_error(error)
+                input("Press Enter to continue...".upper())
             else:
                 matches = last_round.matches
                 self.view.show_updating_round(last_round_index)
                 match_index = 1
                 while match_index <= len(matches):
-                    match = matches[match_index - 1]  # ([player_1, score1], [player_2, score2])
+                    # Each match is an object with an attribute 'match' where:
+                    # match = ([player_1, score1], [player_2, score2])
+                    match = matches[match_index - 1]
                     player1, player2 = self.model.get_players_from_match(match)
 
                     self.view.show_updating_match(last_round_index, match_index)
                     score1 = float(input(f'{player1}, score = '))
                     score2 = float(input(f'{player2}, score = '))
 
-                    score_list = [0, 0.5, 1]
+                    score_list = const.score_list
                     if score1 in score_list and score2 in score_list and score1 + score2 == 1.0:
                         self.model.update_match(match, score1, score2)
                         match_index += 1
                     else:
-                        self.view.show_error("score", "[0/0.5/1], sum of scores must be 1")
+                        self.view.show_error("score", f"{score_list}, sum of scores must be 1")
 
                 self.model.update_round(matches)
                 self.view.show_question(f"see the last round updated (round {last_round_index})")
                 res = input()
                 if res.lower() in const.y_res:
                     self.view.show_round(last_round, last_round_index)
-                input(f"You have updated the scores for the Round {last_round_index}. Press Enter to continue...".upper())
-                
-                # For TinyDB
-                self.model.upsert_tournament()
-                
+                input(
+                    f"You have updated the scores for the Round {last_round_index}. Press Enter to continue...".upper())
+
     def end_round(self):
-        """Ask the user if the round is finished and mark automatically the end time."""
+        """Ask the user if the round is finished and then mark automatically the end time for the round."""
+
         try:
-            # Players exist is the condition for taking place a tournament (get pairs, make round, update round).
+            # Players exist is a condition for taking place a tournament (get pairs, make round, update round).
             self.model.check_exist_players()
-        except mvc_exc.EmptyListError as e:
-            self.view.show_except_error(e)
-            input(f"Press Enter to continue...".upper())
+        except mvc_exc.EmptyListError as error:
+            self.view.show_except_error(error)
+            input("Press Enter to continue...".upper())
         else:
             try:
-                # Check if at least a round is created/started in the tournament
+                # Check if at least a round has been already created/started in the tournament.
                 last_round, last_round_index = self.model.get_last_round()
-            except mvc_exc.RoundIndexError as e:
-                self.view.show_except_error(e)
-                input(f"Press Enter to continue...".upper())
+            except mvc_exc.RoundIndexError as error:
+                self.view.show_except_error(error)
+                input("Press Enter to continue...".upper())
             else:
                 res = input(f"Is the round {last_round_index} finished {const.y_n}? ".upper())
                 if res.lower() in const.y_res:
                     now = datetime.now()
                     current_time = now.strftime("%H:%M:%S")
+                    last_round, last_round_index = self.model.get_last_round()
                     last_round.end_time = current_time
-                self.view.show_round(last_round, last_round_index)
-                input(f"You have finished the round {last_round_index}. Press Enter to continue...".upper())
-
-                # For TinyDB
-                self.model.upsert_tournament()
-
-    def get_last_ranking(self):
-        """Get and show the ranking of the last round."""
-
-        try:
-            self.model.check_exist_players()
-        except mvc_exc.EmptyListError as e:
-            self.view.show_except_error(e)
-            input("Press Enter to continue...".upper())
-        else:
-            last_ranking = self.model.get_last_ranking()
-            last_round_index = self.model.get_last_round_index()
-            self.view.show_last_ranking(last_ranking, last_round_index)
-
-    def get_info_tournament(self):
-        """Get and show information of the tournament."""
-        
-        self.view.show_tournament_info(self.model.tournament)
-        input("Press Enter to continue...".upper())
+                    self.view.show_round(last_round, last_round_index)
+                    input(f"You have finished the round {last_round_index}. Press Enter to continue...".upper())
 
     def get_items(self, fct, _obj):
         """Build a pattern for getting and showing players, rounds, matches."""
@@ -285,49 +265,103 @@ class Controller(object):
         try:
             items = fct(_obj)
             self.view.show_items(items)
-        except mvc_exc.EmptyListError as e:
-            self.view.show_except_error(e)
+        except mvc_exc.EmptyListError as error:
+            self.view.show_except_error(error)
+        input("Press Enter to continue...".upper())
+
+    def get_info_tournament(self, _tournament):
+        """Get and show information of a given tournament."""
+
+        self.view.show_tournament_info(_tournament)
         input("Press Enter to continue...".upper())
 
     def get_players(self, _tournament):
-        """Get and show players."""
+        """Get and show players of a given tournament."""
 
         fct = self.model.get_players
         self.get_items(fct, _tournament)
 
     def get_rounds(self, _tournament):
-        """Get and show the list of rounds."""
+        """Get and show the list of rounds of a given tournament."""
 
         fct = self.model.get_rounds
         self.get_items(fct, _tournament)
 
     def get_matches(self, _tournament):
-        """Get and show the list of matches."""
+        """Get and show the list of matches of a given tournament."""
 
         fct = self.model.get_matches
         self.get_items(fct, _tournament)
 
+    def get_last_ranking(self, _tournament):
+        """Get and show the last ranking of a given tournament."""
+        try:
+            last_ranking, last_round_index = self.model.get_last_ranking(_tournament)
+        except mvc_exc.EmptyListError as error:
+            self.view.show_except_error(error)
+            input("Press Enter to continue...".upper())
+        else:
+            self.view.show_last_ranking(last_ranking, last_round_index)
+            input("Press Enter to continue...".upper())
+
+    def get_info_new_tournament(self):
+        """Get and show information of the current tournament."""
+
+        self.view.show_tournament_info(self.model.tournament)
+        input("Press Enter to continue...".upper())
+
     def get_players_new_tournament(self):
-        return self.model.get_players_new_tournament()
+        """Get and show the list of players of the current tournament."""
+
+        return self.get_players(self.model.tournament)
 
     def get_rounds_new_tournament(self):
-        return self.model.get_rounds_new_tournament()
+        """Get and show the list of rounds of the current tournament."""
+
+        return self.get_rounds(self.model.tournament)
 
     def get_matches_new_tournament(self):
-        return self.model.get_matches_new_tournament()
+        """Get and show the list of matches of the current tournament."""
+
+        return self.get_matches(self.model.tournament)
+
+    def get_last_ranking_new_tournament(self):
+        """Get and show the ranking of the last round of the current tournament.
+
+        The last round may not be the final round.
+        """
+
+        try:
+            self.model.check_exist_players()
+        except mvc_exc.EmptyListError as error:
+            self.view.show_except_error(error)
+            input("Press Enter to continue...".upper())
+        else:
+            last_ranking = self.model.get_last_ranking_new_tournament()
+            last_round_index = self.model.get_last_round_index()
+            self.view.show_last_ranking(last_ranking, last_round_index)
+            input("Press Enter to continue...".upper())
 
     def get_tournaments(self):
+        """Get the list of all tournaments saved in the database (with TinyDB here)."""
+
         return self.model.get_tournaments()
 
     def get_actors(self):
+        """Get the list of all actors saved in the database (with TinyDB here)."""
+
         return self.model.get_actors()
 
     def get_actors_alphabetical_order(self):
+        """Get and show the list of all actors in the alphabetical order."""
+
         actors = self.model.get_actors_alphabetical_order()
         self.view.show_items(actors)
         input("Press Enter to continue...".upper())
 
     def get_actors_ranking_order(self):
+        """Get and show the list of all actors in the descending ranking order."""
+
         actors = self.model.get_actors_ranking_order()
         self.view.show_items(actors)
         input("Press Enter to continue...".upper())

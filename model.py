@@ -80,8 +80,8 @@ class Model:
     def initialize_info(self):
         """Initialize values for: total_points, opponents and players_info"""
 
-        self.total_points = self.tournament.initialize_total_points() # all palyers have 0 point
-        self.opponents = self.tournament.initialize_opponents() # all players have an empty list of opponents
+        self.total_points = self.tournament.initialize_total_points()  # all palyers have 0 point
+        self.opponents = self.tournament.initialize_opponents()  # all players have an empty list of opponents
         elo_ratings = self.tournament.get_elo_ratings()
 
         # First, insert total_points, opponents, and elo_ratings for each player
@@ -111,10 +111,10 @@ class Model:
         return self.tournament.make_pairs_first_round()
 
     def get_pairs(self, round_index):
-        """Get pairs from the second round."""
-        
-        # For user, the index of a round is shifted by 1 (in python, index begins by 0).
+        """Get pairs from the second round to the final round if number of rounds is greatter than 1."""
+
         nb_rounds = self.tournament.number_of_rounds
+        # Here, round index is seen by user (that is added by 1 compared to the index in the system).
         if round_index <= nb_rounds:
             if round_index == 1:
                 pairs = self.tournament.make_pairs_first_round()
@@ -291,7 +291,7 @@ class Model:
 
         db_serialized_items = self.tournaments_table.all()
         fct = self.tournament.get_deserialized_tournament
-        deserialized_tournaments =tiny.deserialize_items(db_serialized_items, fct)
+        deserialized_tournaments = tiny.deserialize_items(db_serialized_items, fct)
         return deserialized_tournaments
 
     def get_actors(self):
@@ -299,7 +299,7 @@ class Model:
 
         db_serialized_items = self.actors_table.all()
         fct = player.Player.create_player
-        deserialized_actors =tiny.deserialize_items(db_serialized_items, fct)
+        deserialized_actors = tiny.deserialize_items(db_serialized_items, fct)
         return deserialized_actors
 
     def get_actors_alphabetical_order(self):
@@ -318,7 +318,7 @@ class Model:
     def upsert_tournament(self):
         """Update and insert the current tournament in the database (the table of tournaments)."""
 
-        serialized_tournament =tiny.serialize_item(self.tournament)
+        serialized_tournament = tiny.serialize_item(self.tournament)
         tiny.upsert_tournament(self.tournaments_table, serialized_tournament)
 
     def upsert_players(self):
@@ -326,5 +326,5 @@ class Model:
         (the table of actors).
         """
 
-        serialized_players =tiny.serialize_items(self.tournament.players)
-        tiny.upsert_multiple(self.actors_table, serialized_players,tiny.upsert_player)
+        serialized_players = tiny.serialize_items(self.tournament.players)
+        tiny.upsert_multiple(self.actors_table, serialized_players, tiny.upsert_player)

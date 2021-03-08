@@ -44,8 +44,7 @@ class Tournament:
 
     def __eq__(self, other):
         if isinstance(other, type(self)):
-            return (self._name, self._location, self._date) \
-                   == (other.name, other.location, other.date)
+            return (self._name, self._location, self._date) == (other.name, other.location, other.date)
         return False
 
     @property

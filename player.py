@@ -30,7 +30,7 @@ class Player:
 
         if isinstance(other, type(self)):
             return (self._first_name, self._last_name, self._date_of_birth, self._gender) \
-                   == (other.first_name, other.last_name, other.date_of_birth, other.gender)
+                == (other.first_name, other.last_name, other.date_of_birth, other.gender)
         return False
 
     @property

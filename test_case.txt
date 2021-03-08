@@ -1,0 +1,53 @@
+Here are two test cases for the verification of the implemented algorithm which builds the pairs of players for a match
+under the condition: two players must not be encountered before.
+
+If at a step, the current pair can not be built because there are only two players and they encountered before,
+the algorithm will return to the previous pair and re-make the previous pair, then try to make the current pair. This is
+repeated until the above condition is satisfied.
+
+These test cases will show that the problem appears at the round 4 and it is resolved with the above algorithm.
+
+I. List of players
+In the method 'get_players(cls)' of player.py, uncomment:
+        # list_of_players = [players[i] for i in range(1, 9, 1)]
+
+
+II. Scores (player_1 vs player_2) to test:
+II.1. Case 1
+- Round 1
+0 1
+1 0
+1 0
+0.5 0.5
+
+- Round 2
+0.5 0.5
+1 0
+0 1
+1 0
+
+- Round 3
+0.5 0.5
+1 0
+0 1
+0 1
+
+II.2. Case 2
+
+- Round 1
+1 0
+0 1
+0.5 0.5
+1 0
+
+- Round 2
+0 1
+0.5 0.5
+0.5 0.5
+1 0
+
+- Round 3
+1 0
+0 1
+1 0
+0 1

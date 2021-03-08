@@ -149,7 +149,8 @@ class Controller:
                     if res.lower() in const.y_res:
                         pairs = self.model.get_pairs(round_index)
                         self.view.show_pairs(pairs, round_index)
-                        input(f"You have seen the pairs of the round {round_index}. Press Enter to continue...".upper())
+                        input(f"You have seen the pairs of the round {round_index}. "
+                              f"Press Enter to continue...".upper())
 
     def get_last_round_index(self):
         """Get the index of the last round in the list of rounds taken place."""
@@ -230,8 +231,8 @@ class Controller:
                 res = input()
                 if res.lower() in const.y_res:
                     self.view.show_round(last_round, last_round_index)
-                input(
-                    f"You have updated the scores for the Round {last_round_index}. Press Enter to continue...".upper())
+                    input("You have updated the scores for the Round {last_round_index}."
+                          " Press Enter to continue...".upper())
 
     def end_round(self):
         """Ask the user if the round is finished and then mark automatically the end time for the round."""

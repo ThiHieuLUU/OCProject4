@@ -15,9 +15,9 @@ import db_tinydb as tiny
 
 # Dictionaries reprensent some information for each player (his total point, his list of opponents)
 # These dictionaries are updated after each round.
-total_points = dict()
-opponents = dict()
-players_info = dict()
+# total_points = dict()
+# opponents = dict()
+# players_info = dict()
 
 db = TinyDB('db.json', encoding="utf-8", ensure_ascii=False)
 actors_table = db.table('actors')
@@ -42,6 +42,14 @@ class Model:
         """
 
         self.tournament = tournament.Tournament()
+
+        # Dictionaries reprensent some information for each player (his total point, his list of opponents)
+        # These dictionaries are updated after each round.
+        self.total_points = dict()
+        self.opponents = dict()
+        self.players_info = dict()
+
+        # For the table of actors and the table of tournaments in the database
         self.actors_table = actors_table
         self.tournaments_table = tournaments_table
 
@@ -70,17 +78,14 @@ class Model:
         self.upsert_tournament()  # Insert new tournament in the table of tournaments.
 
     def initialize_info(self):
-        """Initialize values for three global variables: total_points, opponents and players_info"""
+        """Initialize values for: total_points, opponents and players_info"""
 
-        global total_points
-        global opponents
-        global players_info
-        total_points = self.tournament.initialize_total_points() # all palyers have 0 point
-        opponents = self.tournament.initialize_opponents() # all players have an empty list of opponents
+        self.total_points = self.tournament.initialize_total_points() # all palyers have 0 point
+        self.opponents = self.tournament.initialize_opponents() # all players have an empty list of opponents
         elo_ratings = self.tournament.get_elo_ratings()
 
         # First, insert total_points, opponents, and elo_ratings for each player
-        players_info = self.tournament.initialize_players_info(elo_ratings)
+        self.players_info = self.tournament.initialize_players_info(elo_ratings)
 
     def check_exist_players(self):
         """Check if there are players in the tournament."""
@@ -107,18 +112,14 @@ class Model:
 
     def get_pairs(self, round_index):
         """Get pairs from the second round."""
-
-        global total_points
-        global opponents
-        global players_info
-
+        
         # For user, the index of a round is shifted by 1 (in python, index begins by 0).
         nb_rounds = self.tournament.number_of_rounds
         if round_index <= nb_rounds:
             if round_index == 1:
                 pairs = self.tournament.make_pairs_first_round()
             else:
-                pairs = self.tournament.make_pairs(players_info)
+                pairs = self.tournament.make_pairs(self.players_info)
             return pairs
         else:
             raise mvc_exc.RoundIndexError(f"Can not get pairs for the round {round_index} because the "
@@ -163,18 +164,14 @@ class Model:
     def update_round(self, updated_matches):
         """Update a round after the scores of matches are known."""
 
-        global total_points
-        global opponents
-        global players_info
-
         if len(self.tournament.rounds) == 1:
             self.initialize_info()
 
         self.tournament.update_round(updated_matches)
         _round = self.tournament.rounds[-1]
-        total_points = self.tournament.update_total_points(_round, total_points)
-        opponents = self.tournament.update_opponents(_round, opponents)
-        players_info = self.tournament.update_players_info(players_info, total_points, opponents)
+        self.total_points = self.tournament.update_total_points(_round, self.total_points)
+        self.opponents = self.tournament.update_opponents(_round, self.opponents)
+        self.players_info = self.tournament.update_players_info(self.players_info, self.total_points, self.opponents)
 
         # For Tiny_DB
         self.get_last_ranking_new_tournament()
@@ -209,14 +206,11 @@ class Model:
     def get_last_ranking_new_tournament(self):
         """Get the ranking of the last finished round. It may not be the final round."""
 
-        global total_points
-        global opponents
-        global players_info
         if self.get_last_round_index() == 0:
             sorted_players = sorted(self.tournament.players, key=lambda p: p.elo_rating, reverse=True)
             last_ranking = [[repr(_player), _player.elo_rating] for _player in sorted_players]
         else:
-            sorted_players_info = sorted(players_info, key=lambda k: (-k["total_point"], -k['initial_ranking']))
+            sorted_players_info = sorted(self.players_info, key=lambda k: (-k["total_point"], -k['initial_ranking']))
             last_ranking = [[repr(item["player"]), item["total_point"], item["initial_ranking"]] for item in
                             sorted_players_info]
 

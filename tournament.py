@@ -219,10 +219,7 @@ class Tournament:
         not_yet_encountered_players = dict()
         called_time = dict()
         called_time[pair_index] = 1
-        print("*" * 40)
-        print("Verify the pairing algorithm".upper())
         while pair_index <= pair_number:
-            print("pair_index", pair_index)
             player_1_info = sorted_players_info_dict[pair_index][0]
             player_1 = player_1_info["player"]
             if called_time[pair_index] == 1:
@@ -237,8 +234,6 @@ class Tournament:
             except mvc_exc.EmptyListError:
                 # Return in the previous pair and re-make previous pair
                 pair_index -= 1  # CHANGE HERE : -=1 to re-make the previous pair, pair_index = 1: re-begin all
-                print(f"Problem at pair {pair_index + 1} - 2 players have been encountered. Return to make the "
-                      f"previous pair (pair {pair_index})".upper())
                 # Remove the previous pair to re-make it.
                 pairs.pop()
             else:
@@ -256,11 +251,6 @@ class Tournament:
 
                 # Build pair
                 pairs.append(pair)
-
-                print(f'{player_1_info["total_point"]} vs {player_2_info["total_point"]}; '
-                      f'{player_1_info["player"].elo_rating} vs {player_2_info["player"].elo_rating}; '
-                      f'{player_1_info["player"] in player_2_info["opponents"]} vs '
-                      f'{player_2_info["player"] in player_1_info["opponents"]}')
 
         if player_number % 2 == 1:
             # Pair with none player if number of players is odd

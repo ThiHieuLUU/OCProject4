@@ -13,4 +13,3 @@ score_list = [0, 0.5, 1]
 
 # For tournament
 DEFAULT_NUMBER_OF_ROUNDS = 4
-

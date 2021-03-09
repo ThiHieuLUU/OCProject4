@@ -7,9 +7,9 @@ is not the same as the __getattribute__ (built-in method) where the attribute's 
 gives only one attribute's value.).
 
 - set attributes from a given dictionary (each attribute's name is automatically compared with the keys of the
-dictionary. If this comparison is true, value of the corresponding key will be set to one of attributes. It's useful for
-deserialization of an object. It is not the same as the __setattr__ (built-in method) where the attribute's name must be
-known and this sets value for only one attribute).
+dictionary. If this comparison is true, value of the corresponding key will be set to one of attributes. It's useful
+for deserialization of an object. It is not the same as the __setattr__ (built-in method) where the attribute's name
+must be known and this sets value for only one attribute).
 
 - print an object of the class: concatenating all attributes and theirs' values by an given string pattern.
 (otherwise, repr method is not implemented here, it is customised in each class).

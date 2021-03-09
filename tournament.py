@@ -178,21 +178,6 @@ class Tournament:
             raise mvc_exc.EmptyListError('There is no player at the moment!')
         return pairs
 
-    # @staticmethod
-    # def make_pair(player_1, not_yet_encountered_players):
-    #     """Given the player 1, find the player 2 such that they mustn't be encountered before."""
-    #
-    #     if not not_yet_encountered_players:
-    #         raise mvc_exc.EmptyListError(f"List of not yet encountered players for player {repr(player_1)} is empty!")
-    #
-    #     player_2_info = not_yet_encountered_players[0]
-    #     player_2 = player_2_info["player"]
-    #     # Eliminate the taken player_2 for the next time if it has to re-find player_2
-    #     not_yet_encountered_players = not_yet_encountered_players[1:]
-    #     pair = [player_1, player_2]
-    #
-    #     return pair, player_2_info, not_yet_encountered_players
-
     @staticmethod
     def make_pair(player_1, not_yet_encountered_players):
         """Given the player 1, find the player 2 such that they mustn't be encountered before."""

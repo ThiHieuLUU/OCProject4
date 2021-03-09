@@ -80,6 +80,7 @@ pip install -r requirements.txt
 ```
 3. Check code with flake8
 ```bash
+flake8 --max-line-length=119 --ignore=E128,W503 --format=html --htmldir=flake8-rapport *.py
 ```
 4. Launch
 ```bash
@@ -95,4 +96,3 @@ firefox flake-rapport/index.html &
 ```
 2. Database:
 tournaments and actors are serialized in the 'db.json' database.
-flake8 --max-line-length=119 --ignore=E128,W503 --format=html --htmldir=flake8-rapport *.py

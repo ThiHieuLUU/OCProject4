@@ -12,20 +12,11 @@ from consolemenu.format import MenuBorderStyleType
 from controller import Controller as Controller
 
 
-def main():
-    controller = Controller()
-    menu_format = MenuFormatBuilder().set_border_style_type(MenuBorderStyleType.HEAVY_BORDER) \
-        .set_prompt("SELECT>") \
-        .set_title_align('center') \
-        .set_subtitle_align('center') \
-        .set_left_margin(4) \
-        .set_right_margin(4) \
-        .show_header_bottom_border(True)
+def append_new_tournament_menu(menu, menu_format, controller):
+    """Build a submenu in order to help the user entries/updates information for a new tournament.
+    This submenu is added to the main menu.
+    """
 
-    # Main menu
-    menu = ConsoleMenu("Chess Application", subtitle="Main Menu", formatter=menu_format)
-
-    # """************ BEGIN : Menu for a new tournament ************"""
     submenu = SelectionMenu([], title="New Tournament",
                             subtitle="Create and take place a new tournament",
                             formatter=menu_format, exit_option_text='Return to Main Menu')
@@ -77,14 +68,13 @@ def main():
     submenu_level2_item = SubmenuItem("Tournament's Info", submenu=submenu_level2)
     submenu.append_item(submenu_level2_item)
 
-    # show_ranking_function = FunctionItem("Last Ranking", show_last_ranking)
-    # submenu.append_item(show_ranking_function)
-
     submenu_item = SubmenuItem("New Tournament", submenu=submenu)
     menu.append_item(submenu_item)
-    # """************ END : Menu for a new tournament ************"""
 
-    # """************ BEGIN : Menu for the list of tournaments ************"""
+
+def append_tournaments_menu(menu, menu_format, controller):
+    """Build a submenu in order to display the list of tournaments. This submenu is added to the main menu."""
+
     submenu = SelectionMenu([], title="Tournaments",
                             subtitle="Here are tournaments in the past",
                             formatter=menu_format, exit_option_text='Return to Main Menu')
@@ -116,9 +106,11 @@ def main():
 
     submenu_item = SubmenuItem("Tournaments", submenu=submenu)
     menu.append_item(submenu_item)
-    # """************ END : Menu for the list of tournaments ************"""
 
-    # """************ BEGIN : Menu for the list of actors ************"""
+
+def append_actors_menu(menu, menu_format,  controller):
+    """Build a submenu in order to display actors. This submenu is added to the main menu."""
+
     submenu = SelectionMenu([], title="Actors",
                             formatter=menu_format, exit_option_text='Return to Main Menu')
 
@@ -131,7 +123,24 @@ def main():
 
     submenu_item = SubmenuItem("Actors", submenu=submenu)
     menu.append_item(submenu_item)
-    # """************ END : Menu for the list of tournaments ************"""
+
+
+def main():
+    controller = Controller()
+
+    menu_format = MenuFormatBuilder().set_border_style_type(MenuBorderStyleType.HEAVY_BORDER) \
+        .set_prompt("SELECT>") \
+        .set_title_align('center') \
+        .set_subtitle_align('center') \
+        .set_left_margin(4) \
+        .set_right_margin(4) \
+        .show_header_bottom_border(True)
+
+    # Main menu
+    menu = ConsoleMenu("Chess Application", subtitle="Main Menu", formatter=menu_format)
+    append_new_tournament_menu(menu, menu_format, controller)
+    append_tournaments_menu(menu, menu_format, controller)
+    append_actors_menu(menu, menu_format, controller)
 
     menu.show()
 

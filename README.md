@@ -88,11 +88,11 @@ python3 project4_cli.py
 ```
 
 ## Results
-1. Checking code
-Result of checking code with flake8 is in the flake-rapport directory.
+1. Checking code:
+result of checking code with flake8 is in the flake-rapport directory.
 Example of opening this result:
 ```bash
 firefox flake-rapport/index.html &
 ```
-2. Database
-Tournaments and actors are serialized in the 'db.json' database.
+2. Database:
+tournaments and actors are serialized in the 'db.json' database.

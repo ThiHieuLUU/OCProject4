@@ -78,8 +78,21 @@ source venv/bin/activate
 ```bash
 pip install -r requirements.txt
 ```
-3. Launch
+3. Check code with flake8
+```bash
+flake8 --max-line-length=119 --ignore=E128,W503 --format=html --htmldir=flake-rapport
+```
+4. Launch
 ```bash
 python3 project4_cli.py
 ```
 
+## Results
+1. Checking code
+Result of checking code with flake8 is in the flake-rapport directory.
+Example of opening this result:
+```bash
+firefox flake-rapport/index.html &
+```
+2. Database
+Tournaments and actors are serialized in the 'db.json' database.

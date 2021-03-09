@@ -9,27 +9,23 @@ class View:
     Only a Controller should call View's methods.
     """
 
-    @staticmethod
-    def show_request(obj):
+    def show_request(self, obj):
         """To display the request of entering input for an object."""
 
         print(f'Enter the information of {obj}: ')
 
-    @staticmethod
-    def show_error(key, value):
+    def show_error(self, key, value):
         """To display the request of re-entering value for a variable 'key'."""
 
         print(f'The {key} is not correct. Re-enter {key} ({value}): ')
 
-    @staticmethod
-    def show_question(action):
+    def show_question(self, action):
         """To display the yes-no request."""
 
         print("*" * 40)
         print(f'Do you want to {action} [y/n]? '.upper())
 
-    @staticmethod
-    def show_pairs(pairs, round_index):
+    def show_pairs(self, pairs, round_index):
         """To display the pairs of a chess round."""
 
         print("*" * 40)
@@ -38,8 +34,7 @@ class View:
             print(pair)
         print("*" * 40)
 
-    @staticmethod
-    def show_round(_round, round_index):
+    def show_round(self, _round, round_index):
         """To display the information of a chess round."""
 
         print("*" * 40)
@@ -47,30 +42,26 @@ class View:
         print(_round)
         print("*" * 40)
 
-    @staticmethod
-    def show_round_error(error):
+    def show_round_error(self, error):
         """To display the error with a chess round (not having players, index over the number of rounds...)."""
 
         print("*" * 40)
         print(error)
         print("*" * 40)
 
-    @staticmethod
-    def show_updating_round(round_index):
+    def show_updating_round(self, round_index):
         """To display the request for entering the result of matches of a round."""
 
         print("*" * 40)
         print(f"Enter the result of matches for the round {round_index}:".upper())
         print("*" * 40)
 
-    @staticmethod
-    def show_updating_match(round_index, match_index):
+    def show_updating_match(self, round_index, match_index):
         """To display which match."""
 
         print(f"* Round {round_index}, match {match_index}:".upper())
 
-    @staticmethod
-    def show_last_ranking(last_ranking, last_round_index):
+    def show_last_ranking(self, last_ranking, last_round_index):
         """To display the ranking after a round, here that is the last round."""
 
         # Last_ranking is a list.
@@ -93,8 +84,7 @@ class View:
                 i += 1
         print("*" * 40)
 
-    @staticmethod
-    def show_tournament_info(tournament):
+    def show_tournament_info(self, tournament):
         """To display all information of a tournament."""
 
         print("*" * 40)
@@ -102,16 +92,14 @@ class View:
         print(tournament)
         print("*" * 40)
 
-    @staticmethod
-    def show_except_error(error):
+    def show_except_error(self, error):
         """To display an exception error caught by the instruction 'try'."""
 
         print("*" * 40)
         print(error)
         print("*" * 40)
 
-    @staticmethod
-    def show_items(items):
+    def show_items(self, items):
         """To display a list of items."""
 
         print("*" * 40)
@@ -119,5 +107,5 @@ class View:
             print("Error: list is empty!")
         else:
             for index, item in enumerate(items):
-                print(f'{index+1}. {item}')
+                print(f'{index + 1}. {item}')
         print("*" * 40)

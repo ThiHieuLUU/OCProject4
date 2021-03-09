@@ -1,8 +1,10 @@
 #! /usr/bin/venv python3
 # coding: utf-8
 
-"""This module takes into account all elements (players, rounds, matches) to take place a new tournament."""
+"""This module takes into account all elements (players, rounds, matches) to take place a new tournament.
 
+It also accesses and handles the database (here for tournaments and actors).
+"""
 from tinydb import TinyDB
 
 import tournament

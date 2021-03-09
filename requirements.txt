@@ -6,8 +6,12 @@ click==7.1.2
 console-menu==0.6.0
 docformatter==1.4
 flake8==3.8.4
+flake8-html==0.4.1
+importlib-metadata==3.7.2
 isort==5.7.0
+Jinja2==2.11.3
 lazy-object-proxy==1.4.3
+MarkupSafe==1.1.1
 mccabe==0.6.1
 mypy-extensions==0.4.3
 pathspec==0.8.1
@@ -27,3 +31,4 @@ typing-extensions==3.7.4.3
 untokenize==0.1.1
 wcwidth==0.2.5
 wrapt==1.12.1
+zipp==3.4.1

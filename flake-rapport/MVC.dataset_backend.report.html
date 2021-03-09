@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>flake8 violations: MVC/dataset_backend.py</title>
+      <meta http-equiv="Content-Type" value="text/html; charset=UTF-8">
+      <link rel="stylesheet" href="styles.css">
+<script>
+function bindHandler(link) {
+   var code = link.getAttribute('data-code');
+   var key = location.pathname + '#' + code;
+
+   var ul = link.parentNode.querySelector('.details');
+   if (sessionStorage[key] != 'open') {
+      ul.style.display = 'none';
+   }
+   link.addEventListener('click', function (event) {
+      if (!ul.style.display || ul.style.display == 'none') {
+         ul.style.display = 'block';
+         sessionStorage[key] = 'open';
+      } else {
+         ul.style.display = 'none';
+         sessionStorage[key] = 'closed';
+      }
+   });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+   var links = document.querySelectorAll('#index > li > a');
+   for (var i = 0; i < links.length; i++) {
+      bindHandler(links[i]);
+   }
+});
+</script>
+   </head>
+   <body>
+      <div id="masthead" class="sev-1"></div>
+      <div id="page">
+         <p id="srclink">
+            <a title="View full annotated source"
+               href="MVC.dataset_backend.source.html">
+               <img src="file.svg" alt="&#x2261;">
+            </a></p>
+         <h1>
+            <a href="index.html">
+               <img src="back.svg" alt="&#x2B05;">
+               MVC/dataset_backend.py
+            </a>
+         </h1>
+
+         <ul id="index">
+         
+         <li>
+            <a data-code="F821">
+               <span class="count sev-1">
+                  2
+               </span>
+               <strong>F821:</strong> undefined name 'DB_name'
+               
+                  (and 1 similar)
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <p>Undefined name 'DB_name':</p>
+               
+               <a href="MVC.dataset_backend.source.html#l20">
+                  <tt><i>20</i>         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Created table </span><span class="si">{}</span><span class="s1"> on database </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span> <span class="n">DB_name</span><span class="p">))</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Undefined name 'dataset':</p>
+               
+               <a href="MVC.dataset_backend.source.html#l172">
+                  <tt><i>172</i>     <span class="n">conn</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;sqlite:///:memory:&#39;</span><span class="p">)</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="F811">
+               <span class="count sev-1">
+                  1
+               </span>
+               <strong>F811:</strong> redefinition of unused 'NoSuchTableError' from line 1
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="MVC.dataset_backend.source.html#l23">
+                  <tt><i>23</i> <span class="kn">from</span> <span class="nn">sqlalchemy.exc</span> <span class="kn">import</span> <span class="n">IntegrityError</span><span class="p">,</span> <span class="n">NoSuchTableError</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E501">
+               <span class="count sev-2">
+                  14
+               </span>
+               <strong>E501:</strong> line too long (142 > 79 characters)
+               
+                  (and 10 similar)
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <p>Line too long (142 > 79 characters):</p>
+               
+               <a href="MVC.dataset_backend.source.html#l6">
+                  <tt><i>6</i> <span class="sd">    The function load_table can only load a table if exist, and raises a NoSuchTableError if the table does not already exist in the database.</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (241 > 79 characters):</p>
+               
+               <a href="MVC.dataset_backend.source.html#l8">
+                  <tt><i>8</i> <span class="sd">    The function get_table either loads a table or creates it if it doesn&#39;t exist yet. The new table will automatically have an id column unless specified via optional parameter primary_id, which will be used as the primary key of the table.</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (101 > 79 characters):</p>
+               
+               <a href="MVC.dataset_backend.source.html#l94">
+                  <tt><i>94</i>             <span class="s1">&#39;Can</span><span class="se">\&#39;</span><span class="s1">t read &quot;</span><span class="si">{}</span><span class="s1">&quot; because it</span><span class="se">\&#39;</span><span class="s1">s not stored in table &quot;</span><span class="si">{}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">table</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">name</span><span class="p">))</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (155 > 79 characters):</p>
+               
+               <a href="MVC.dataset_backend.source.html#l122">
+                  <tt><i>122</i> <span class="sd">    Note: dataset update method is a bit counterintuitive to use. Read the docs here: https://dataset.readthedocs.io/en/latest/quickstart.html#storing-data</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (146 > 79 characters):</p>
+               
+               <a href="MVC.dataset_backend.source.html#l123">
+                  <tt><i>123</i> <span class="sd">    Dataset has also an upsert functionality: if rows with matching keys exist they will be updated, otherwise a new row is inserted in the table.</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (103 > 79 characters):</p>
+               
+               <a href="MVC.dataset_backend.source.html#l144">
+                  <tt><i>144</i>             <span class="s1">&#39;Can</span><span class="se">\&#39;</span><span class="s1">t update &quot;</span><span class="si">{}</span><span class="s1">&quot; because it</span><span class="se">\&#39;</span><span class="s1">s not stored in table &quot;</span><span class="si">{}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">table</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">name</span><span class="p">))</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (108 > 79 characters):</p>
+               
+               <a href="MVC.dataset_backend.source.html#l168">
+                  <tt><i>168</i>             <span class="s1">&#39;Can</span><span class="se">\&#39;</span><span class="s1">t delete &quot;</span><span class="si">{}</span><span class="s1">&quot; because it</span><span class="se">\&#39;</span><span class="s1">s not stored in table &quot;</span><span class="si">{}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">item_name</span><span class="p">,</span> <span class="n">table</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">name</span><span class="p">))</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (88 > 79 characters):</p>
+               
+               <a href="MVC.dataset_backend.source.html#l186">
+                  <tt><i>186</i>     <span class="c1"># if we try to insert an object already stored we get an ItemAlreadyStored exception</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (80 > 79 characters):</p>
+               
+               <a href="MVC.dataset_backend.source.html#l194">
+                  <tt><i>194</i>     <span class="c1"># if we try to select an object not stored we get an ItemNotStored exception</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (80 > 79 characters):</p>
+               
+               <a href="MVC.dataset_backend.source.html#l201">
+                  <tt><i>201</i>     <span class="c1"># if we try to update an object not stored we get an ItemNotStored exception</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (80 > 79 characters):</p>
+               
+               <a href="MVC.dataset_backend.source.html#l209">
+                  <tt><i>209</i>     <span class="c1"># if we try to delete an object not stored we get an ItemNotStored exception</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (263 > 79 characters):</p>
+               
+               <a href="MVC.dataset_backend.source.html#l226">
+                  <tt><i>226</i> <span class="c1">#     The database can be a SQLite DB (either a DB file or an in-memory DB), or a PostgreSQL DB. In order to connect to a PostgreSQL DB you have first to create a database, create a user, and finally grant him all necessary privileges on that database and tables.</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (80 > 79 characters):</p>
+               
+               <a href="MVC.dataset_backend.source.html#l227">
+                  <tt><i>227</i> <span class="c1">#     &#39;postgresql://&lt;username&gt;:&lt;password&gt;@localhost:&lt;PostgreSQL port&gt;/&lt;db name&gt;&#39;</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (128 > 79 characters):</p>
+               
+               <a href="MVC.dataset_backend.source.html#l228">
+                  <tt><i>228</i> <span class="c1">#     Note: at the moment it looks it&#39;s not possible to close a connection manually (e.g. like calling conn.close() in sqlite3).</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E302">
+               <span class="count sev-2">
+                  6
+               </span>
+               <strong>E302:</strong> expected 2 blank lines, found 1
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="MVC.dataset_backend.source.html#l3">
+                  <tt><i>3</i> <span class="k">def</span> <span class="nf">create_table</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">table_name</span><span class="p">):</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="MVC.dataset_backend.source.html#l26">
+                  <tt><i>26</i> <span class="k">def</span> <span class="nf">insert_one</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">price</span><span class="p">,</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">table_name</span><span class="p">):</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="MVC.dataset_backend.source.html#l72">
+                  <tt><i>72</i> <span class="k">def</span> <span class="nf">select_one</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">table_name</span><span class="p">):</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="MVC.dataset_backend.source.html#l119">
+                  <tt><i>119</i> <span class="k">def</span> <span class="nf">update_one</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">price</span><span class="p">,</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">table_name</span><span class="p">):</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="MVC.dataset_backend.source.html#l149">
+                  <tt><i>149</i> <span class="k">def</span> <span class="nf">delete_one</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">item_name</span><span class="p">,</span> <span class="n">table_name</span><span class="p">):</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="MVC.dataset_backend.source.html#l170">
+                  <tt><i>170</i> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="W292">
+               <span class="count sev-2">
+                  3
+               </span>
+               <strong>W292:</strong> no newline at end of file
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <p>No newline at end of file (in 3 places):</p>
+               
+               <a href="MVC.dataset_backend.source.html#l260">
+                  <tt><i>260</i> <span class="c1">#     return dataset.connect(db_string)</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E305">
+               <span class="count sev-2">
+                  2
+               </span>
+               <strong>E305:</strong> expected 2 blank lines after class or function definition, found 1
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="MVC.dataset_backend.source.html#l23">
+                  <tt><i>23</i> <span class="kn">from</span> <span class="nn">sqlalchemy.exc</span> <span class="kn">import</span> <span class="n">IntegrityError</span><span class="p">,</span> <span class="n">NoSuchTableError</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="MVC.dataset_backend.source.html#l213">
+                  <tt><i>213</i> <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E402">
+               <span class="count sev-2">
+                  2
+               </span>
+               <strong>E402:</strong> module level import not at top of file
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="MVC.dataset_backend.source.html#l23">
+                  <tt><i>23</i> <span class="kn">from</span> <span class="nn">sqlalchemy.exc</span> <span class="kn">import</span> <span class="n">IntegrityError</span><span class="p">,</span> <span class="n">NoSuchTableError</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="MVC.dataset_backend.source.html#l24">
+                  <tt><i>24</i> <span class="kn">import</span> <span class="nn">mvc_exceptions</span> <span class="k">as</span> <span class="nn">mvc_exc</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         </ul>
+      </div>
+   </body>
+</html>

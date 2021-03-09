@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>mvc_exceptions_v0.py - flake8 annotated source</title>
+      <meta http-equiv="Content-Type" value="text/html; charset=UTF-8">
+      <link rel="stylesheet" href="styles.css">
+   </head>
+   <body>
+      <div id="masthead" class="sev-2"></div>
+      <div id="page">
+         <h1>
+            <a href="mvc_exceptions_v0.report.html">
+               <img src="back.svg" alt="&#x2B05;">
+               mvc_exceptions_v0.py source
+            </a>
+         </h1>
+
+         <div id="doc">
+            <div id="l1"
+               class="code sev- "><tt><i>1</i> <span class="c1"># mvc_exceptions_v0.py</span></tt>
+            </div>
+            <div id="l2"
+               class="code sev- "><tt><i>2</i> <span class="c1"># class ItemAlreadyStored(Exception):</span></tt>
+            </div>
+            <div id="l3"
+               class="code sev- "><tt><i>3</i> <span class="c1">#     pass</span></tt>
+            </div>
+            <div id="l4"
+               class="code sev- "><tt><i>4</i> <span class="c1">#</span></tt>
+            </div>
+            <div id="l5"
+               class="code sev- "><tt><i>5</i> <span class="c1">#</span></tt>
+            </div>
+            <div id="l6"
+               class="code sev- "><tt><i>6</i> <span class="c1"># class ItemNotStored(Exception):</span></tt>
+            </div>
+            <div id="l7"
+               class="code sev- "><tt><i>7</i> <span class="c1">#     pass</span></tt>
+            </div>
+            <div id="l8"
+               class="code sev- "><tt><i>8</i> <span class="c1"># &gt;&gt;&gt; try:</span></tt>
+            </div>
+            <div id="l9"
+               class="code sev- "><tt><i>9</i> <span class="c1"># ...     a = int(input(&quot;Enter a positive integer: &quot;))</span></tt>
+            </div>
+            <div id="l10"
+               class="code sev- "><tt><i>10</i> <span class="c1"># ...     if a &lt;= 0:</span></tt>
+            </div>
+            <div id="l11"
+               class="code sev- "><tt><i>11</i> <span class="c1"># ...         raise ValueError(&quot;That is not a positive number!&quot;)</span></tt>
+            </div>
+            <div id="l12"
+               class="code sev- "><tt><i>12</i> <span class="c1"># ... except ValueError as ve:</span></tt>
+            </div>
+            <div id="l13"
+               class="code sev- "><tt><i>13</i> <span class="c1"># ...     print(ve)</span></tt>
+            </div>
+            <div id="l14"
+               class="code sev- "><tt><i>14</i> &nbsp;</tt>
+            </div>
+            <div id="l15"
+               class="code sev- "><tt><i>15</i> <span class="c1"># class Error(Exception):</span></tt>
+            </div>
+            <div id="l16"
+               class="code sev- "><tt><i>16</i> <span class="c1">#     &quot;&quot;&quot;Base class for exceptions in this module.&quot;&quot;&quot;</span></tt>
+            </div>
+            <div id="l17"
+               class="code sev- "><tt><i>17</i> <span class="c1">#     pass</span></tt>
+            </div>
+            <div id="l18"
+               class="code sev- "><tt><i>18</i> <span class="c1">#</span></tt>
+            </div>
+            <div id="l19"
+               class="code sev- "><tt><i>19</i> <span class="c1">#</span></tt>
+            </div>
+            <div id="l20"
+               class="code sev- "><tt><i>20</i> <span class="c1"># class InputError(Error):</span></tt>
+            </div>
+            <div id="l21"
+               class="code sev- "><tt><i>21</i> <span class="c1">#     &quot;&quot;&quot;Exception raised for errors in the input.</span></tt>
+            </div>
+            <div id="l22"
+               class="code sev- "><tt><i>22</i> <span class="c1">#</span></tt>
+            </div>
+            <div id="l23"
+               class="code sev- "><tt><i>23</i> <span class="c1">#     Attributes:</span></tt>
+            </div>
+            <div id="l24"
+               class="code sev- "><tt><i>24</i> <span class="c1">#         expression -- input expression in which the error occurred</span></tt>
+            </div>
+            <div id="l25"
+               class="code sev- "><tt><i>25</i> <span class="c1">#         message -- explanation of the error</span></tt>
+            </div>
+            <div id="l26"
+               class="code sev- "><tt><i>26</i> <span class="c1">#     &quot;&quot;&quot;</span></tt>
+            </div>
+            <div id="l27"
+               class="code sev- "><tt><i>27</i> &nbsp;</tt>
+            </div>
+            <div id="l28"
+               class="code sev- "><tt><i>28</i> <span class="c1">#     def __init__(self, expression, message):</span></tt>
+            </div>
+            <div id="l29"
+               class="code sev- "><tt><i>29</i> <span class="c1">#         self.expression = expression</span></tt>
+            </div>
+            <div id="l30"
+               class="code sev- "><tt><i>30</i> <span class="c1">#         self.message = message</span></tt>
+            </div>
+            <div id="l31"
+               class="code sev- "><tt><i>31</i> <span class="c1">#</span></tt>
+            </div>
+            <div id="l32"
+               class="code sev- "><tt><i>32</i> <span class="c1">#</span></tt>
+            </div>
+            <div id="l33"
+               class="code sev- "><tt><i>33</i> <span class="c1"># class TransitionError(Error):</span></tt>
+            </div>
+            <div id="l34"
+               class="code sev- "><tt><i>34</i> <span class="c1">#     &quot;&quot;&quot;Raised when an operation attempts a state transition that&#39;s not</span></tt>
+            </div>
+            <div id="l35"
+               class="code sev- "><tt><i>35</i> <span class="c1">#     allowed.</span></tt>
+            </div>
+            <div id="l36"
+               class="code sev- "><tt><i>36</i> <span class="c1">#</span></tt>
+            </div>
+            <div id="l37"
+               class="code sev- "><tt><i>37</i> <span class="c1">#     Attributes:</span></tt>
+            </div>
+            <div id="l38"
+               class="code sev- "><tt><i>38</i> <span class="c1">#         previous -- state at beginning of transition</span></tt>
+            </div>
+            <div id="l39"
+               class="code sev- "><tt><i>39</i> <span class="c1">#         next -- attempted new state</span></tt>
+            </div>
+            <div id="l40"
+               class="code sev- "><tt><i>40</i> <span class="c1">#         message -- explanation of why the specific transition is not allowed</span></tt>
+            </div>
+            <div id="l41"
+               class="code sev- "><tt><i>41</i> <span class="c1">#     &quot;&quot;&quot;</span></tt>
+            </div>
+            <div id="l42"
+               class="code sev- "><tt><i>42</i> <span class="c1">#</span></tt>
+            </div>
+            <div id="l43"
+               class="code sev- "><tt><i>43</i> <span class="c1">#     def __init__(self, previous, next, message):</span></tt>
+            </div>
+            <div id="l44"
+               class="code sev- "><tt><i>44</i> <span class="c1">#         self.previous = previous</span></tt>
+            </div>
+            <div id="l45"
+               class="code sev- "><tt><i>45</i> <span class="c1">#         self.next = next</span></tt>
+            </div>
+            <div id="l46"
+               class="code sev- "><tt><i>46</i> <span class="c1">#         self.message = message</span></tt>
+            </div>
+            <div id="l47"
+               class="code sev- "><tt><i>47</i> &nbsp;</tt>
+            </div>
+            <div id="l48"
+               class="code sev- "><tt><i>48</i> &nbsp;</tt>
+            </div>
+            <div id="l49"
+               class="code sev- "><tt><i>49</i> <span class="c1"># &gt;&gt; &gt;</span></tt>
+            </div>
+            <div id="l50"
+               class="code sev- "><tt><i>50</i> <span class="c1">#</span></tt>
+            </div>
+            <div id="l51"
+               class="code sev- "><tt><i>51</i> <span class="c1"># class MyError(Exception):</span></tt>
+            </div>
+            <div id="l52"
+               class="code sev- "><tt><i>52</i> <span class="c1">#     def __init__(self, value):</span></tt>
+            </div>
+            <div id="l53"
+               class="code sev- "><tt><i>53</i> <span class="c1">#         self.value = value</span></tt>
+            </div>
+            <div id="l54"
+               class="code sev- "><tt><i>54</i> <span class="c1">#</span></tt>
+            </div>
+            <div id="l55"
+               class="code sev- "><tt><i>55</i> <span class="c1">#     def __str__(self):</span></tt>
+            </div>
+            <div id="l56"
+               class="code sev- "><tt><i>56</i> <span class="c1">#         return repr(self.value)</span></tt>
+            </div>
+            <div id="l57"
+               class="code sev- "><tt><i>57</i> <span class="c1">#</span></tt>
+            </div>
+            <div id="l58"
+               class="code sev- "><tt><i>58</i> <span class="c1"># &gt;&gt; &gt; try:</span></tt>
+            </div>
+            <div id="l59"
+               class="code sev- "><tt><i>59</i> <span class="c1">#     raise MyError(2 * 2)</span></tt>
+            </div>
+            <div id="l60"
+               class="code sev- "><tt><i>60</i> <span class="c1"># except MyError as e:</span></tt>
+            </div>
+            <div id="l61"
+               class="code sev- "><tt><i>61</i> <span class="c1">#     print(&#39;My exception occurred, value:&#39;, e.value)</span></tt>
+            </div>
+            <div id="l62"
+               class="code sev- "><tt><i>62</i> &nbsp;</tt>
+            </div>
+            <div id="l63"
+               class="code sev- "><tt><i>63</i> <span class="k">class</span> <span class="nc">UnexpectedStringError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span></tt>
+            </div>
+            <div id="l64"
+               class="code sev- "><tt><i>64</i>     <span class="k">pass</span></tt>
+            </div>
+            <div id="l65"
+               class="code sev- "><tt><i>65</i> &nbsp;</tt>
+            </div>
+            <div id="l66"
+               class="code sev- "><tt><i>66</i> &nbsp;</tt>
+            </div>
+            <div id="l67"
+               class="code sev- "><tt><i>67</i> <span class="k">class</span> <span class="nc">ItemNotStored</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span></tt>
+            </div>
+            <div id="l68"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        W292
+                     </span>
+                     No newline at end of file</li>
+               
+               </ul><tt><i>68</i>     <span class="k">pass</span></tt>
+            </div>
+            
+         </div>
+      </div>
+   </body>
+</html>

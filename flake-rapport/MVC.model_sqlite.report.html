@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>flake8 violations: MVC/model_sqlite.py</title>
+      <meta http-equiv="Content-Type" value="text/html; charset=UTF-8">
+      <link rel="stylesheet" href="styles.css">
+<script>
+function bindHandler(link) {
+   var code = link.getAttribute('data-code');
+   var key = location.pathname + '#' + code;
+
+   var ul = link.parentNode.querySelector('.details');
+   if (sessionStorage[key] != 'open') {
+      ul.style.display = 'none';
+   }
+   link.addEventListener('click', function (event) {
+      if (!ul.style.display || ul.style.display == 'none') {
+         ul.style.display = 'block';
+         sessionStorage[key] = 'open';
+      } else {
+         ul.style.display = 'none';
+         sessionStorage[key] = 'closed';
+      }
+   });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+   var links = document.querySelectorAll('#index > li > a');
+   for (var i = 0; i < links.length; i++) {
+      bindHandler(links[i]);
+   }
+});
+</script>
+   </head>
+   <body>
+      <div id="masthead" class="sev-1"></div>
+      <div id="page">
+         <p id="srclink">
+            <a title="View full annotated source"
+               href="MVC.model_sqlite.source.html">
+               <img src="file.svg" alt="&#x2261;">
+            </a></p>
+         <h1>
+            <a href="index.html">
+               <img src="back.svg" alt="&#x2B05;">
+               MVC/model_sqlite.py
+            </a>
+         </h1>
+
+         <ul id="index">
+         
+         <li>
+            <a data-code="E999">
+               <span class="count sev-1">
+                  1
+               </span>
+               <strong>E999:</strong> SyntaxError: invalid syntax
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="MVC.model_sqlite.source.html#l51">
+                  <tt><i>51</i> <span class="n">As</span> <span class="n">I</span> <span class="n">said</span> <span class="n">last</span> <span class="n">time</span><span class="p">,</span> <span class="n">View</span> <span class="ow">and</span> <span class="n">Controller</span> <span class="n">are</span> <span class="n">completely</span> <span class="n">decoupled</span> <span class="kn">from</span> <span class="nn">the</span> <span class="n">Model</span> <span class="p">(</span><span class="ow">and</span> <span class="n">between</span> <span class="n">themselves</span><span class="p">),</span> <span class="n">so</span> <span class="n">you</span> <span class="n">don</span><span class="err">’</span><span class="n">t</span> <span class="n">need</span> <span class="n">to</span> <span class="n">change</span> <span class="n">anything</span> <span class="ow">in</span> <span class="n">their</span> <span class="n">implementation</span><span class="o">.</span> <span class="n">If</span> <span class="n">you</span> <span class="n">need</span> <span class="n">the</span> <span class="n">code</span> <span class="k">for</span> <span class="n">these</span> <span class="n">classes</span><span class="p">,</span> <span class="n">see</span> <span class="n">the</span> <span class="n">first</span> <span class="n">article</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">series</span><span class="o">.</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E112">
+               <span class="count sev-2">
+                  1
+               </span>
+               <strong>E112:</strong> expected an indented block
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="MVC.model_sqlite.source.html#l57">
+                  <tt><i>57</i> <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E211">
+               <span class="count sev-2">
+                  1
+               </span>
+               <strong>E211:</strong> whitespace before '('
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="MVC.model_sqlite.source.html#l51">
+                  <tt><i>51</i> <span class="n">As</span> <span class="n">I</span> <span class="n">said</span> <span class="n">last</span> <span class="n">time</span><span class="p">,</span> <span class="n">View</span> <span class="ow">and</span> <span class="n">Controller</span> <span class="n">are</span> <span class="n">completely</span> <span class="n">decoupled</span> <span class="kn">from</span> <span class="nn">the</span> <span class="n">Model</span> <span class="p">(</span><span class="ow">and</span> <span class="n">between</span> <span class="n">themselves</span><span class="p">),</span> <span class="n">so</span> <span class="n">you</span> <span class="n">don</span><span class="err">’</span><span class="n">t</span> <span class="n">need</span> <span class="n">to</span> <span class="n">change</span> <span class="n">anything</span> <span class="ow">in</span> <span class="n">their</span> <span class="n">implementation</span><span class="o">.</span> <span class="n">If</span> <span class="n">you</span> <span class="n">need</span> <span class="n">the</span> <span class="n">code</span> <span class="k">for</span> <span class="n">these</span> <span class="n">classes</span><span class="p">,</span> <span class="n">see</span> <span class="n">the</span> <span class="n">first</span> <span class="n">article</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">series</span><span class="o">.</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E225">
+               <span class="count sev-2">
+                  1
+               </span>
+               <strong>E225:</strong> missing whitespace around operator
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="MVC.model_sqlite.source.html#l51">
+                  <tt><i>51</i> <span class="n">As</span> <span class="n">I</span> <span class="n">said</span> <span class="n">last</span> <span class="n">time</span><span class="p">,</span> <span class="n">View</span> <span class="ow">and</span> <span class="n">Controller</span> <span class="n">are</span> <span class="n">completely</span> <span class="n">decoupled</span> <span class="kn">from</span> <span class="nn">the</span> <span class="n">Model</span> <span class="p">(</span><span class="ow">and</span> <span class="n">between</span> <span class="n">themselves</span><span class="p">),</span> <span class="n">so</span> <span class="n">you</span> <span class="n">don</span><span class="err">’</span><span class="n">t</span> <span class="n">need</span> <span class="n">to</span> <span class="n">change</span> <span class="n">anything</span> <span class="ow">in</span> <span class="n">their</span> <span class="n">implementation</span><span class="o">.</span> <span class="n">If</span> <span class="n">you</span> <span class="n">need</span> <span class="n">the</span> <span class="n">code</span> <span class="k">for</span> <span class="n">these</span> <span class="n">classes</span><span class="p">,</span> <span class="n">see</span> <span class="n">the</span> <span class="n">first</span> <span class="n">article</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">series</span><span class="o">.</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E305">
+               <span class="count sev-2">
+                  1
+               </span>
+               <strong>E305:</strong> expected 2 blank lines after class or function definition, found 1
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="MVC.model_sqlite.source.html#l50">
+                  <tt><i>50</i> <span class="n">View</span> <span class="ow">and</span> <span class="n">Controller</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E501">
+               <span class="count sev-2">
+                  1
+               </span>
+               <strong>E501:</strong> line too long (245 > 79 characters)
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="MVC.model_sqlite.source.html#l51">
+                  <tt><i>51</i> <span class="n">As</span> <span class="n">I</span> <span class="n">said</span> <span class="n">last</span> <span class="n">time</span><span class="p">,</span> <span class="n">View</span> <span class="ow">and</span> <span class="n">Controller</span> <span class="n">are</span> <span class="n">completely</span> <span class="n">decoupled</span> <span class="kn">from</span> <span class="nn">the</span> <span class="n">Model</span> <span class="p">(</span><span class="ow">and</span> <span class="n">between</span> <span class="n">themselves</span><span class="p">),</span> <span class="n">so</span> <span class="n">you</span> <span class="n">don</span><span class="err">’</span><span class="n">t</span> <span class="n">need</span> <span class="n">to</span> <span class="n">change</span> <span class="n">anything</span> <span class="ow">in</span> <span class="n">their</span> <span class="n">implementation</span><span class="o">.</span> <span class="n">If</span> <span class="n">you</span> <span class="n">need</span> <span class="n">the</span> <span class="n">code</span> <span class="k">for</span> <span class="n">these</span> <span class="n">classes</span><span class="p">,</span> <span class="n">see</span> <span class="n">the</span> <span class="n">first</span> <span class="n">article</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">series</span><span class="o">.</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="W292">
+               <span class="count sev-2">
+                  1
+               </span>
+               <strong>W292:</strong> no newline at end of file
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="MVC.model_sqlite.source.html#l88">
+                  <tt><i>88</i>         <span class="n">c</span><span class="o">.</span><span class="n">show_items</span><span class="p">()</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         </ul>
+      </div>
+   </body>
+</html>

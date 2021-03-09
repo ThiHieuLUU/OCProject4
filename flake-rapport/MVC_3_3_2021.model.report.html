@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>flake8 violations: MVC_3_3_2021/model.py</title>
+      <meta http-equiv="Content-Type" value="text/html; charset=UTF-8">
+      <link rel="stylesheet" href="styles.css">
+<script>
+function bindHandler(link) {
+   var code = link.getAttribute('data-code');
+   var key = location.pathname + '#' + code;
+
+   var ul = link.parentNode.querySelector('.details');
+   if (sessionStorage[key] != 'open') {
+      ul.style.display = 'none';
+   }
+   link.addEventListener('click', function (event) {
+      if (!ul.style.display || ul.style.display == 'none') {
+         ul.style.display = 'block';
+         sessionStorage[key] = 'open';
+      } else {
+         ul.style.display = 'none';
+         sessionStorage[key] = 'closed';
+      }
+   });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+   var links = document.querySelectorAll('#index > li > a');
+   for (var i = 0; i < links.length; i++) {
+      bindHandler(links[i]);
+   }
+});
+</script>
+   </head>
+   <body>
+      <div id="masthead" class="sev-2"></div>
+      <div id="page">
+         <p id="srclink">
+            <a title="View full annotated source"
+               href="MVC_3_3_2021.model.source.html">
+               <img src="file.svg" alt="&#x2261;">
+            </a></p>
+         <h1>
+            <a href="index.html">
+               <img src="back.svg" alt="&#x2B05;">
+               MVC_3_3_2021/model.py
+            </a>
+         </h1>
+
+         <ul id="index">
+         
+         <li>
+            <a data-code="E501">
+               <span class="count sev-2">
+                  22
+               </span>
+               <strong>E501:</strong> line too long (90 > 79 characters)
+               
+                  (and 17 similar)
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <p>Line too long (90 > 79 characters):</p>
+               
+               <a href="MVC_3_3_2021.model.source.html#l37">
+                  <tt><i>37</i>     <span class="k">def</span> <span class="nf">build_player</span><span class="p">(</span><span class="n">player_id</span><span class="p">,</span> <span class="n">first_name</span><span class="p">,</span> <span class="n">last_name</span><span class="p">,</span> <span class="n">date_of_birth</span><span class="p">,</span> <span class="n">gender</span><span class="p">,</span> <span class="n">elo_rating</span><span class="p">):</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (113 > 79 characters):</p>
+               
+               <a href="MVC_3_3_2021.model.source.html#l52">
+                  <tt><i>52</i>     <span class="k">def</span> <span class="nf">create_tournament</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">_location</span><span class="p">,</span> <span class="n">date</span><span class="p">,</span> <span class="n">number_of_rounds</span><span class="p">,</span> <span class="n">player_list</span><span class="p">,</span> <span class="n">time_control</span><span class="p">,</span> <span class="n">description</span><span class="p">):</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (84 > 79 characters):</p>
+               
+               <a href="MVC_3_3_2021.model.source.html#l62">
+                  <tt><i>62</i>         <span class="bp">self</span><span class="o">.</span><span class="n">tournament</span> <span class="o">=</span> <span class="n">tournament</span><span class="o">.</span><span class="n">Tournament</span><span class="o">.</span><span class="n">create_tournament</span><span class="p">(</span><span class="n">attributes_values</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (110 > 79 characters):</p>
+               
+               <a href="MVC_3_3_2021.model.source.html#l64">
+                  <tt><i>64</i>     <span class="k">def</span> <span class="nf">set_tournament</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">_location</span><span class="p">,</span> <span class="n">date</span><span class="p">,</span> <span class="n">number_of_rounds</span><span class="p">,</span> <span class="n">player_list</span><span class="p">,</span> <span class="n">time_control</span><span class="p">,</span> <span class="n">description</span><span class="p">):</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (86 > 79 characters):</p>
+               
+               <a href="MVC_3_3_2021.model.source.html#l74">
+                  <tt><i>74</i>         <span class="c1"># self.tournament = tournament.Tournament.create_tournament(attributes_values)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (103 > 79 characters):</p>
+               
+               <a href="MVC_3_3_2021.model.source.html#l102">
+                  <tt><i>102</i>             <span class="k">raise</span> <span class="n">mvc_exc</span><span class="o">.</span><span class="n">RoundIndexError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Can not get pairs for the round </span><span class="si">{</span><span class="n">round_index</span><span class="si">}</span><span class="s2"> because the &quot;</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (108 > 79 characters):</p>
+               
+               <a href="MVC_3_3_2021.model.source.html#l103">
+                  <tt><i>103</i>                                           <span class="sa">f</span><span class="s2">&quot;number of rounds is set by </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tournament</span><span class="o">.</span><span class="n">number_of_rounds</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (111 > 79 characters):</p>
+               
+               <a href="MVC_3_3_2021.model.source.html#l121">
+                  <tt><i>121</i>             <span class="k">raise</span> <span class="n">mvc_exc</span><span class="o">.</span><span class="n">RoundIndexError</span><span class="p">(</span><span class="s2">&quot;Round index is out of range because the number of rounds is set by &quot;</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (81 > 79 characters):</p>
+               
+               <a href="MVC_3_3_2021.model.source.html#l122">
+                  <tt><i>122</i>                                           <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tournament</span><span class="o">.</span><span class="n">number_of_rounds</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (80 > 79 characters):</p>
+               
+               <a href="MVC_3_3_2021.model.source.html#l136">
+                  <tt><i>136</i>         <span class="n">total_points</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tournament</span><span class="o">.</span><span class="n">update_total_points</span><span class="p">(</span><span class="n">_round</span><span class="p">,</span> <span class="n">total_points</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (97 > 79 characters):</p>
+               
+               <a href="MVC_3_3_2021.model.source.html#l138">
+                  <tt><i>138</i>         <span class="n">players_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tournament</span><span class="o">.</span><span class="n">update_players_info</span><span class="p">(</span><span class="n">players_info</span><span class="p">,</span> <span class="n">total_points</span><span class="p">,</span> <span class="n">opponents</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (84 > 79 characters):</p>
+               
+               <a href="MVC_3_3_2021.model.source.html#l166">
+                  <tt><i>166</i>         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tournament</span><span class="o">.</span><span class="n">players</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tournament</span><span class="o">.</span><span class="n">players</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (106 > 79 characters):</p>
+               
+               <a href="MVC_3_3_2021.model.source.html#l168">
+                  <tt><i>168</i>                 <span class="n">sorted_players</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tournament</span><span class="o">.</span><span class="n">players</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">elo_rating</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (98 > 79 characters):</p>
+               
+               <a href="MVC_3_3_2021.model.source.html#l169">
+                  <tt><i>169</i>                 <span class="n">last_ranking</span> <span class="o">=</span> <span class="p">[[</span><span class="nb">repr</span><span class="p">(</span><span class="n">_player</span><span class="p">),</span> <span class="n">_player</span><span class="o">.</span><span class="n">elo_rating</span><span class="p">]</span> <span class="k">for</span> <span class="n">_player</span> <span class="ow">in</span> <span class="n">sorted_players</span><span class="p">]</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (116 > 79 characters):</p>
+               
+               <a href="MVC_3_3_2021.model.source.html#l172">
+                  <tt><i>172</i>                 <span class="n">sorted_players_info</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">players_info</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">k</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="n">k</span><span class="p">[</span><span class="s2">&quot;total_point&quot;</span><span class="p">],</span> <span class="o">-</span><span class="n">k</span><span class="p">[</span><span class="s1">&#39;initial_ranking&#39;</span><span class="p">]))</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (112 > 79 characters):</p>
+               
+               <a href="MVC_3_3_2021.model.source.html#l173">
+                  <tt><i>173</i>                 <span class="n">last_ranking</span> <span class="o">=</span> <span class="p">[[</span><span class="nb">repr</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;player&quot;</span><span class="p">]),</span> <span class="n">item</span><span class="p">[</span><span class="s2">&quot;total_point&quot;</span><span class="p">],</span> <span class="n">item</span><span class="p">[</span><span class="s2">&quot;initial_ranking&quot;</span><span class="p">]]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (103 > 79 characters):</p>
+               
+               <a href="MVC_3_3_2021.model.source.html#l176">
+                  <tt><i>176</i>             <span class="k">raise</span> <span class="n">mvc_exc</span><span class="o">.</span><span class="n">EmptyListError</span><span class="p">(</span><span class="s1">&#39;For the moment, there is any player in the list of players!&#39;</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (99 > 79 characters):</p>
+               
+               <a href="MVC_3_3_2021.model.source.html#l184">
+                  <tt><i>184</i>             <span class="k">raise</span> <span class="n">mvc_exc</span><span class="o">.</span><span class="n">EmptyListError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;For the moment, there is any </span><span class="si">{</span><span class="n">item_name</span><span class="si">}</span><span class="s1"> in the list of&#39;</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (103 > 79 characters):</p>
+               
+               <a href="MVC_3_3_2021.model.source.html#l192">
+                  <tt><i>192</i>         <span class="c1">#     raise mvc_exc.EmptyListError(&#39;For the moment, there is any round in the list of rounds!&#39;)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (103 > 79 characters):</p>
+               
+               <a href="MVC_3_3_2021.model.source.html#l200">
+                  <tt><i>200</i>         <span class="c1">#     raise mvc_exc.EmptyListError(&#39;For the moment, there is any round in the list of rounds!&#39;)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (85 > 79 characters):</p>
+               
+               <a href="MVC_3_3_2021.model.source.html#l211">
+                  <tt><i>211</i>         <span class="c1">#     matches = [match for _round in self.rounds for match in _round.matches]</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (104 > 79 characters):</p>
+               
+               <a href="MVC_3_3_2021.model.source.html#l217">
+                  <tt><i>217</i>         <span class="c1">#     raise mvc_exc.EmptyListError(&#39;For the moment, there is any match in the list of matches!&#39;)</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E303">
+               <span class="count sev-2">
+                  5
+               </span>
+               <strong>E303:</strong> too many blank lines (2)
+               
+                  (and 1 similar)
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <p>Too many blank lines (2):</p>
+               
+               <a href="MVC_3_3_2021.model.source.html#l89">
+                  <tt><i>89</i>     <span class="k">def</span> <span class="nf">get_pairs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">round_index</span><span class="p">):</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Too many blank lines (2):</p>
+               
+               <a href="MVC_3_3_2021.model.source.html#l106">
+                  <tt><i>106</i>     <span class="k">def</span> <span class="nf">make_new_round</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_time</span><span class="p">):</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Too many blank lines (2):</p>
+               
+               <a href="MVC_3_3_2021.model.source.html#l159">
+                  <tt><i>159</i>     <span class="k">def</span> <span class="nf">get_number_of_rounds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Too many blank lines (2):</p>
+               
+               <a href="MVC_3_3_2021.model.source.html#l203">
+                  <tt><i>203</i>     <span class="k">def</span> <span class="nf">get_matches</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Too many blank lines (3):</p>
+               
+               <a href="MVC_3_3_2021.model.source.html#l221">
+                  <tt><i>221</i>     <span class="nd">@staticmethod</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E127">
+               <span class="count sev-2">
+                  1
+               </span>
+               <strong>E127:</strong> continuation line over-indented for visual indent
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="MVC_3_3_2021.model.source.html#l185">
+                  <tt><i>185</i>                                                 <span class="sa">f</span><span class="s1">&#39; </span><span class="si">{</span><span class="n">item_name</span><span class="si">}</span><span class="s1">s!&#39;</span><span class="p">)</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         </ul>
+      </div>
+   </body>
+</html>

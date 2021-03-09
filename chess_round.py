@@ -120,9 +120,6 @@ class Round:
         (e.g. from TinyDB).
         """
 
-        # Retrieve the class type
-        obj_type = globals()[cls.__name__]
-
         for key in serialized_attributes_values.keys():
             if key == "matches":
                 matches = serialized_attributes_values["matches"]
@@ -130,7 +127,7 @@ class Round:
                     deserialized_match = match.Match.get_deserialized_match(match_info)
                     # print("deserialized_match", deserialized_match)
                     matches[index] = deserialized_match
-        _round = basic_backend.create_item(serialized_attributes_values, obj_type)
+        _round = basic_backend.create_item(cls, serialized_attributes_values)
         return _round
 
     def set_attrs(self, kwargs):

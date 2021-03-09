@@ -91,7 +91,7 @@ class Match:
                 serialized_attributes_values["match"][0][0] = deserialized_player1
                 serialized_attributes_values["match"][1][0] = deserialized_player2
 
-        return basic_backend.create_item(serialized_attributes_values, cls)
+        return basic_backend.create_item(cls, serialized_attributes_values)
 
     def __str__(self):
         """Set values for attributes via a dictionary."""

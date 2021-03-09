@@ -12,10 +12,6 @@ import location
 import chess_round
 import constants
 
-DEFAULT_NUMBER_OF_ROUNDS = constants.default_number_of_rounds
-
-none_player = player.Player()
-
 
 class Tournament:
     """This class represents a tournament with some attributes where:
@@ -24,9 +20,8 @@ class Tournament:
      - rounds is a list of instances of the Round class (a round contains Match instances).
      """
 
-    def __init__(self, name=None, _location=None, date=None, number_of_rounds=DEFAULT_NUMBER_OF_ROUNDS, players=None,
-                 time_control=None, description=None):
-
+    def __init__(self, name=None, _location=None, date=None, number_of_rounds=constants.DEFAULT_NUMBER_OF_ROUNDS,
+                 players=None, time_control=None, description=None):
         self._name = name
         self._location = _location
         self._date = date
@@ -168,6 +163,7 @@ class Tournament:
     def make_pairs_first_round(self):
         """Build the pairs for the first round based on the ranking of players (sort by elo rating)."""
 
+        none_player = player.Player()
         if self._players is not None and len(self._players) > 0:
             pairs = []
             sorted_players = sorted(self._players, key=lambda p: p.elo_rating, reverse=True)
@@ -182,18 +178,33 @@ class Tournament:
             raise mvc_exc.EmptyListError('There is no player at the moment!')
         return pairs
 
+    # @staticmethod
+    # def make_pair(player_1, not_yet_encountered_players):
+    #     """Given the player 1, find the player 2 such that they mustn't be encountered before."""
+    #
+    #     if not not_yet_encountered_players:
+    #         raise mvc_exc.EmptyListError(f"List of not yet encountered players for player {repr(player_1)} is empty!")
+    #
+    #     player_2_info = not_yet_encountered_players[0]
+    #     player_2 = player_2_info["player"]
+    #     # Eliminate the taken player_2 for the next time if it has to re-find player_2
+    #     not_yet_encountered_players = not_yet_encountered_players[1:]
+    #     pair = [player_1, player_2]
+    #
+    #     return pair, player_2_info, not_yet_encountered_players
+
     @staticmethod
     def make_pair(player_1, not_yet_encountered_players):
         """Given the player 1, find the player 2 such that they mustn't be encountered before."""
 
-        if not not_yet_encountered_players:
+        if not_yet_encountered_players:
+            player_2_info = not_yet_encountered_players[0]
+            player_2 = player_2_info["player"]
+            # Eliminate the taken player_2 for the next time if it has to re-find player_2
+            not_yet_encountered_players = not_yet_encountered_players[1:]
+            pair = [player_1, player_2]
+        else:
             raise mvc_exc.EmptyListError(f"List of not yet encountered players for player {repr(player_1)} is empty!")
-
-        player_2_info = not_yet_encountered_players[0]
-        player_2 = player_2_info["player"]
-        # Eliminate the taken player_2 for the next time if it has to re-find player_2
-        not_yet_encountered_players = not_yet_encountered_players[1:]
-        pair = [player_1, player_2]
 
         return pair, player_2_info, not_yet_encountered_players
 
@@ -253,6 +264,7 @@ class Tournament:
 
         if player_number % 2 == 1:
             # Pair with none player if number of players is odd
+            none_player = player.Player()
             pairs.append([sorted_players_info_dict[pair_index][-1]["player"], none_player])
 
         return pairs
@@ -278,6 +290,7 @@ class Tournament:
     def update_total_points(_round, total_points):
         """After each round, the total-point dictionary is updated by the scores of the matches."""
 
+        none_player = player.Player()
         for _match in _round.matches:
             # match is an object of class Match with attribute "match"
             if _match.match[0][0] != none_player:  # odd number of players
@@ -305,9 +318,9 @@ class Tournament:
         opponents of each player.
         """
 
+        none_player = player.Player()
         for _match in _round.matches:
-            # _match is an objet of class Match with attribute match = ([player_1, score1], [player_2, score2])
-            # if _match.match[0][0] != none_player and _match.match[1][0] != none_player:  # odd number of players
+            # Here, '_match' is an objet of class Match with attribute match = ([player_1, score1], [player_2, score2])
             if none_player not in (_match.match[0][0], _match.match[1][0]):  # odd number of players
                 opponents[_match.match[0][0]].append(_match.match[1][0])
                 opponents[_match.match[1][0]].append(_match.match[0][0])
@@ -382,7 +395,7 @@ class Tournament:
                 deserialized_location = location.Location.create_location(location_info)
                 serialized_attributes_values["location"] = deserialized_location
 
-        _tournament = basic_backend.create_item(serialized_attributes_values, cls)
+        _tournament = basic_backend.create_item(cls, serialized_attributes_values)
         return _tournament
 
     def get_attributes(self):
@@ -400,7 +413,7 @@ class Tournament:
     def create_tournament(cls, attributes_values):
         """Create a tournament from a dictionary of attributes - values."""
 
-        return basic_backend.create_item(attributes_values, cls)
+        return basic_backend.create_item(cls, attributes_values)
 
     def __str__(self):
         """Print all attributes and theirs values for a tournament."""
@@ -413,5 +426,4 @@ class Tournament:
 
         if self._name is not None:
             return ", ".join([self._name, self._date])
-            # return self._name + "\n -date: " + str(self._date) + "\n -location: " + str(self._location)
         return str(None)

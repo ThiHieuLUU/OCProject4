@@ -25,12 +25,16 @@ class Controller:
     def input_time_control(self):
         """To control the input for the time control of the tournament."""
 
-        while True:
+        # Set time_control to begin the loop.
+        time_control = ''
+        # Start a loop that will run until the time control type is one of given types.
+        while time_control.lower() not in const.time_control_list:
+            # Ask the user for a time control type.
             time_control = input(f"Enter time control {const.time_control_list}: ")
-            while time_control.lower() not in const.time_control_list:
+            if time_control.lower() in const.time_control_list:
+                break
+            else:
                 self.view.show_error("time control", const.time_control_list)
-                time_control = input(f"Re-enter time control {const.time_control_list}: ")
-            break
         return time_control
 
     def input_int(self, msg):
@@ -122,7 +126,7 @@ class Controller:
         else:
             input("You did not create a tournament. Press Enter to continue...".upper())
 
-    def get_pairs(self, round_index):
+    def show_pairs(self, round_index):
         """Get pairs of each round in order to show these pairs to the user."""
 
         try:
@@ -260,7 +264,7 @@ class Controller:
                     self.view.show_round(last_round, last_round_index)
                     input(f"You have finished the round {last_round_index}. Press Enter to continue...".upper())
 
-    def get_items(self, fct, _obj):
+    def show_items(self, fct, _obj):
         """Build a pattern for getting and showing players, rounds, matches."""
 
         try:
@@ -270,31 +274,31 @@ class Controller:
             self.view.show_except_error(error)
         input("Press Enter to continue...".upper())
 
-    def get_info_tournament(self, _tournament):
+    def show_info_tournament(self, _tournament):
         """Get and show information of a given tournament."""
 
         self.view.show_tournament_info(_tournament)
         input("Press Enter to continue...".upper())
 
-    def get_players(self, _tournament):
+    def show_players(self, _tournament):
         """Get and show players of a given tournament."""
 
         fct = self.model.get_players
-        self.get_items(fct, _tournament)
+        self.show_items(fct, _tournament)
 
-    def get_rounds(self, _tournament):
+    def show_rounds(self, _tournament):
         """Get and show the list of rounds of a given tournament."""
 
         fct = self.model.get_rounds
-        self.get_items(fct, _tournament)
+        self.show_items(fct, _tournament)
 
-    def get_matches(self, _tournament):
+    def show_matches(self, _tournament):
         """Get and show the list of matches of a given tournament."""
 
         fct = self.model.get_matches
-        self.get_items(fct, _tournament)
+        self.show_items(fct, _tournament)
 
-    def get_last_ranking(self, _tournament):
+    def show_last_ranking(self, _tournament):
         """Get and show the last ranking of a given tournament."""
         try:
             last_ranking, last_round_index = self.model.get_last_ranking(_tournament)
@@ -305,29 +309,29 @@ class Controller:
             self.view.show_last_ranking(last_ranking, last_round_index)
             input("Press Enter to continue...".upper())
 
-    def get_info_new_tournament(self):
+    def show_info_new_tournament(self):
         """Get and show information of the current tournament."""
 
         self.view.show_tournament_info(self.model.tournament)
         input("Press Enter to continue...".upper())
 
-    def get_players_new_tournament(self):
+    def show_players_new_tournament(self):
         """Get and show the list of players of the current tournament."""
 
-        return self.get_players(self.model.tournament)
+        self.show_players(self.model.tournament)
 
-    def get_rounds_new_tournament(self):
+    def show_rounds_new_tournament(self):
         """Get and show the list of rounds of the current tournament."""
 
-        return self.get_rounds(self.model.tournament)
+        self.show_rounds(self.model.tournament)
 
-    def get_matches_new_tournament(self):
-        """Get and show the list of matches of the current tournament."""
+    def show_matches_new_tournament(self):
+        """Show the list of matches of the current tournament."""
 
-        return self.get_matches(self.model.tournament)
+        self.show_matches(self.model.tournament)
 
-    def get_last_ranking_new_tournament(self):
-        """Get and show the ranking of the last round of the current tournament.
+    def show_last_ranking_new_tournament(self):
+        """Show the ranking of the last round of the current tournament.
 
         The last round may not be the final round.
         """
@@ -344,24 +348,19 @@ class Controller:
             input("Press Enter to continue...".upper())
 
     def get_tournaments(self):
-        """Get the list of all tournaments saved in the database (with TinyDB here)."""
+        """Get the list of all tournaments from the database (with TinyDB here)."""
 
         return self.model.get_tournaments()
 
-    def get_actors(self):
-        """Get the list of all actors saved in the database (with TinyDB here)."""
-
-        return self.model.get_actors()
-
-    def get_actors_alphabetical_order(self):
-        """Get and show the list of all actors in the alphabetical order."""
+    def show_actors_alphabetical_order(self):
+        """Get from the database and show the list of all actors in the alphabetical order."""
 
         actors = self.model.get_actors_alphabetical_order()
         self.view.show_items(actors)
         input("Press Enter to continue...".upper())
 
-    def get_actors_ranking_order(self):
-        """Get and show the list of all actors in the descending ranking order."""
+    def show_actors_ranking_order(self):
+        """Get from the database and show the list of all actors in the descending ranking order."""
 
         actors = self.model.get_actors_ranking_order()
         self.view.show_items(actors)

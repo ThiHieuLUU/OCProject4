@@ -25,7 +25,7 @@ db = TinyDB('db.json', encoding="utf-8", ensure_ascii=False)
 actors_table = db.table('actors')
 tournaments_table = db.table('tournaments', cache_size=30)
 
-# clear the table
+# clear the table if necessary
 # actors_table.truncate()
 # tournaments_table.truncate()
 
@@ -113,7 +113,7 @@ class Model:
         return self.tournament.make_pairs_first_round()
 
     def get_pairs(self, round_index):
-        """Get pairs from the second round to the final round if number of rounds is greatter than 1."""
+        """Get pairs for a round in the limite of number of rounds which is set before."""
 
         nb_rounds = self.tournament.number_of_rounds
         # Here, round index is seen by user (that is added by 1 compared to the index in the system).

@@ -80,7 +80,7 @@ pip install -r requirements.txt
 ```
 3. Check code with flake8
 ```bash
-flake8 --max-line-length=119 --ignore=E128,W503 --format=html --htmldir=flake-rapport
+flake8 --max-line-length=119 --ignore=E128,W503 --format=html --htmldir=flake8-rapport
 ```
 4. Launch
 ```bash

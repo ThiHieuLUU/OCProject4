@@ -1,8 +1,7 @@
-"""This module is used to represent a chess player with player's individual information."""
-
 # ! /usr/bin/venv python3
 # coding: utf-8
 
+"""This module is used to represent a chess player with player's individual information."""
 
 import random
 
@@ -117,8 +116,7 @@ class Player:
     def create_player(cls, attributes_values):
         """Create a chess player from the given set of attribute - value."""
 
-        # Retrieve the class type
-        return basic_backend.create_item(attributes_values, cls)
+        return basic_backend.create_item(cls, attributes_values)
 
     def __str__(self):
         """Print all attributes and theirs values for a player."""

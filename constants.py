@@ -1,4 +1,4 @@
-"""These are some constants used in project 4."""
+"""These are some constants used in the project 4."""
 
 # For controller
 y_n = "[y/n]"
@@ -12,4 +12,5 @@ date_request = date_format.lower().replace("%", "")
 score_list = [0, 0.5, 1]
 
 # For tournament
-default_number_of_rounds = 4
+DEFAULT_NUMBER_OF_ROUNDS = 4
+

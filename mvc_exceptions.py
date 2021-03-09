@@ -1,32 +1,7 @@
-class UnexpectedString(Exception):
-    pass
-
-
-class String(Exception):
-    pass
-
-
-class DateError(Exception):
-    pass
-
-
-class ScoreError(Exception):
-    pass
+"""There are some exceptions which will be met in the process of checking players, rounds, matches, etc."""
 
 
 class RoundIndexError(Exception):
-    pass
-
-
-class ItemNotExisted(Exception):
-    pass
-
-
-class ItemAlreadyExisted(Exception):
-    pass
-
-
-class ItemNotFound(Exception):
     pass
 
 

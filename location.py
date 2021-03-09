@@ -67,9 +67,7 @@ class Location:
     def create_location(cls, attributes_values):
         """Create a location from a dictionary."""
 
-        # Retrieve the class type
-        obj_type = globals()[cls.__name__]
-        return basic_backend.create_item(attributes_values, obj_type)
+        return basic_backend.create_item(cls, attributes_values)
 
     def get_attributes(self):
         """Get names of all attributes (without protected or private sign) and theirs values."""

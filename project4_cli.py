@@ -108,7 +108,7 @@ def append_tournaments_menu(menu, menu_format, controller):
     menu.append_item(submenu_item)
 
 
-def append_actors_menu(menu, menu_format,  controller):
+def append_actors_menu(menu, menu_format, controller):
     """Build a submenu in order to display actors. This submenu is added to the main menu."""
 
     submenu = SelectionMenu([], title="Actors",

@@ -29,7 +29,7 @@ this module is used to do the general tasks for a class:
 - create an object from a given dictionary.
 - get all attributes and theirs values to put in a dictionary.
 - set attributes from a given dictionary.
-- print /repr an object of the class.
+- print an object of a class.
 (the dictionary's keys are attribute names of the class).
 
 7. constants.py:
@@ -63,7 +63,27 @@ In this project 4, including:
 1. README.md
 2. requirements.txt
 3. .gitignore
-4. 13 above python modules
+4. setup.cfg
+5. flake8-rapport 
+6.  db.json
+5. 13 python modules mentioned above where 9 modules are included in the "chessmodel" package, as following: 
+```
+├── view.py  
+├── controller.py
+├── project4_cli.py
+
+chessmodel/
+    ├── __init__.py
+    ├── basic_backend.py
+    ├── chess_round.py
+    ├── constants.py
+    ├── db_tinydb.py
+    ├── location.py
+    ├── match.py
+    ├── model.py
+    ├── mvc_exceptions.py
+    ├── player.py
+```
 
 ## Process
 1. Create a virtual environment python for the project 4
@@ -79,20 +99,23 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 3. Check code with flake8
+* Set flake8 configuration in "setup.cfg" file.
+* Check code 
 ```bash
-flake8 --max-line-length=119 --ignore=E128,W503 --format=html --htmldir=flake8-rapport *.py
+ flake8 --format=html --htmldir=flake8-rapport
 ```
-4. Launch
+4. Run the application
 ```bash
 python3 project4_cli.py
 ```
 
 ## Results
 1. Checking code:
-result of checking code with flake8 is in the flake-rapport directory.
+* Result of checking code with flake8 is found in the flake8-rapport directory.
 Example of opening this result:
 ```bash
-firefox flake-rapport/index.html &
+firefox flake8-rapport/index.html &
 ```
 2. Database:
-tournaments and actors are serialized in the 'db.json' database.
+* Tournaments and actors are serialized and saved in the 'db.json' database via the "tournaments_table" and 
+  "actors_table" respectively.

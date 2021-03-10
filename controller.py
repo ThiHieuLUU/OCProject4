@@ -5,10 +5,10 @@
 
 from datetime import datetime
 
-import model
+import chessmodel.model as model
+import chessmodel.mvc_exceptions as mvc_exc
+import chessmodel.constants as const
 import view
-import constants as const
-import mvc_exceptions as mvc_exc
 
 
 class Controller:
@@ -28,13 +28,13 @@ class Controller:
         # Set time_control to begin the loop.
         time_control = ''
         # Start a loop that will run until the time control type is one of given types.
-        while time_control.lower() not in const.time_control_list:
+        while time_control.lower() not in const.TIME_CONTROL_LIST:
             # Ask the user for a time control type.
-            time_control = input(f"Enter time control {const.time_control_list}: ")
-            if time_control.lower() in const.time_control_list:
+            time_control = input(f"Enter time control {const.TIME_CONTROL_LIST}: ")
+            if time_control.lower() in const.TIME_CONTROL_LIST:
                 break
             else:
-                self.view.show_error("time control", const.time_control_list)
+                self.view.show_error("time control", const.TIME_CONTROL_LIST)
         return time_control
 
     def input_int(self, msg):
@@ -67,7 +67,7 @@ class Controller:
     #
     #         self.view.show_question("add more player")
     #         res = input()
-    #         if res.lower() in const.y_res:
+    #         if res.lower() in const.Y_RES:
     #             player_index += 1
     #         else:
     #             break
@@ -92,21 +92,21 @@ class Controller:
     def input_date(self, msg):
         """To control the input for the date of the tournament."""
 
-        date_format = const.date_format  # "%d/%m/%Y"
+        date_format = const.DATE_FORMAT  # "%d/%m/%Y"
         while True:
             try:
                 date_entry = input(msg)
                 datetime.strptime(str(date_entry), date_format)
                 break
             except ValueError:
-                self.view.show_error("date", const.date_request)
+                self.view.show_error("date", const.DATE_REQUEST)
         return date_entry
 
     def create_tournament(self):
         """Build a tournament from the input data."""
 
         res = input("Do you want to create a tournament [y/n]? ")
-        if res.lower() in const.y_res:
+        if res.lower() in const.Y_RES:
             name = str(input("Enter the name of the tournament: "))
             _date = self.input_date("Enter the date of the tournament: ")
             number_of_rounds = self.input_int("Enter the number of rounds: ")
@@ -119,7 +119,7 @@ class Controller:
 
             self.view.show_question("see the tournament's information")
             res = input()
-            if res.lower() in const.y_res:
+            if res.lower() in const.Y_RES:
                 self.view.show_tournament_info(self.model.tournament)
 
             input("You have created a tournament. Press Enter to continue...".upper())
@@ -150,7 +150,7 @@ class Controller:
                 if round_index <= nbr_rounds:
                     self.view.show_question(f"see the pairs of the round {round_index}")
                     res = input()
-                    if res.lower() in const.y_res:
+                    if res.lower() in const.Y_RES:
                         pairs = self.model.get_pairs(round_index)
                         self.view.show_pairs(pairs, round_index)
                         input(f"You have seen the pairs of the round {round_index}. "
@@ -181,8 +181,8 @@ class Controller:
                 input("Press Enter to continue...".upper())
             else:
                 last_round_index = self.get_last_round_index()
-                res = input(f"Do you want to start the round {last_round_index + 1} now {const.y_n}? ".upper())
-                if res.lower() in const.y_res:
+                res = input(f"Do you want to start the round {last_round_index + 1} now {const.Y_N}? ".upper())
+                if res.lower() in const.Y_RES:
                     now = datetime.now()
                     start_time = now.strftime("%H:%M:%S")
 
@@ -223,7 +223,7 @@ class Controller:
                     score1 = float(input(f'{player1}, score = '))
                     score2 = float(input(f'{player2}, score = '))
 
-                    score_list = const.score_list
+                    score_list = const.SCORE_LIST
                     if score1 in score_list and score2 in score_list and score1 + score2 == 1.0:
                         self.model.update_match(match, score1, score2)
                         match_index += 1
@@ -233,7 +233,7 @@ class Controller:
                 self.model.update_round(matches)
                 self.view.show_question(f"see the last round updated (round {last_round_index})")
                 res = input()
-                if res.lower() in const.y_res:
+                if res.lower() in const.Y_RES:
                     self.view.show_round(last_round, last_round_index)
                     input("You have updated the scores for the Round {last_round_index}."
                           " Press Enter to continue...".upper())
@@ -255,8 +255,8 @@ class Controller:
                 self.view.show_except_error(error)
                 input("Press Enter to continue...".upper())
             else:
-                res = input(f"Is the round {last_round_index} finished {const.y_n}? ".upper())
-                if res.lower() in const.y_res:
+                res = input(f"Is the round {last_round_index} finished {const.Y_N}? ".upper())
+                if res.lower() in const.Y_RES:
                     now = datetime.now()
                     current_time = now.strftime("%H:%M:%S")
                     last_round, last_round_index = self.model.get_last_round()

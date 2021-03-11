@@ -285,6 +285,10 @@ class Model:
     def get_tournaments(self):
         """Retrieve the data of tournaments from the database and rebuild them to a list of tournaments."""
 
+        # Upsert when the tournament is created with full information.
+        if self.tournament != tournament.Tournament():
+            self.upsert_tournament()
+
         db_serialized_items = self.tournaments_table.all()
         fct = self.tournament.get_deserialized_tournament
         deserialized_tournaments = tiny.deserialize_items(db_serialized_items, fct)

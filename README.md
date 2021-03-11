@@ -54,8 +54,8 @@ this module is used to display messages, information to user.
 13. project4_cli.py:
 this module is used as a CLI (command line interface) for user in order to:
 - create and take place a new tournament
-- See information of previous tournaments (players, rounds, matches, ranking)1. scraping_one_book.py:
-- See information of all players (actors) coming from previous tournaments.	this script is used to extract information of a book. 
+- See information of previous tournaments (players, rounds, matches, ranking)
+- See information of all players (actors) coming from previous tournaments.	
 
 ## Code organization
 In this project 4, including:

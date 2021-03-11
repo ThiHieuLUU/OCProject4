@@ -126,9 +126,10 @@ class Controller:
         else:
             input("You did not create a tournament. Press Enter to continue...".upper())
 
-    def show_pairs(self, round_index):
-        """Get pairs of each round in order to show these pairs to the user."""
+    def show_pairs(self):
+        """Get pairs of the next round in order to show these pairs to the user."""
 
+        round_index = self.get_last_round_index() + 1
         try:
             # Players exist is a condition for taking place a tournament (get pairs, make round, update round).
             self.model.check_exist_players()
@@ -235,7 +236,7 @@ class Controller:
                 res = input()
                 if res.lower() in const.Y_RES:
                     self.view.show_round(last_round, last_round_index)
-                    input("You have updated the scores for the Round {last_round_index}."
+                    input(f"You have updated the scores for the Round {last_round_index}."
                           " Press Enter to continue...".upper())
 
     def end_round(self):

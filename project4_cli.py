@@ -28,8 +28,7 @@ def append_new_tournament_menu(menu, menu_format, controller):
                                    formatter=menu_format, exit_option_text='Return to New Tournament')
 
     # Pairs for next round
-    last_round_index = controller.get_last_round_index() + 1
-    show_pairs_function = FunctionItem("Get Pairs", controller.show_pairs, [last_round_index])
+    show_pairs_function = FunctionItem("Get Pairs", controller.show_pairs)
     submenu_level2.append_item(show_pairs_function)
 
     start_round_function = FunctionItem("Start Round", controller.make_new_round)

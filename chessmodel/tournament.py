@@ -6,12 +6,12 @@
 import copy
 
 # import basic_backend
-from . import basic_backend as basic_backend
-from . import mvc_exceptions as mvc_exc
-from . import player
-from . import location
-from . import chess_round
-from .constants import DEFAULT_NUMBER_OF_ROUNDS
+from chessmodel import basic_backend as basic_backend
+from chessmodel import mvc_exceptions as mvc_exc
+from chessmodel import player
+from chessmodel import location
+from chessmodel import chess_round
+from chessmodel.constants import DEFAULT_NUMBER_OF_ROUNDS
 
 
 class Tournament:
@@ -410,6 +410,6 @@ class Tournament:
     def __repr__(self):
         """Display the string representation of a tournament object."""
 
-        if self._name is not None:
+        if self._name:
             return ", ".join([self._name, self._date])
-        return str(None)
+        return self._name

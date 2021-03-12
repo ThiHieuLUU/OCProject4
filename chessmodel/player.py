@@ -40,10 +40,6 @@ class Player:
     def first_name(self, new_first_name):
         self._first_name = new_first_name
 
-    @first_name.deleter
-    def first_name(self):
-        del self._first_name
-
     @property
     def last_name(self):
         return self._last_name
@@ -51,10 +47,6 @@ class Player:
     @last_name.setter
     def last_name(self, new_last_name):
         self._last_name = new_last_name
-
-    @last_name.deleter
-    def last_name(self):
-        del self._last_name
 
     @property
     def date_of_birth(self):
@@ -64,10 +56,6 @@ class Player:
     def date_of_birth(self, new_date_of_birth):
         self._date_of_birth = new_date_of_birth
 
-    @date_of_birth.deleter
-    def date_of_birth(self):
-        del self._date_of_birth
-
     @property
     def gender(self):
         return self._gender
@@ -76,10 +64,6 @@ class Player:
     def gender(self, new_gender):
         self._gender = new_gender
 
-    @gender.deleter
-    def gender(self):
-        del self._gender
-
     @property
     def elo_rating(self):
         return self._elo_rating
@@ -87,10 +71,6 @@ class Player:
     @elo_rating.setter
     def elo_rating(self, new_elo_rating):
         self._elo_rating = new_elo_rating
-
-    @elo_rating.deleter
-    def elo_rating(self):
-        del self._elo_rating
 
     def get_attributes(self):
         """Get names of all attributes (without protected or private sign) and theirs values."""

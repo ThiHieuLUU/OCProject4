@@ -66,8 +66,10 @@ In this project 4, including:
 4. setup.cfg
 5. flake8-rapport 
 6.  db.json
-5. 13 python modules mentioned above where 9 modules are included in the "chessmodel" package, as following: 
+5. 13 python modules mentioned above where 7 modules are included in the "chessmodel" package, as following: 
 ```
+├── constants.py
+├── mvc_exceptions.py
 ├── view.py  
 ├── controller.py
 ├── project4_cli.py
@@ -76,12 +78,10 @@ chessmodel/
     ├── __init__.py
     ├── basic_backend.py
     ├── chess_round.py
-    ├── constants.py
     ├── db_tinydb.py
     ├── location.py
     ├── match.py
     ├── model.py
-    ├── mvc_exceptions.py
     ├── player.py
 ```
 

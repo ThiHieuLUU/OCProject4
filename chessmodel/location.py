@@ -23,10 +23,6 @@ class Location:
     def building_number(self, building_number):
         self._building_number = building_number
 
-    @building_number.deleter
-    def building_number(self):
-        del self._building_number
-
     @property
     def street(self):
         return self._street
@@ -34,10 +30,6 @@ class Location:
     @street.setter
     def street(self, street):
         self._street = street
-
-    @street.deleter
-    def street(self):
-        del self._street
 
     @property
     def city(self):
@@ -47,10 +39,6 @@ class Location:
     def city(self, city):
         self._city = city
 
-    @city.deleter
-    def city(self):
-        del self._city
-
     @property
     def zipcode(self):
         return self._zipcode
@@ -58,10 +46,6 @@ class Location:
     @zipcode.setter
     def zipcode(self, zipcode):
         self._zipcode = zipcode
-
-    @zipcode.deleter
-    def zipcode(self):
-        del self._zipcode
 
     @classmethod
     def create_location(cls, attributes_values):

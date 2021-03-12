@@ -26,10 +26,6 @@ class Match:
     def match(self, new_match):
         self._match = new_match
 
-    @match.deleter
-    def match(self):
-        del self._match
-
     def get_serialized_attributes(self):
         """Serialize all attributes of a match instance in order to save them in a document oriented database
         (TinyDB).

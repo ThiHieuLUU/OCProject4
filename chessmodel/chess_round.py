@@ -27,10 +27,6 @@ class Round:
     def name(self, new_name):
         self._name = new_name
 
-    @name.deleter
-    def name(self):
-        del self._name
-
     @property
     def date(self):
         return self._date
@@ -38,10 +34,6 @@ class Round:
     @date.setter
     def date(self, new_date):
         self._date = new_date
-
-    @date.deleter
-    def date(self):
-        del self._date
 
     @property
     def matches(self):
@@ -51,10 +43,6 @@ class Round:
     def matches(self, new_matches):
         self._matches = new_matches
 
-    @matches.deleter
-    def matches(self):
-        del self._matches
-
     @property
     def start_time(self):
         return self._start_time
@@ -63,10 +51,6 @@ class Round:
     def start_time(self, new_start_time):
         self._start_time = new_start_time
 
-    @start_time.deleter
-    def start_time(self):
-        del self._start_time
-
     @property
     def end_time(self):
         return self._end_time
@@ -74,10 +58,6 @@ class Round:
     @end_time.setter
     def end_time(self, new_end_time):
         self._end_time = new_end_time
-
-    @end_time.deleter
-    def end_time(self):
-        del self._end_time
 
     def initialize_matches(self, pairs):
         """Initialize a match with score = 0 for each player."""

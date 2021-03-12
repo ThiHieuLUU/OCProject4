@@ -5,13 +5,12 @@
 
 import copy
 
-# import basic_backend
-from chessmodel import basic_backend as basic_backend
-import mvc_exceptions as mvc_exc
-from chessmodel import player
-from chessmodel import location
-from chessmodel import chess_round
 from constants import DEFAULT_NUMBER_OF_ROUNDS
+import mvc_exceptions as mvc_exc
+from . import basic_backend as basic_backend
+from . import player
+from . import location
+from . import chess_round
 
 
 class Tournament:
@@ -51,10 +50,6 @@ class Tournament:
     def name(self, new_name):
         self._name = new_name
 
-    @name.deleter
-    def name(self):
-        del self._name
-
     @property
     def location(self):
         return self._location
@@ -62,10 +57,6 @@ class Tournament:
     @location.setter
     def location(self, new_location):
         self._location = new_location
-
-    @location.deleter
-    def location(self):
-        del self._location
 
     @property
     def date(self):
@@ -75,10 +66,6 @@ class Tournament:
     def date(self, new_date):
         self._date = new_date
 
-    @date.deleter
-    def date(self):
-        del self._date
-
     @property
     def number_of_rounds(self):
         return self._number_of_rounds
@@ -86,10 +73,6 @@ class Tournament:
     @number_of_rounds.setter
     def number_of_rounds(self, new_number_of_rounds):
         self._number_of_rounds = new_number_of_rounds
-
-    @number_of_rounds.deleter
-    def number_of_rounds(self):
-        del self._number_of_rounds
 
     @property
     def rounds(self):
@@ -99,10 +82,6 @@ class Tournament:
     def rounds(self, new_rounds):
         self._rounds = new_rounds
 
-    @rounds.deleter
-    def rounds(self):
-        del self._rounds
-
     @property
     def players(self):
         return self._players
@@ -110,10 +89,6 @@ class Tournament:
     @players.setter
     def players(self, new_players):
         self._players = new_players
-
-    @players.deleter
-    def players(self):
-        del self._players
 
     @property
     def time_control(self):
@@ -123,10 +98,6 @@ class Tournament:
     def time_control(self, new_time_control):
         self._time_control = new_time_control
 
-    @time_control.deleter
-    def time_control(self):
-        del self._time_control
-
     @property
     def description(self):
         return self._description
@@ -135,10 +106,6 @@ class Tournament:
     def description(self, new_description):
         self._description = new_description
 
-    @description.deleter
-    def description(self):
-        del self._description
-
     @property
     def last_ranking(self):
         return self._last_ranking
@@ -146,10 +113,6 @@ class Tournament:
     @last_ranking.setter
     def last_ranking(self, new_last_ranking):
         self._last_ranking = new_last_ranking
-
-    @last_ranking.deleter
-    def last_ranking(self):
-        del self._last_ranking
 
     def get_elo_ratings(self):
         """Build a dictionary where each key is a player in the list of players of the tournament

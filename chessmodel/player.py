@@ -141,12 +141,12 @@ class Player:
         players[22] = cls("Ivan", "Desnard", "15/08/1980", "M", 1390)
 
         # Pick randomly players with a given number of players.
-        original_list = [players[i] for i in range(22)]
-        number_of_players = 8
-        list_of_players = random.sample(original_list, number_of_players)
+        # original_list = [players[i] for i in range(22)]
+        # number_of_players = 8
+        # list_of_players = random.sample(original_list, number_of_players)
 
         # For test cases to check the algorithm of constructing two players for a match.
         # The must not be encountered before.
-        # list_of_players = [players[i] for i in range(1, 9, 1)]
+        list_of_players = [players[i] for i in range(1, 9, 1)]
 
         return list_of_players

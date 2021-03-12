@@ -178,7 +178,9 @@ class Tournament:
         not_yet_encountered_players = dict()
         called_time = dict()
         called_time[pair_index] = 1
+        print("*" * 40, "Information of Pairs", "*" * 40)
         while pair_index <= pair_number:
+            print(f"pair {pair_index}")
             player_1_info = sorted_players_info_dict[pair_index][0]
             player_1 = player_1_info["player"]
             if called_time[pair_index] == 1:
@@ -193,6 +195,26 @@ class Tournament:
             except mvc_exc.EmptyListError:
                 # Return in the previous pair and re-make previous pair
                 pair_index -= 1  # CHANGE HERE : -=1 to re-make the previous pair, pair_index = 1: re-begin all
+                _players = copy.deepcopy(self._players)
+                paired_players = []
+                for pair in pairs:
+                    paired_players.append(pair[0])
+                    paired_players.append(pair[1])
+                future_pairs = [_player for _player in _players if _player not in paired_players]  # includes player_1
+                future_opponents_of_player_1 = [_player for _player in future_pairs if _player != player_1]
+
+                print("*" * 40)
+                order_of_players_in_players_info = [player_info["player"] for player_info in players_info]
+                for player_2 in future_opponents_of_player_1:
+                    player_2_info_index = order_of_players_in_players_info.index(player_2)
+                    player_2_info = players_info[player_2_info_index]
+                    print('{:<14} vs {:>14}; {:>7} vs {:>3}; {:>7} vs {:>4};\t are encountered?: {}'
+                          .format(player_1_info["player"].first_name, player_2_info["player"].first_name,
+                                  player_1_info["total_point"], player_2_info["total_point"],
+                                  player_1_info["player"].elo_rating, player_2_info["player"].elo_rating,
+                                  player_2_info["player"] in player_1_info["opponents"]))
+                print("*" * 40)
+
                 # Remove the previous pair to re-make it.
                 pairs.pop()
             else:
@@ -211,6 +233,13 @@ class Tournament:
                 # Build pair
                 pairs.append(pair)
 
+                print('{:<14} vs {:>14}; {:>7} vs {:>3}; {:>7} vs {:>4};\t are encountered?: {}'
+                      .format(player_1_info["player"].first_name, player_2_info["player"].first_name,
+                              player_1_info["total_point"], player_2_info["total_point"],
+                              player_1_info["player"].elo_rating, player_2_info["player"].elo_rating,
+                              player_2_info["player"] in player_1_info["opponents"]))
+        print("*"*101)
+        input()
         if player_number % 2 == 1:
             # Pair with none player if number of players is odd
             none_player = player.Player()

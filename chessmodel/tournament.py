@@ -7,11 +7,11 @@ import copy
 
 # import basic_backend
 from chessmodel import basic_backend as basic_backend
-from chessmodel import mvc_exceptions as mvc_exc
+import mvc_exceptions as mvc_exc
 from chessmodel import player
 from chessmodel import location
 from chessmodel import chess_round
-from chessmodel.constants import DEFAULT_NUMBER_OF_ROUNDS
+from constants import DEFAULT_NUMBER_OF_ROUNDS
 
 
 class Tournament:

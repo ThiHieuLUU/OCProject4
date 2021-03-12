@@ -6,8 +6,8 @@
 from datetime import datetime
 
 import chessmodel.model as model
-import chessmodel.mvc_exceptions as mvc_exc
-import chessmodel.constants as const
+import mvc_exceptions as mvc_exc
+import constants as const
 import view
 
 

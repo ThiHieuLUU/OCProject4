@@ -11,7 +11,7 @@ from . import tournament
 from . import player
 from . import chess_round
 from . import location
-from . import mvc_exceptions as mvc_exc
+import mvc_exceptions as mvc_exc
 from . import db_tinydb as tiny
 
 # 'db.json' is created and updated where model module is called, e.g. in the directory containing controller.

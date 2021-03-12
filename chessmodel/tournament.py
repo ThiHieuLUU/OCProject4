@@ -128,7 +128,7 @@ class Tournament:
         """Build the pairs for the first round based on the ranking of players (sort by elo rating)."""
 
         none_player = player.Player()
-        if self._players is not None and len(self._players) > 0:
+        if self._players:
             pairs = []
             sorted_players = sorted(self._players, key=lambda p: p.elo_rating, reverse=True)
             half_number = len(self._players) // 2
@@ -241,7 +241,7 @@ class Tournament:
 
         none_player = player.Player()
         for _match in _round.matches:
-            # match is an object of class Match with attribute "match"
+            # match is an object of Match class with an attribute "match"
             if _match.match[0][0] != none_player:  # odd number of players
                 total_points[_match.match[0][0]] += _match.match[0][1]
 
@@ -269,7 +269,7 @@ class Tournament:
 
         none_player = player.Player()
         for _match in _round.matches:
-            # Here, '_match' is an objet of class Match with attribute match = ([player_1, score1], [player_2, score2])
+            # Here, '_match' is an objet of Match class with attribute match = ([player_1, score1], [player_2, score2])
             if none_player not in (_match.match[0][0], _match.match[1][0]):  # odd number of players
                 opponents[_match.match[0][0]].append(_match.match[1][0])
                 opponents[_match.match[1][0]].append(_match.match[0][0])

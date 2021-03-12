@@ -1,3 +1,6 @@
+#! /usr/bin/venv python3
+# coding: utf-8
+
 """This module is used to do some general tasks for a class:
 
 - create an object from a given dictionary (it's useful and automatically when deserialization process is called).
@@ -34,7 +37,7 @@ def get_attributes(cls):
     private_sign = "_" + type(cls).__name__ + "__"
 
     for attribute_name, attribute_value in zip(cls.__dict__, cls.__dict__.values()):
-        # In case of protected or private attribute, retrieve only name without underscore at the beginning of name.
+        # Case of protected or private attribute, retrieve only name without underscore at the beginning of name.
         if attribute_name.startswith(private_sign):
             attribute_name = attribute_name[len(private_sign):]
         elif attribute_name.startswith(protected_sign):

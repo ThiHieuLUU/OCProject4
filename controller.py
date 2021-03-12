@@ -63,7 +63,7 @@ class Controller:
     #         ranking = input("Ranking (Elo rating): ")
     #
     #         _player = self.model.build_player(first_name, last_name, date_of_birth, gender, ranking)
-    #         players.append(player)
+    #         players.append(_player)
     #
     #         self.view.show_question("add more player")
     #         res = input()

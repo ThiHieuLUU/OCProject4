@@ -1,8 +1,10 @@
+#! /usr/bin/venv python3
+# coding: utf-8
+
 """This module is used as a CLI (command line interface) for user in order to:
 - create and take place a new tournament
 - See information of previous tournaments (players, rounds, matches, ranking)
 - See information of all players (actors) coming from previous tournaments.
-
 """
 
 from consolemenu import ConsoleMenu, SelectionMenu, MenuFormatBuilder

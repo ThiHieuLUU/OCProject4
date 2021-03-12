@@ -14,7 +14,8 @@ from . import location
 import mvc_exceptions as mvc_exc
 from . import db_tinydb as tiny
 
-# 'db.json' is created and updated where model module is called, e.g. in the directory containing controller.
+# 'db.json' is created and updated in the directory where the model module is called.
+# e.g. in the directory containing controller.
 db = TinyDB('db.json', encoding="utf-8", ensure_ascii=False)
 actors_table = db.table('actors')
 tournaments_table = db.table('tournaments', cache_size=30)
@@ -34,7 +35,7 @@ class Model:
     def __init__(self):
         """Each instance of the Model class is associated with a new tournament.
         The table of actors in the database is updated here.
-        The table of tournament in the database is updated here.
+        The table of tournaments in the database is updated here.
         """
 
         self.tournament = tournament.Tournament()
@@ -177,7 +178,7 @@ class Model:
         """Get the last round in the list of rounds. It may not be the final round."""
 
         # For user, the index of a round in a list is shifted by 1, compared to the index in system.
-        if self.tournament.rounds is not None and len(self.tournament.rounds) > 0:
+        if self.tournament.rounds:
             last_round_index = len(self.tournament.rounds)
             last_round = self.tournament.rounds[-1]
 
@@ -257,7 +258,7 @@ class Model:
         """Get the list of matches of the tournament."""
 
         rounds = _tournament.rounds
-        if rounds is not None and len(rounds) > 0:
+        if rounds:
             matches = [match for _round in rounds for match in _round.matches]
         else:
             raise mvc_exc.EmptyListError("Error: there is no match in the list of matches!")

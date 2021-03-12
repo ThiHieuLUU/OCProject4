@@ -107,7 +107,7 @@ class Player:
     def __repr__(self):
         """Display the string representation of a player object."""
 
-        if self._first_name is not None:
+        if self._first_name:
             return self._first_name + " " + self._last_name + " - " + self._date_of_birth
         return str(None)
 

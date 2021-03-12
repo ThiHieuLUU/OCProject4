@@ -34,7 +34,7 @@ class Match:
         attributes_info = basic_backend.get_attributes(self)
         # Do not use new_dict = attributes_info or attributes_info.copy()
         # because the change of new_dict will lead to the change of attributes_info
-        # (e.g. containing others class instances).
+        # (where attributes_info can contain others class instances).
         new_dict = copy.deepcopy(attributes_info)
         for key, value in new_dict.items():
             if key == "match":
@@ -98,6 +98,6 @@ class Match:
     def __repr__(self):
         """Display the string representation of a chess match object."""
 
-        if self._match[0][0] is not None:
+        if self._match[0][0]:
             return basic_backend.get_str(self)
         return str(None)

@@ -1,3 +1,6 @@
+#! /usr/bin/venv python3
+# coding: utf-8
+
 """These are some constants used in the project 4."""
 
 # For controller

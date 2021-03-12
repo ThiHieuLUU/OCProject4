@@ -82,7 +82,7 @@ class Round:
 
         attributes_info = basic_backend.get_attributes(self)
         new_dict = copy.deepcopy(attributes_info)
-        # This part is added used for the serialization with TinyDB
+        # This part is used for the serialization with TinyDB
         for index, _match in enumerate(attributes_info["matches"]):
             serialized_match = _match.get_serialized_attributes()
             new_dict["matches"][index] = serialized_match
@@ -105,7 +105,6 @@ class Round:
                 matches = serialized_attributes_values["matches"]
                 for index, match_info in enumerate(matches):
                     deserialized_match = match.Match.get_deserialized_match(match_info)
-                    # print("deserialized_match", deserialized_match)
                     matches[index] = deserialized_match
         _round = basic_backend.create_item(cls, serialized_attributes_values)
         return _round
@@ -131,7 +130,7 @@ class Round:
     def __repr__(self):
         """Display the string representation of a round object."""
 
-        if self._name is not None:
+        if self._name:
             return basic_backend.get_str(self)
             # return self._name + "at " + self.start_time
         return str(None)

@@ -1,13 +1,16 @@
+#! /usr/bin/venv python3
+# coding: utf-8
+
 """
 This module is used to serialize or deserialize an object/item.
 
- STEPS:
- For an item:
+STEPS:
+For an item:
     1. Serialize item (call serialize_item(item)
     2. Define the function for deserializing:
     (player : create_player, location: create_location, others: get_deserialized_round/match/tournament)
 
- For many items:
+For many items:
     1. Serialize items: serialize_items(items)
     2. Save in TinyDB
     - upsert_fct : call corresponding function, e.g. for player, call 'upsert_player'
@@ -16,7 +19,6 @@ This module is used to serialize or deserialize an object/item.
     Example for players:
     - db_serialized_items = players_table.all()
     - deserialized_items = deserialize_items(db_serialized_items, deserialize_fct)
-
 """
 
 from tinydb import Query

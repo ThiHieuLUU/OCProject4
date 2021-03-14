@@ -84,6 +84,11 @@ chessmodel/
     ├── model.py
     ├── player.py
 ```
+## Clone this branch
+Clone the branch test_pairing_algorithm in a local directory, ex: test_algo.
+```
+git clone --branch test_pairing_algorithm https://github.com/ThiHieuLUU/OCProject4.git test_algo
+```
 
 ## Process
 1. Create a virtual environment python for the project 4
